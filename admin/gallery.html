@@ -73,7 +73,10 @@
           <div class="upload-zone" id="uploadZone">
             <div class="upload-icon">📁</div>
             <h4>Drag & drop files here</h4>
-            <p>or click to browse — JPG, PNG, GIF, MP4, WebM (max 10MB each)</p>
+            <p>or click to browse — JPG, PNG, GIF, WebP, MP4, WebM</p>
+            <p style="margin-top:8px;font-size:.78rem;color:var(--green);font-weight:600">
+              ✅ Images are automatically compressed & converted to WebP — same quality, much smaller size
+            </p>
             <input type="file" id="fileInput" multiple accept="image/*,video/*" style="display:none">
           </div>
           <div class="upload-preview" id="uploadPreview"></div>
@@ -153,10 +156,16 @@ async function uploadFiles() {
   if (!input.files.length) { toast('Please select files first.', 'warning'); return; }
 
   const btn = document.querySelector('[onclick="uploadFiles()"]');
-  btn.disabled = true; btn.textContent = 'Uploading...';
+  btn.disabled = true;
 
-  try {
-    for (const file of input.files) {
+  let successCount = 0;
+  let totalSaved = 0;
+
+  for (let i = 0; i < input.files.length; i++) {
+    const file = input.files[i];
+    btn.textContent = `Uploading ${i + 1} of ${input.files.length}...`;
+
+    try {
       const fd = new FormData();
       fd.append('file', file);
       fd.append('title', title);
@@ -170,17 +179,27 @@ async function uploadFiles() {
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || 'Upload failed');
+
+      successCount++;
+      if (json.compression) {
+        totalSaved += (json.compression.original_kb - json.compression.compressed_kb);
+      }
+    } catch (err) {
+      toast(`Failed: ${file.name} — ${err.message}`, 'error');
     }
-    toast(`${input.files.length} file(s) uploaded!`, 'success');
+  }
+
+  if (successCount > 0) {
+    const savedMsg = totalSaved > 0 ? ` (saved ~${Math.round(totalSaved)}KB)` : '';
+    toast(`${successCount} file(s) uploaded successfully!${savedMsg}`, 'success');
     input.value = '';
     document.getElementById('uploadPreview').innerHTML = '';
     document.getElementById('uploadMeta').style.display = 'none';
     loadGalleryAdmin();
-  } catch (err) {
-    toast(err.message, 'error');
-  } finally {
-    btn.disabled = false; btn.textContent = '⬆️ Upload Files';
   }
+
+  btn.disabled = false;
+  btn.textContent = '⬆️ Upload Files';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
