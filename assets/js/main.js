@@ -395,3 +395,144 @@ document.querySelectorAll('[data-counter]').forEach(el => {
   }, { threshold: 0.5 });
   pulsePatch.observe(el);
 });
+
+/* ============================================================
+   Back to Top Button
+   ============================================================ */
+const backToTopBtn = document.createElement('button');
+backToTopBtn.className = 'back-to-top';
+backToTopBtn.innerHTML = '↑';
+backToTopBtn.setAttribute('aria-label', 'Back to top');
+backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+document.body.appendChild(backToTopBtn);
+
+window.addEventListener('scroll', () => {
+  backToTopBtn.classList.toggle('visible', window.scrollY > 400);
+}, { passive: true });
+
+/* ============================================================
+   Floating Action Buttons
+   ============================================================ */
+const floatingBtns = document.createElement('div');
+floatingBtns.className = 'floating-btns';
+floatingBtns.innerHTML = `
+  <a href="https://www.facebook.com/profile.php?id=61589233370202"
+     target="_blank" rel="noopener" class="float-btn float-btn-fb"
+     aria-label="Visit our Facebook page">
+    <span class="float-icon">📘</span>
+    <span class="float-label">Facebook</span>
+  </a>
+`;
+document.body.appendChild(floatingBtns);
+
+/* ============================================================
+   Cookie / Privacy Banner
+   ============================================================ */
+if (!localStorage.getItem('hw_cookie_consent')) {
+  const banner = document.createElement('div');
+  banner.className = 'cookie-banner';
+  banner.innerHTML = `
+    <p>
+      This website uses cookies to improve your experience and comply with the
+      <strong>Data Privacy Act of 2012</strong>.
+      <a href="#" onclick="return false">Learn more</a>
+    </p>
+    <div class="cookie-btns">
+      <button class="cookie-decline" onclick="dismissCookie()">Decline</button>
+      <button class="cookie-accept" onclick="acceptCookie()">Accept</button>
+    </div>
+  `;
+  document.body.appendChild(banner);
+  setTimeout(() => banner.classList.add('show'), 1500);
+}
+
+function acceptCookie() {
+  localStorage.setItem('hw_cookie_consent', 'accepted');
+  document.querySelector('.cookie-banner')?.remove();
+}
+function dismissCookie() {
+  localStorage.setItem('hw_cookie_consent', 'declined');
+  document.querySelector('.cookie-banner')?.remove();
+}
+
+/* ============================================================
+   Daily Bible Verse (injected into footer)
+   ============================================================ */
+const BIBLE_VERSES = [
+  { text: "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future.", ref: "Jeremiah 29:11" },
+  { text: "He heals the brokenhearted and binds up their wounds.", ref: "Psalm 147:3" },
+  { text: "The Lord is my shepherd; I shall not want.", ref: "Psalm 23:1" },
+  { text: "I can do all things through Christ who strengthens me.", ref: "Philippians 4:13" },
+  { text: "Cast all your anxiety on him because he cares for you.", ref: "1 Peter 5:7" },
+  { text: "Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.", ref: "Joshua 1:9" },
+  { text: "The Lord is close to the brokenhearted and saves those who are crushed in spirit.", ref: "Psalm 34:18" },
+  { text: "Come to me, all you who are weary and burdened, and I will give you rest.", ref: "Matthew 11:28" },
+  { text: "Trust in the Lord with all your heart and lean not on your own understanding.", ref: "Proverbs 3:5" },
+  { text: "And we know that in all things God works for the good of those who love him.", ref: "Romans 8:28" },
+  { text: "The Lord will fight for you; you need only to be still.", ref: "Exodus 14:14" },
+  { text: "Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.", ref: "Philippians 4:6" },
+  { text: "Even though I walk through the darkest valley, I will fear no evil, for you are with me.", ref: "Psalm 23:4" },
+  { text: "But those who hope in the Lord will renew their strength. They will soar on wings like eagles.", ref: "Isaiah 40:31" },
+  { text: "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.", ref: "John 3:16" },
+  { text: "The name of the Lord is a fortified tower; the righteous run to it and are safe.", ref: "Proverbs 18:10" },
+  { text: "Give thanks to the Lord, for he is good; his love endures forever.", ref: "Psalm 107:1" },
+  { text: "Blessed are the merciful, for they will be shown mercy.", ref: "Matthew 5:7" },
+  { text: "Love your neighbor as yourself.", ref: "Mark 12:31" },
+  { text: "The Lord bless you and keep you; the Lord make his face shine on you and be gracious to you.", ref: "Numbers 6:24-25" },
+  { text: "Rejoice always, pray continually, give thanks in all circumstances.", ref: "1 Thessalonians 5:16-18" },
+  { text: "A cheerful heart is good medicine, but a crushed spirit dries up the bones.", ref: "Proverbs 17:22" },
+  { text: "He gives strength to the weary and increases the power of the weak.", ref: "Isaiah 40:29" },
+  { text: "The Lord is my light and my salvation — whom shall I fear?", ref: "Psalm 27:1" },
+  { text: "For it is by grace you have been saved, through faith — and this is not from yourselves, it is the gift of God.", ref: "Ephesians 2:8" },
+  { text: "Let your light shine before others, that they may see your good deeds and glorify your Father in heaven.", ref: "Matthew 5:16" },
+  { text: "Whoever is kind to the poor lends to the Lord, and he will reward them for what they have done.", ref: "Proverbs 19:17" },
+  { text: "The Lord is my strength and my shield; my heart trusts in him, and he helps me.", ref: "Psalm 28:7" },
+  { text: "Peace I leave with you; my peace I give you. Do not let your hearts be troubled.", ref: "John 14:27" },
+  { text: "And now these three remain: faith, hope and love. But the greatest of these is love.", ref: "1 Corinthians 13:13" },
+  { text: "Delight yourself in the Lord, and he will give you the desires of your heart.", ref: "Psalm 37:4" }
+];
+
+function getDailyVerse() {
+  const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  return BIBLE_VERSES[dayOfYear % BIBLE_VERSES.length];
+}
+
+const footer = document.querySelector('.site-footer');
+if (footer) {
+  const verse = getDailyVerse();
+  const verseStrip = document.createElement('div');
+  verseStrip.className = 'bible-verse-strip';
+  verseStrip.innerHTML = `
+    <p class="verse-text">"${verse.text}"</p>
+    <p class="verse-ref">— ${verse.ref}</p>
+  `;
+  footer.insertBefore(verseStrip, footer.firstChild);
+}
+
+/* ============================================================
+   News Search
+   ============================================================ */
+const newsSearchInput = document.getElementById('newsSearchInput');
+if (newsSearchInput) {
+  let searchTimer;
+  newsSearchInput.addEventListener('input', () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      const q = newsSearchInput.value.trim().toLowerCase();
+      const cards = document.querySelectorAll('#newsPosts .card');
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(q) ? '' : 'none';
+      });
+    }, 300);
+  });
+}
+
+/* ============================================================
+   PWA Service Worker Registration
+   ============================================================ */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}

@@ -61,12 +61,19 @@
 <section class="section">
   <div class="container">
     <!-- Category Filter -->
-    <div class="news-filter" id="categoryFilter" role="group" aria-label="Filter by category">
-      <button class="filter-btn active" data-category="" onclick="filterNews(this, '')">All</button>
-      <button class="filter-btn" data-category="announcements" onclick="filterNews(this, 'announcements')">📢 Announcements</button>
-      <button class="filter-btn" data-category="events" onclick="filterNews(this, 'events')">📅 Events</button>
-      <button class="filter-btn" data-category="stories" onclick="filterNews(this, 'stories')">💬 Stories</button>
-      <button class="filter-btn" data-category="health-tips" onclick="filterNews(this, 'health-tips')">💚 Health Tips</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:24px">
+      <div class="news-filter" id="categoryFilter" role="group" aria-label="Filter by category" style="margin-bottom:0">
+        <button class="filter-btn active" data-category="" onclick="filterNews(this, '')">All</button>
+        <button class="filter-btn" data-category="announcements" onclick="filterNews(this, 'announcements')">📢 Announcements</button>
+        <button class="filter-btn" data-category="events" onclick="filterNews(this, 'events')">📅 Events</button>
+        <button class="filter-btn" data-category="stories" onclick="filterNews(this, 'stories')">💬 Stories</button>
+        <button class="filter-btn" data-category="health-tips" onclick="filterNews(this, 'health-tips')">💚 Health Tips</button>
+      </div>
+      <div class="news-search-wrap">
+        <input type="search" id="newsSearchInput" class="news-search-input"
+               placeholder="Search news..." aria-label="Search news">
+        <span class="news-search-icon">🔍</span>
+      </div>
     </div>
 
     <!-- Posts Grid -->

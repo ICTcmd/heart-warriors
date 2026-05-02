@@ -769,3 +769,117 @@ img[loading="lazy"].loaded {
   42%      { transform: scale(1.05); }
   56%      { transform: scale(1); }
 }
+
+/* ============================================================
+   Back to Top Button
+   ============================================================ */
+.back-to-top {
+  position: fixed; bottom: 90px; right: 24px; z-index: 900;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--red-main); color: #fff; border: none;
+  font-size: 1.1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--shadow-md);
+  opacity: 0; transform: translateY(20px);
+  transition: opacity .3s ease, transform .3s ease;
+  pointer-events: none;
+}
+.back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+.back-to-top:hover { background: var(--red-dark); transform: translateY(-3px); }
+
+/* ============================================================
+   Floating Action Buttons (WhatsApp / Facebook)
+   ============================================================ */
+.floating-btns {
+  position: fixed; bottom: 24px; right: 24px; z-index: 900;
+  display: flex; flex-direction: column; gap: 10px; align-items: flex-end;
+}
+.float-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px; border-radius: 50px;
+  font-size: .88rem; font-weight: 700; text-decoration: none;
+  box-shadow: var(--shadow-md); transition: var(--transition);
+  white-space: nowrap;
+}
+.float-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.float-btn-fb { background: #1877f2; color: #fff; }
+.float-btn-fb:hover { background: #1565c0; color: #fff; }
+.float-btn-wa { background: #25d366; color: #fff; }
+.float-btn-wa:hover { background: #1da851; color: #fff; }
+.float-btn .float-icon { font-size: 1.2rem; }
+.float-label { font-size: .8rem; }
+@media (max-width: 600px) {
+  .float-label { display: none; }
+  .float-btn { padding: 12px; border-radius: 50%; }
+}
+
+/* ============================================================
+   Cookie / Privacy Banner
+   ============================================================ */
+.cookie-banner {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 9990;
+  background: var(--gray-800); color: rgba(255,255,255,.9);
+  padding: 14px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+  transform: translateY(100%); transition: transform .4s ease;
+  box-shadow: 0 -4px 20px rgba(0,0,0,.2);
+}
+.cookie-banner.show { transform: translateY(0); }
+.cookie-banner p { font-size: .85rem; margin: 0; flex: 1; min-width: 200px; }
+.cookie-banner a { color: #ffd700; }
+.cookie-btns { display: flex; gap: 10px; flex-shrink: 0; }
+.cookie-accept {
+  background: var(--red-main); color: #fff; border: none;
+  padding: 8px 20px; border-radius: var(--radius-sm);
+  font-size: .85rem; font-weight: 700; cursor: pointer;
+  transition: var(--transition);
+}
+.cookie-accept:hover { background: var(--red-dark); }
+.cookie-decline {
+  background: transparent; color: rgba(255,255,255,.6);
+  border: 1px solid rgba(255,255,255,.3);
+  padding: 8px 16px; border-radius: var(--radius-sm);
+  font-size: .85rem; cursor: pointer; transition: var(--transition);
+}
+.cookie-decline:hover { color: #fff; border-color: rgba(255,255,255,.6); }
+
+/* ============================================================
+   Bible Verse Strip
+   ============================================================ */
+.bible-verse-strip {
+  background: linear-gradient(135deg, #1a0a0a, #2d1515);
+  padding: 14px 0; text-align: center;
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+.bible-verse-strip .verse-text {
+  font-size: .88rem; color: rgba(255,255,255,.75);
+  font-style: italic; max-width: 700px; margin: 0 auto;
+  line-height: 1.6;
+}
+.bible-verse-strip .verse-ref {
+  font-size: .78rem; color: #ffd700;
+  font-weight: 600; margin-top: 4px; font-style: normal;
+}
+
+/* ============================================================
+   News Search Bar
+   ============================================================ */
+.news-search-wrap {
+  position: relative; max-width: 400px; margin-bottom: 24px;
+}
+.news-search-input {
+  width: 100%; padding: 11px 44px 11px 16px;
+  border: 2px solid var(--gray-200); border-radius: 50px;
+  font-size: .9rem; color: var(--text-dark);
+  transition: var(--transition); background: var(--white);
+}
+.news-search-input:focus {
+  outline: none; border-color: var(--red-main);
+  box-shadow: 0 0 0 3px rgba(192,57,43,.1);
+}
+.news-search-icon {
+  position: absolute; right: 14px; top: 50%;
+  transform: translateY(-50%); color: var(--gray-400);
+  font-size: 1rem; pointer-events: none;
+}
