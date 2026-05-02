@@ -92,13 +92,85 @@
 
       <!-- Tab Navigation -->
       <div class="content-tabs">
-        <button class="content-tab active" onclick="switchTab('hero')">🏠 Hero Section</button>
+        <button class="content-tab active" onclick="switchTab('nav')">🧭 Navigation</button>
+        <button class="content-tab" onclick="switchTab('hero')">🏠 Hero</button>
         <button class="content-tab" onclick="switchTab('stats')">📊 Stats</button>
-        <button class="content-tab" onclick="switchTab('mission')">🎯 Mission & Vision</button>
+        <button class="content-tab" onclick="switchTab('mission')">🎯 Mission</button>
+        <button class="content-tab" onclick="switchTab('about')">📄 About Page</button>
+        <button class="content-tab" onclick="switchTab('contact')">📧 Contact</button>
+        <button class="content-tab" onclick="switchTab('footer')">🔻 Footer</button>
+      </div>
+
+      <!-- ── TAB: Navigation ── -->
+      <div class="tab-panel active" id="tab-nav">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3>Navigation & Header</h3>
+            <span style="font-size:.8rem;color:var(--text-muted)">Site-wide navigation menu</span>
+          </div>
+          <div class="admin-card-body">
+            <div class="content-form-grid">
+              <div class="form-group">
+                <label class="form-label">Brand Name</label>
+                <input type="text" id="brand_name" class="form-input" placeholder="Heart Warriors" maxlength="60" oninput="markUnsaved(this)">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Brand Tagline</label>
+                <input type="text" id="brand_tagline" class="form-input" placeholder="Bago City LGU Program" maxlength="80" oninput="markUnsaved(this)">
+              </div>
+              
+              <div class="form-group form-group-full" style="border-top:1px solid var(--gray-200);padding-top:20px;margin-top:10px">
+                <h4 style="font-size:.9rem;font-weight:600;margin-bottom:16px">Menu Items</h4>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Home</label>
+                <input type="text" id="nav_home" class="form-input" placeholder="Home" maxlength="30" oninput="markUnsaved(this)">
+              </div>
+              <div class="form-group">
+                <label class="form-label">About</label>
+                <input type="text" id="nav_about" class="form-input" placeholder="About" maxlength="30" oninput="markUnsaved(this)">
+              </div>
+              <div class="form-group">
+                <label class="form-label">News & Updates</label>
+                <input type="text" id="nav_news" class="form-input" placeholder="News & Updates" maxlength="30" oninput="markUnsaved(this)">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Events</label>
+                <input type="text" id="nav_events" class="form-input" placeholder="Events" maxlength="30" oninput="markUnsaved(this)">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Gallery</label>
+                <input type="text" id="nav_gallery" class="form-input" placeholder="Gallery" maxlength="30" oninput="markUnsaved(this)">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Contact</label>
+                <input type="text" id="nav_contact" class="form-input" placeholder="Contact" maxlength="30" oninput="markUnsaved(this)">
+              </div>
+              <div class="form-group form-group-full">
+                <label class="form-label">CTA Button Text</label>
+                <input type="text" id="nav_cta_text" class="form-input" placeholder="Request Help" maxlength="40" oninput="markUnsaved(this)">
+              </div>
+              
+              <div class="form-group form-group-full" style="border-top:1px solid var(--gray-200);padding-top:20px;margin-top:10px">
+                <h4 style="font-size:.9rem;font-weight:600;margin-bottom:16px">Top Bar</h4>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Top Bar Text 1</label>
+                <input type="text" id="topbar_text1" class="form-input" placeholder="Local Government Unit of Bago City" maxlength="80" oninput="markUnsaved(this)">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Top Bar Text 2</label>
+                <input type="text" id="topbar_text2" class="form-input" placeholder="Official Program Website" maxlength="80" oninput="markUnsaved(this)">
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- ── TAB: Hero ── -->
-      <div class="tab-panel active" id="tab-hero">
+      <div class="tab-panel" id="tab-hero">
         <div class="admin-card">
           <div class="admin-card-header">
             <h3>Hero Section</h3>
@@ -298,6 +370,196 @@
         </div>
       </div>
 
+      <!-- ── TAB: About Page ── -->
+      <div class="tab-panel" id="tab-about">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3>About Page Content</h3>
+          </div>
+          <div class="admin-card-body">
+            <div style="display:flex;flex-direction:column;gap:24px">
+              <div class="form-group">
+                <label class="form-label">Page Title</label>
+                <input type="text" id="about_page_title" class="form-input" placeholder="About Heart Warriors" maxlength="100" oninput="markUnsaved(this)">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Page Description</label>
+                <input type="text" id="about_page_desc" class="form-input" placeholder="Our story, our mission..." maxlength="200" oninput="markUnsaved(this)">
+              </div>
+              
+              <div style="border-top:1px solid var(--gray-200);padding-top:20px">
+                <h4 style="font-size:.9rem;font-weight:600;margin-bottom:16px">"What is Heart Warriors?" Section</h4>
+                <div style="display:flex;flex-direction:column;gap:16px">
+                  <div class="form-group">
+                    <label class="form-label">Paragraph 1</label>
+                    <textarea id="about_intro_p1" class="form-input" rows="3" maxlength="600" oninput="markUnsaved(this)"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Paragraph 2</label>
+                    <textarea id="about_intro_p2" class="form-input" rows="3" maxlength="600" oninput="markUnsaved(this)"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Paragraph 3</label>
+                    <textarea id="about_intro_p3" class="form-input" rows="3" maxlength="600" oninput="markUnsaved(this)"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Established Year</label>
+                    <input type="number" id="about_established_year" class="form-input" placeholder="2021" min="1900" max="2100" oninput="markUnsaved(this)">
+                  </div>
+                </div>
+              </div>
+              
+              <div style="border-top:1px solid var(--gray-200);padding-top:20px">
+                <h4 style="font-size:.9rem;font-weight:600;margin-bottom:16px">Highlight Items (✅ checkmarks)</h4>
+                <div style="display:flex;flex-direction:column;gap:12px">
+                  <input type="text" id="about_highlight1" class="form-input" placeholder="Free ECG and cardiovascular screenings..." maxlength="200" oninput="markUnsaved(this)">
+                  <input type="text" id="about_highlight2" class="form-input" placeholder="Medicine assistance program..." maxlength="200" oninput="markUnsaved(this)">
+                  <input type="text" id="about_highlight3" class="form-input" placeholder="Regular community outreach..." maxlength="200" oninput="markUnsaved(this)">
+                  <input type="text" id="about_highlight4" class="form-input" placeholder="Health education and lifestyle coaching..." maxlength="200" oninput="markUnsaved(this)">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="admin-card" style="margin-top:24px">
+          <div class="admin-card-header">
+            <h3>Services Section (6 Cards)</h3>
+          </div>
+          <div class="admin-card-body">
+            <div style="display:flex;flex-direction:column;gap:24px">
+              ${[1,2,3,4,5,6].map(n => `
+                <div style="border:1px solid var(--gray-200);border-radius:8px;padding:20px">
+                  <h4 style="font-size:.85rem;font-weight:600;margin-bottom:12px;color:var(--red-main)">Service ${n}</h4>
+                  <div style="display:grid;grid-template-columns:80px 1fr;gap:12px">
+                    <div class="form-group" style="margin:0">
+                      <label class="form-label" style="font-size:.75rem">Icon</label>
+                      <input type="text" id="service${n}_icon" class="form-input" placeholder="🫀" maxlength="10" oninput="markUnsaved(this)">
+                    </div>
+                    <div class="form-group" style="margin:0">
+                      <label class="form-label" style="font-size:.75rem">Title</label>
+                      <input type="text" id="service${n}_title" class="form-input" placeholder="ECG Screening" maxlength="80" oninput="markUnsaved(this)">
+                    </div>
+                  </div>
+                  <div class="form-group" style="margin-top:12px">
+                    <label class="form-label" style="font-size:.75rem">Description</label>
+                    <textarea id="service${n}_desc" class="form-input" rows="2" maxlength="300" oninput="markUnsaved(this)"></textarea>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: Contact Page ── -->
+      <div class="tab-panel" id="tab-contact">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3>Contact Page Content</h3>
+          </div>
+          <div class="admin-card-body">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div class="form-group">
+                <label class="form-label">Page Title</label>
+                <input type="text" id="contact_page_title" class="form-input" placeholder="Get in Touch" maxlength="100" oninput="markUnsaved(this)">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Page Description</label>
+                <textarea id="contact_page_desc" class="form-input" rows="2" maxlength="300" oninput="markUnsaved(this)"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Office Hours</label>
+                <input type="text" id="contact_office_hours" class="form-input" placeholder="Monday–Friday, 8:00 AM – 5:00 PM" maxlength="100" oninput="markUnsaved(this)">
+              </div>
+              
+              <div style="border-top:1px solid var(--gray-200);padding-top:20px">
+                <h4 style="font-size:.9rem;font-weight:600;margin-bottom:16px">Contact Form Labels</h4>
+                <div class="content-form-grid">
+                  <div class="form-group">
+                    <label class="form-label">Name Field Label</label>
+                    <input type="text" id="contact_form_name_label" class="form-input" placeholder="Your Name" maxlength="50" oninput="markUnsaved(this)">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Email Field Label</label>
+                    <input type="text" id="contact_form_email_label" class="form-input" placeholder="Your Email" maxlength="50" oninput="markUnsaved(this)">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Subject Field Label</label>
+                    <input type="text" id="contact_form_subject_label" class="form-input" placeholder="Subject" maxlength="50" oninput="markUnsaved(this)">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Message Field Label</label>
+                    <input type="text" id="contact_form_message_label" class="form-input" placeholder="Your Message" maxlength="50" oninput="markUnsaved(this)">
+                  </div>
+                  <div class="form-group form-group-full">
+                    <label class="form-label">Submit Button Text</label>
+                    <input type="text" id="contact_form_submit_text" class="form-input" placeholder="Send Message" maxlength="30" oninput="markUnsaved(this)">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: Footer ── -->
+      <div class="tab-panel" id="tab-footer">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3>Footer Content</h3>
+            <span style="font-size:.8rem;color:var(--text-muted)">Appears on all pages</span>
+          </div>
+          <div class="admin-card-body">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div class="form-group">
+                <label class="form-label">Footer Description</label>
+                <textarea id="footer_description" class="form-input" rows="2" maxlength="300" oninput="markUnsaved(this)"
+                  placeholder="An official health program of the Local Government Unit..."></textarea>
+              </div>
+              
+              <div class="content-form-grid">
+                <div class="form-group">
+                  <label class="form-label">Section 1 Title</label>
+                  <input type="text" id="footer_section1_title" class="form-input" placeholder="Quick Links" maxlength="50" oninput="markUnsaved(this)">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Section 2 Title</label>
+                  <input type="text" id="footer_section2_title" class="form-input" placeholder="Programs" maxlength="50" oninput="markUnsaved(this)">
+                </div>
+                <div class="form-group form-group-full">
+                  <label class="form-label">Section 3 Title</label>
+                  <input type="text" id="footer_section3_title" class="form-input" placeholder="Contact" maxlength="50" oninput="markUnsaved(this)">
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Copyright Text</label>
+                <input type="text" id="footer_copyright" class="form-input" placeholder="© 2026 Heart Warriors — LGU Bago City. All rights reserved." maxlength="150" oninput="markUnsaved(this)">
+              </div>
+              
+              <div style="border-top:1px solid var(--gray-200);padding-top:20px">
+                <h4 style="font-size:.9rem;font-weight:600;margin-bottom:16px">Social Media Links</h4>
+                <div class="content-form-grid">
+                  <div class="form-group">
+                    <label class="form-label">Facebook URL</label>
+                    <input type="url" id="social_facebook" class="form-input" placeholder="https://facebook.com/..." oninput="markUnsaved(this)">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="social_email" class="form-input" placeholder="heartwarriors@bago.gov.ph" oninput="markUnsaved(this)">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" id="social_phone" class="form-input" placeholder="(034) 000-0000" oninput="markUnsaved(this)">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Save bar -->
       <div class="save-bar">
         <div class="save-bar-left" id="saveStatus">All changes saved.</div>
@@ -370,6 +632,20 @@ async function loadSettings() {
 }
 
 const DEFAULTS = {
+  // Navigation
+  brand_name: 'Heart Warriors',
+  brand_tagline: 'Bago City LGU Program',
+  nav_home: 'Home',
+  nav_about: 'About',
+  nav_news: 'News & Updates',
+  nav_events: 'Events',
+  nav_gallery: 'Gallery',
+  nav_contact: 'Contact',
+  nav_cta_text: 'Request Help',
+  topbar_text1: 'Local Government Unit of Bago City',
+  topbar_text2: 'Official Program Website',
+  
+  // Hero
   hero_badge: '❤️ LGU Bago City Official Program',
   hero_title_line1: 'Caring for Every',
   hero_title_highlight: 'Heart',
@@ -382,14 +658,56 @@ const DEFAULTS = {
   hero_tag1: '💊 Free Medicines',
   hero_tag2: '🩺 Free Check-ups',
   hero_tag3: '📚 Health Education',
+  
+  // Stats
   stat1_value: '1200', stat1_suffix: '+', stat1_label: 'Beneficiaries Served',
   stat2_value: '48',   stat2_suffix: '',  stat2_label: 'Barangays Covered',
   stat3_value: '350',  stat3_suffix: '+', stat3_label: 'Free Check-ups Done',
   stat4_value: '5',    stat4_suffix: '',  stat4_label: 'Years of Service',
+  
+  // Mission & Vision
   mission_text: 'To provide accessible, comprehensive, and compassionate cardiovascular health services to all residents of Bago City — especially the marginalized and underprivileged — through free medical assistance, health education, and community-based interventions.',
   vision_text: 'A Bago City where every resident has access to quality heart health care, where cardiovascular diseases are prevented through education and early detection, and where no one suffers alone because of lack of resources or support.',
   core_values_text: 'Compassion — We serve with genuine care.\nIntegrity — We act with honesty and transparency.\nExcellence — We strive for the best outcomes.\nCommunity — We believe in the power of togetherness.',
-  lgu_commitment_text: 'The Local Government Unit of Bago City fully supports Heart Warriors as a flagship health program, allocating resources, personnel, and infrastructure to ensure sustainable and impactful service delivery to all barangays.'
+  lgu_commitment_text: 'The Local Government Unit of Bago City fully supports Heart Warriors as a flagship health program, allocating resources, personnel, and infrastructure to ensure sustainable and impactful service delivery to all barangays.',
+  
+  // About Page
+  about_page_title: 'About Heart Warriors',
+  about_page_desc: 'Our story, our mission, and the people behind the program.',
+  about_intro_p1: 'Heart Warriors is an official health program of the Local Government Unit of Bago City, Negros Occidental. Established in 2021, the program was created in response to the growing prevalence of cardiovascular diseases among Bago City residents, particularly among the elderly and low-income communities.',
+  about_intro_p2: 'The program provides free cardiovascular health services including ECG screenings, blood pressure monitoring, cholesterol testing, medicine assistance, and health education seminars — all at no cost to qualified beneficiaries.',
+  about_intro_p3: 'Through partnerships with local health centers, barangay officials, and volunteer medical professionals, Heart Warriors has reached over 1,200 beneficiaries across all 48 barangays of Bago City.',
+  about_established_year: '2021',
+  about_highlight1: 'Free ECG and cardiovascular screenings for all qualified residents',
+  about_highlight2: 'Medicine assistance program for hypertension and heart disease patients',
+  about_highlight3: 'Regular community outreach in all 48 barangays of Bago City',
+  about_highlight4: 'Health education and lifestyle coaching for at-risk individuals',
+  service1_icon: '🫀', service1_title: 'ECG Screening', service1_desc: 'Free electrocardiogram screenings to detect heart irregularities early, available at all partner health centers.',
+  service2_icon: '💊', service2_title: 'Medicine Assistance', service2_desc: 'Monthly medicine packs for qualified hypertension and heart disease patients who cannot afford maintenance medications.',
+  service3_icon: '🩺', service3_title: 'Health Consultations', service3_desc: 'Free consultations with licensed physicians and cardiologists during scheduled community outreach activities.',
+  service4_icon: '📚', service4_title: 'Health Education', service4_desc: 'Regular seminars and workshops on heart-healthy lifestyles, diet, exercise, and stress management for all ages.',
+  service5_icon: '🏘️', service5_title: 'Community Outreach', service5_desc: 'Mobile health teams visiting all 48 barangays to bring services directly to residents who cannot travel to health centers.',
+  service6_icon: '👴', service6_title: 'Senior Care', service6_desc: 'Specialized care and priority services for senior citizens, including home visits for bedridden elderly patients.',
+  
+  // Contact Page
+  contact_page_title: 'Get in Touch',
+  contact_page_desc: 'Have questions or need assistance? We\'re here to help. Reach out to us through any of the channels below.',
+  contact_office_hours: 'Monday–Friday, 8:00 AM – 5:00 PM',
+  contact_form_name_label: 'Your Name',
+  contact_form_email_label: 'Your Email',
+  contact_form_subject_label: 'Subject',
+  contact_form_message_label: 'Your Message',
+  contact_form_submit_text: 'Send Message',
+  
+  // Footer
+  footer_description: 'An official health program of the Local Government Unit of Bago City, dedicated to cardiovascular health and community wellness.',
+  footer_section1_title: 'Quick Links',
+  footer_section2_title: 'Programs',
+  footer_section3_title: 'Contact',
+  footer_copyright: '© 2026 Heart Warriors — LGU Bago City. All rights reserved.',
+  social_facebook: 'https://www.facebook.com/profile.php?id=61589233370202',
+  social_email: 'heartwarriors@bago.gov.ph',
+  social_phone: '(034) 000-0000'
 };
 
 function populateForm(settings) {
