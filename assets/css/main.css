@@ -757,3 +757,15 @@ img[loading="lazy"].loaded {
   transition: width .1s linear;
   border-radius: 0 2px 2px 0;
 }
+
+/* Hero card logo heartbeat */
+.hero-img-card img {
+  animation: heartbeat 1.8s ease-in-out infinite;
+}
+@keyframes heartbeat {
+  0%,100% { transform: scale(1); }
+  14%      { transform: scale(1.08); }
+  28%      { transform: scale(1); }
+  42%      { transform: scale(1.05); }
+  56%      { transform: scale(1); }
+}
