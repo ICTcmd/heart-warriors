@@ -883,3 +883,138 @@ img[loading="lazy"].loaded {
   transform: translateY(-50%); color: var(--gray-400);
   font-size: 1rem; pointer-events: none;
 }
+
+/* ============================================================
+   Digital Clock
+   ============================================================ */
+.digital-clock {
+  display: flex; align-items: center; gap: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: .82rem; font-weight: 700;
+  color: rgba(255,255,255,.9);
+  background: rgba(255,255,255,.1);
+  padding: 3px 10px; border-radius: 4px;
+  letter-spacing: 1px;
+}
+.clock-time { color: #ffd700; }
+.clock-date { color: rgba(255,255,255,.7); font-size: .72rem; font-weight: 400; }
+
+/* ============================================================
+   Dark Mode Toggle Button
+   ============================================================ */
+.dark-mode-toggle {
+  width: 36px; height: 36px; border-radius: var(--radius-sm);
+  background: var(--gray-100); border: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; cursor: pointer; transition: var(--transition);
+  flex-shrink: 0;
+}
+.dark-mode-toggle:hover { background: var(--gray-200); transform: rotate(20deg); }
+
+/* ============================================================
+   Dark Mode Styles
+   ============================================================ */
+body.dark-mode {
+  --white:      #1a1a2e;
+  --off-white:  #16213e;
+  --gray-100:   #0f3460;
+  --gray-200:   #1a1a3e;
+  --gray-400:   #4a4a6a;
+  --gray-600:   #8888aa;
+  --gray-800:   #e0e0f0;
+  --text-dark:  #e8e8f8;
+  --text-muted: #9999bb;
+  background: #0d0d1a;
+  color: #e8e8f8;
+}
+body.dark-mode .site-header {
+  background: #12122a;
+  box-shadow: 0 2px 20px rgba(0,0,0,.4);
+}
+body.dark-mode .nav-link { color: #c8c8e8; }
+body.dark-mode .nav-link:hover,
+body.dark-mode .nav-link.active { color: #ff6b6b; background: rgba(192,57,43,.2); }
+body.dark-mode .brand-name { color: #ff6b6b; }
+body.dark-mode .brand-sub { color: #8888aa; }
+body.dark-mode .card {
+  background: #1a1a3e;
+  box-shadow: 0 2px 12px rgba(0,0,0,.4);
+}
+body.dark-mode .card:hover { box-shadow: 0 8px 30px rgba(192,57,43,.2); }
+body.dark-mode .card-title a { color: #e8e8f8; }
+body.dark-mode .section { background: #0d0d1a; }
+body.dark-mode .section[style*="background:var(--gray-100)"],
+body.dark-mode section[style*="background:var(--gray-100)"] {
+  background: #12122a !important;
+}
+body.dark-mode .mv-card {
+  background: #1a1a3e;
+  border-top-color: #ff6b6b;
+}
+body.dark-mode .mv-card h3 { color: #ff6b6b; }
+body.dark-mode .mv-card p { color: #9999bb; }
+body.dark-mode .form-control,
+body.dark-mode .form-input {
+  background: #12122a;
+  border-color: #2a2a5a;
+  color: #e8e8f8;
+}
+body.dark-mode .form-control:focus,
+body.dark-mode .form-input:focus {
+  border-color: #ff6b6b;
+  box-shadow: 0 0 0 3px rgba(255,107,107,.15);
+}
+body.dark-mode .contact-info-card,
+body.dark-mode .contact-form-card {
+  background: #1a1a3e;
+}
+body.dark-mode .contact-icon {
+  background: rgba(192,57,43,.2);
+  color: #ff6b6b;
+}
+body.dark-mode .filter-btn {
+  background: #1a1a3e;
+  border-color: #2a2a5a;
+  color: #9999bb;
+}
+body.dark-mode .filter-btn:hover,
+body.dark-mode .filter-btn.active {
+  background: var(--red-main);
+  border-color: var(--red-main);
+  color: #fff;
+}
+body.dark-mode .fb-placeholder {
+  background: #1a1a3e;
+  border-color: #2a2a5a;
+}
+body.dark-mode .map-placeholder {
+  background: #12122a;
+  border-color: #2a2a5a;
+}
+body.dark-mode .dark-mode-toggle {
+  background: #2a2a5a;
+  color: #ffd700;
+}
+body.dark-mode .dark-mode-toggle:hover { background: #3a3a7a; }
+body.dark-mode .page-btn {
+  background: #1a1a3e;
+  border-color: #2a2a5a;
+  color: #c8c8e8;
+}
+body.dark-mode .page-btn:hover,
+body.dark-mode .page-btn.active {
+  background: var(--red-main);
+  border-color: var(--red-main);
+  color: #fff;
+}
+body.dark-mode details.card { background: #1a1a3e; }
+body.dark-mode .section-title { color: #e8e8f8; }
+body.dark-mode .topbar { background: #0a0a1a; }
+body.dark-mode .hamburger span { background: #e8e8f8; }
+/* Smooth dark mode transition */
+body, body * {
+  transition: background-color .3s ease, color .3s ease, border-color .3s ease;
+}
+/* But don't transition images or transforms */
+body img, body .btn, body .card:hover { transition: none; }
+body .card { transition: transform .3s ease, box-shadow .3s ease, background-color .3s ease; }

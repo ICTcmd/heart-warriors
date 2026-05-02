@@ -536,3 +536,57 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').catch(() => {});
   });
 }
+
+/* ============================================================
+   Digital Clock
+   ============================================================ */
+function updateClock() {
+  const now = new Date();
+  const timeEl = document.getElementById('clockTime');
+  const dateEl = document.getElementById('clockDate');
+  if (!timeEl) return;
+
+  // Time: 12-hour format with AM/PM
+  let h = now.getHours();
+  const m = String(now.getMinutes()).padStart(2, '0');
+  const s = String(now.getSeconds()).padStart(2, '0');
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  timeEl.textContent = `${String(h).padStart(2,'0')}:${m}:${s} ${ampm}`;
+
+  // Date: Mon, Jan 01, 2026
+  const days   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  dateEl.textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${String(now.getDate()).padStart(2,'0')}, ${now.getFullYear()}`;
+}
+
+updateClock();
+setInterval(updateClock, 1000);
+
+/* ============================================================
+   Dark Mode Toggle
+   ============================================================ */
+const DARK_KEY = 'hw_dark_mode';
+
+function applyDarkMode(dark) {
+  document.body.classList.toggle('dark-mode', dark);
+  const btn = document.getElementById('darkModeToggle');
+  if (btn) btn.textContent = dark ? '☀️' : '🌙';
+  if (btn) btn.title = dark ? 'Switch to light mode' : 'Switch to dark mode';
+}
+
+// Apply saved preference immediately (before paint to avoid flash)
+const savedDark = localStorage.getItem(DARK_KEY) === 'true';
+applyDarkMode(savedDark);
+
+document.addEventListener('DOMContentLoaded', () => {
+  const toggle = document.getElementById('darkModeToggle');
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      const isDark = document.body.classList.toggle('dark-mode');
+      localStorage.setItem(DARK_KEY, isDark);
+      toggle.textContent = isDark ? '☀️' : '🌙';
+      toggle.title = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+    });
+  }
+});
