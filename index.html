@@ -104,8 +104,11 @@
       </div>
       <div class="hero-image-wrap">
         <div class="hero-img-card">
-          <img src="assets/images/logo.png" alt="Heart Warriors Logo"
-               style="width:140px;height:140px;border-radius:50%;object-fit:cover;margin:0 auto 16px;border:4px solid rgba(255,255,255,.3);box-shadow:0 8px 30px rgba(0,0,0,.2);">
+          <picture>
+            <source srcset="assets/images/logo.webp" type="image/webp">
+            <img src="assets/images/logo.png" alt="Heart Warriors Logo"
+                 style="width:140px;height:140px;border-radius:50%;object-fit:cover;margin:0 auto 16px;border:4px solid rgba(255,255,255,.3);box-shadow:0 8px 30px rgba(0,0,0,.2);">
+          </picture>
           <div class="card-title">Heart Warriors</div>
           <div class="card-sub">Bago City, Negros Occidental</div>
           <div style="margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
@@ -125,9 +128,12 @@
 
 <!-- Cover Photo Banner -->
 <div class="cover-banner-wrap">
-  <img src="assets/images/cover.png"
-       alt="Heart Warriors Bago City — Mayor Mayette Javellana and Cong. Jeffrey P. Ferrer"
-       class="cover-banner-img">
+  <picture>
+    <source srcset="assets/images/cover.webp" type="image/webp">
+    <img src="assets/images/cover.png"
+         alt="Heart Warriors Bago City — Mayor Mayette Javellana and Cong. Jeffrey P. Ferrer"
+         class="cover-banner-img" loading="eager" fetchpriority="high">
+  </picture>
 </div>
 
 <!-- Stats Bar -->

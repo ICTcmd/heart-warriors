@@ -1,6 +1,7 @@
 // /api/gallery — GET list, POST add
 const supabase = require('../_lib/supabase');
 const { requireAuth, cors } = require('../_lib/auth');
+const cache = require('../_lib/cache');
 
 module.exports = async (req, res) => {
   cors(res);
@@ -14,6 +15,13 @@ module.exports = async (req, res) => {
     const album = params.album || '';
     const from = (page - 1) * limit;
 
+    const cacheKey = `gallery:${album}:${page}:${limit}`;
+    const cached = cache.get(cacheKey);
+    if (cached) {
+      cache.setCacheHeaders(res, 120);
+      return res.status(200).json(cached);
+    }
+
     let query = supabase
       .from('gallery')
       .select('*', { count: 'exact' })
@@ -25,12 +33,10 @@ module.exports = async (req, res) => {
     const { data, count, error } = await query;
     if (error) return res.status(500).json({ error: error.message });
 
-    return res.status(200).json({
-      data: data || [],
-      total: count || 0,
-      pages: Math.ceil((count || 0) / limit),
-      page
-    });
+    const result = { data: data || [], total: count || 0, pages: Math.ceil((count || 0) / limit), page };
+    cache.set(cacheKey, result, 120);
+    cache.setCacheHeaders(res, 120);
+    return res.status(200).json(result);
   }
 
   const admin = requireAuth(req, res);

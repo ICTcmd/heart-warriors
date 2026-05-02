@@ -1,6 +1,7 @@
 // /api/posts — GET list, POST create
 const supabase = require('../_lib/supabase');
 const { requireAuth, cors } = require('../_lib/auth');
+const cache = require('../_lib/cache');
 
 function slugify(text) {
   return text.toLowerCase()
@@ -34,9 +35,18 @@ module.exports = async (req, res) => {
       }
     } catch { /* not authenticated */ }
 
-    // Public can only see published; admin can filter by status
     const statusParam = params.status || '';
     const status = isAdmin ? statusParam : 'published';
+
+    // Check cache for public requests
+    const cacheKey = `posts:${status}:${category}:${page}:${limit}`;
+    if (!isAdmin) {
+      const cached = cache.get(cacheKey);
+      if (cached) {
+        cache.setCacheHeaders(res, 60);
+        return res.status(200).json(cached);
+      }
+    }
 
     let query = supabase
       .from('posts')
@@ -54,12 +64,20 @@ module.exports = async (req, res) => {
     const { data, count, error } = await query;
     if (error) return res.status(500).json({ error: error.message });
 
-    return res.status(200).json({
+    const result = {
       data: (data || []).map(p => ({ ...p, category_name: p.categories?.name })),
       total: count || 0,
       pages: Math.ceil((count || 0) / limit),
       page
-    });
+    };
+
+    // Cache public published posts for 60 seconds
+    if (!isAdmin && status === 'published') {
+      cache.set(cacheKey, result, 60);
+      cache.setCacheHeaders(res, 60);
+    }
+
+    return res.status(200).json(result);
   }
 
   // POST — create post (auth required)
@@ -91,6 +109,7 @@ module.exports = async (req, res) => {
     }).select().single();
 
     if (error) return res.status(500).json({ error: error.message });
+    cache.del('posts:'); // invalidate all post caches
     return res.status(201).json({ data });
   }
 
