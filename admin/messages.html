@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages | Heart Warriors Admin</title>
+  <link rel="stylesheet" href="../assets/css/admin.css">
+  <link rel="icon" href="../assets/images/bago-city-logo.png" type="image/png">
+</head>
+<body>
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">❤️</div>
+      <div class="sidebar-brand"><div class="name">Heart Warriors</div><div class="sub">Admin Panel</div></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <a href="dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+      <a href="posts.html" class="sidebar-link"><span class="icon">📝</span> Posts & News</a>
+      <a href="gallery.html" class="sidebar-link"><span class="icon">🖼️</span> Gallery</a>
+      <div class="nav-section-label">Management</div>
+      <a href="messages.html" class="sidebar-link active"><span class="icon">✉️</span> Messages</a>
+      <a href="settings.html" class="sidebar-link"><span class="icon">⚙️</span> Settings</a>
+      <div class="nav-section-label">Future</div>
+      <a href="#" class="sidebar-link" style="opacity:.4;cursor:not-allowed" title="Coming Soon">
+        <span class="icon">👥</span> Users
+      </a>
+      <a href="#" class="sidebar-link" style="opacity:.4;cursor:not-allowed" title="Coming Soon">
+        <span class="icon">🎫</span> Help Requests
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar admin-avatar-initials">A</div>
+        <div class="sidebar-user-info">
+          <div class="user-name admin-name">Admin</div>
+          <div class="user-role admin-role">Administrator</div>
+        </div>
+        <button class="sidebar-logout" data-logout title="Logout">⏻</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="admin-main">
+    <header class="admin-header">
+      <div class="admin-header-left">
+        <div>
+          <div class="page-title">Messages</div>
+          <div class="breadcrumb-admin">Heart Warriors › Messages</div>
+        </div>
+      </div>
+      <div class="admin-header-right">
+        <span id="unreadCount" style="font-size:.85rem;color:var(--text-muted)">Loading...</span>
+      </div>
+    </header>
+
+    <div class="admin-content">
+      <div class="admin-card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:40px"></th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Subject</th>
+                <th>Date</th>
+                <th style="width:80px">Action</th>
+              </tr>
+            </thead>
+            <tbody id="messagesBody">
+              <tr><td colspan="6" style="text-align:center;padding:40px">
+                <div class="spinner" style="margin:0 auto"></div>
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Message View Modal -->
+<div class="modal-overlay" id="messageModal">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-header">
+      <h3>Message Details</h3>
+      <button class="modal-close" onclick="closeModal('messageModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div>
+          <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:4px">From</div>
+          <div id="msgFrom" style="font-weight:600"></div>
+          <div id="msgEmail" style="font-size:.85rem;color:var(--text-muted)"></div>
+        </div>
+        <div>
+          <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:4px">Subject</div>
+          <div id="msgSubject" style="font-weight:600"></div>
+        </div>
+        <div>
+          <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:4px">Date</div>
+          <div id="msgDate" style="font-size:.9rem"></div>
+        </div>
+        <div>
+          <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:8px">Message</div>
+          <div id="msgBody" style="background:var(--gray-50);border-radius:var(--radius-sm);padding:16px;font-size:.9rem;line-height:1.7;white-space:pre-wrap"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a id="msgReplyBtn" href="#" class="btn-admin btn-admin-primary" target="_blank">
+        ✉️ Reply via Email
+      </a>
+      <button class="btn-admin btn-admin-secondary" onclick="closeModal('messageModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../assets/js/admin.js"></script>
+<script>
+async function loadMessages() {
+  const tbody = document.getElementById('messagesBody');
+  const countEl = document.getElementById('unreadCount');
+
+  try {
+    const { data, total } = await apiFetch('/messages?limit=50');
+
+    const unread = (data || []).filter(m => !m.is_read).length;
+    countEl.textContent = `${total} total · ${unread} unread`;
+
+    if (!data?.length) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted)">No messages yet.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = data.map(m => `
+      <tr style="${!m.is_read ? 'background:#fffbf0;font-weight:600' : ''}">
+        <td style="text-align:center">
+          ${!m.is_read ? '<span style="color:#f59e0b;font-size:1rem" title="Unread">●</span>' : '<span style="color:var(--gray-400);font-size:1rem">○</span>'}
+        </td>
+        <td>${escHtml(m.name)}</td>
+        <td style="font-size:.85rem;color:var(--text-muted)">${escHtml(m.email)}</td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(m.subject || '—')}</td>
+        <td style="font-size:.82rem;color:var(--text-muted)">${formatDate(m.created_at)}</td>
+        <td>
+          <button class="btn-admin btn-admin-secondary btn-icon" title="View"
+                  onclick="viewMessage(${JSON.stringify(m).replace(/"/g, '&quot;')})">👁️</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:#991b1b">${err.message}</td></tr>`;
+    countEl.textContent = 'Error loading';
+  }
+}
+
+async function viewMessage(m) {
+  // Mark as read
+  if (!m.is_read) {
+    try {
+      await apiFetch(`/messages?id=${m.id}`, { method: 'PUT' });
+      loadMessages(); // refresh list
+    } catch { /* silent */ }
+  }
+
+  document.getElementById('msgFrom').textContent = m.name;
+  document.getElementById('msgEmail').textContent = m.email;
+  document.getElementById('msgSubject').textContent = m.subject || 'No subject';
+  document.getElementById('msgDate').textContent = new Date(m.created_at).toLocaleString('en-PH', {
+    year: 'numeric', month: 'long', day: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+  document.getElementById('msgBody').textContent = m.message;
+  document.getElementById('msgReplyBtn').href =
+    `mailto:${m.email}?subject=Re: ${encodeURIComponent(m.subject || 'Your message to Heart Warriors')}`;
+
+  openModal('messageModal');
+}
+
+document.addEventListener('DOMContentLoaded', loadMessages);
+</script>
+</body>
+</html>
