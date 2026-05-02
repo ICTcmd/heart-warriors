@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Posts | Heart Warriors Admin</title>
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body>
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">❤️</div>
+      <div class="sidebar-brand"><div class="name">Heart Warriors</div><div class="sub">Admin Panel</div></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <a href="dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+      <a href="posts.html" class="sidebar-link active"><span class="icon">📝</span> Posts & News</a>
+      <a href="gallery.html" class="sidebar-link"><span class="icon">🖼️</span> Gallery</a>
+      <div class="nav-section-label">Management</div>
+      <a href="messages.html" class="sidebar-link"><span class="icon">✉️</span> Messages</a>
+      <a href="settings.html" class="sidebar-link"><span class="icon">⚙️</span> Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar admin-avatar-initials">A</div>
+        <div class="sidebar-user-info">
+          <div class="user-name admin-name">Admin</div>
+          <div class="user-role admin-role">Administrator</div>
+        </div>
+        <button class="sidebar-logout" data-logout title="Logout">⏻</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="admin-main">
+    <header class="admin-header">
+      <div class="admin-header-left">
+        <div>
+          <div class="page-title">Posts & News</div>
+          <div class="breadcrumb-admin">Heart Warriors › Posts</div>
+        </div>
+      </div>
+      <div class="admin-header-right">
+        <select id="statusFilter" class="form-input form-select" style="width:140px;padding:7px 12px;font-size:.83rem"
+                onchange="loadPosts(1, this.value)">
+          <option value="">All Status</option>
+          <option value="published">Published</option>
+          <option value="draft">Draft</option>
+          <option value="archived">Archived</option>
+        </select>
+        <button class="btn-admin btn-admin-primary" onclick="openModal('postModal')">+ New Post</button>
+      </div>
+    </header>
+
+    <div class="admin-content">
+      <div class="admin-card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:50px">Image</th>
+                <th>Title / Category</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Views</th>
+                <th style="width:90px">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="postsTableBody">
+              <tr><td colspan="6" style="text-align:center;padding:40px">
+                <div class="spinner" style="margin:0 auto"></div>
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Post Modal -->
+<div class="modal-overlay" id="postModal">
+  <div class="modal" style="max-width:700px">
+    <div class="modal-header">
+      <h3 id="postModalTitle">Create New Post</h3>
+      <button class="modal-close" onclick="closeModal('postModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="postForm" onsubmit="savePost(event)">
+        <input type="hidden" name="postId" id="postId">
+        <div class="form-group">
+          <label class="form-label">Title <span style="color:var(--red-main)">*</span></label>
+          <input type="text" name="title" class="form-input" placeholder="Post title..." required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select name="category_id" class="form-input form-select" id="categorySelect">
+              <option value="">Select category...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select name="status" class="form-input form-select">
+              <option value="draft">Draft</option>
+              <option value="published">Published</option>
+              <option value="archived">Archived</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Excerpt</label>
+          <textarea name="excerpt" class="form-input" rows="2" placeholder="Short description (shown in cards)..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Content <span style="color:var(--red-main)">*</span></label>
+          <textarea name="content" class="form-input" rows="8" placeholder="Full post content..." required></textarea>
+          <div class="form-hint">HTML is supported for formatting.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Featured Image URL</label>
+          <input type="url" name="featured_image" class="form-input" placeholder="https://...">
+          <div class="form-hint">Paste an image URL or upload via Gallery first.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tags</label>
+          <input type="text" name="tags" class="form-input" placeholder="health, outreach, events (comma-separated)">
+        </div>
+        <div class="form-group" style="display:flex;align-items:center;gap:10px">
+          <input type="checkbox" name="is_featured" id="isFeatured" style="accent-color:var(--red-main)">
+          <label for="isFeatured" class="form-label" style="margin:0;cursor:pointer">Mark as Featured Post</label>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-admin btn-admin-secondary" onclick="closeModal('postModal')">Cancel</button>
+      <button class="btn-admin btn-admin-primary" onclick="document.getElementById('postForm').requestSubmit()">
+        Save Post
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-header">
+      <h3>Delete Post</h3>
+      <button class="modal-close" onclick="closeModal('deleteModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to delete <strong id="deletePostTitle"></strong>?</p>
+      <p style="font-size:.85rem;color:var(--text-muted);margin-top:8px">This action cannot be undone.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-admin btn-admin-secondary" onclick="closeModal('deleteModal')">Cancel</button>
+      <button class="btn-admin btn-admin-danger" id="confirmDeleteBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../assets/js/admin.js"></script>
+<script>
+async function loadCategories() {
+  try {
+    const { data } = await apiFetch('/categories');
+    const sel = document.getElementById('categorySelect');
+    if (sel && data) {
+      data.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id; opt.textContent = c.name;
+        sel.appendChild(opt);
+      });
+    }
+  } catch { /* silent */ }
+}
+
+function editPost(id) {
+  // Load post data and open modal
+  apiFetch(`/posts/${id}`).then(({ data }) => {
+    if (!data) return;
+    const form = document.getElementById('postForm');
+    form.dataset.postId = id;
+    form.title.value = data.title || '';
+    form.excerpt.value = data.excerpt || '';
+    form.content.value = data.content || '';
+    form.category_id.value = data.category_id || '';
+    form.status.value = data.status || 'draft';
+    form.featured_image.value = data.featured_image || '';
+    form.tags.value = (data.tags || []).join(', ');
+    form.is_featured.checked = data.is_featured || false;
+    document.getElementById('postModalTitle').textContent = 'Edit Post';
+    openModal('postModal');
+  }).catch(err => toast(err.message, 'error'));
+}
+
+function deletePost(id, title) {
+  document.getElementById('deletePostTitle').textContent = `"${title}"`;
+  document.getElementById('confirmDeleteBtn').onclick = async () => {
+    try {
+      await apiFetch(`/posts/${id}`, { method: 'DELETE' });
+      toast('Post deleted.', 'success');
+      closeModal('deleteModal');
+      loadPosts(1, document.getElementById('statusFilter').value);
+    } catch (err) { toast(err.message, 'error'); }
+  };
+  openModal('deleteModal');
+}
+
+// Reset form when opening for new post
+document.querySelector('[onclick="openModal(\'postModal\')"]')?.addEventListener('click', () => {
+  const form = document.getElementById('postForm');
+  form.reset();
+  delete form.dataset.postId;
+  document.getElementById('postModalTitle').textContent = 'Create New Post';
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadCategories();
+  loadPosts(1, '');
+  // Auto-open new post modal if ?new=1
+  if (new URLSearchParams(location.search).get('new') === '1') openModal('postModal');
+});
+</script>
+</body>
+</html>

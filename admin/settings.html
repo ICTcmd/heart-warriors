@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | Heart Warriors Admin</title>
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body>
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">❤️</div>
+      <div class="sidebar-brand"><div class="name">Heart Warriors</div><div class="sub">Admin Panel</div></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <a href="dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+      <a href="posts.html" class="sidebar-link"><span class="icon">📝</span> Posts & News</a>
+      <a href="gallery.html" class="sidebar-link"><span class="icon">🖼️</span> Gallery</a>
+      <div class="nav-section-label">Management</div>
+      <a href="messages.html" class="sidebar-link"><span class="icon">✉️</span> Messages</a>
+      <a href="settings.html" class="sidebar-link active"><span class="icon">⚙️</span> Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar admin-avatar-initials">A</div>
+        <div class="sidebar-user-info">
+          <div class="user-name admin-name">Admin</div>
+          <div class="user-role admin-role">Administrator</div>
+        </div>
+        <button class="sidebar-logout" data-logout title="Logout">⏻</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="admin-main">
+    <header class="admin-header">
+      <div class="admin-header-left">
+        <div>
+          <div class="page-title">Settings</div>
+          <div class="breadcrumb-admin">Heart Warriors › Settings</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="admin-content">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+
+        <!-- Site Settings -->
+        <div class="admin-card">
+          <div class="admin-card-header"><h3>Site Settings</h3></div>
+          <div class="admin-card-body">
+            <form id="siteSettingsForm" onsubmit="saveSiteSettings(event)">
+              <div class="form-group">
+                <label class="form-label">Site Name</label>
+                <input type="text" name="site_name" class="form-input" value="Heart Warriors">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tagline</label>
+                <input type="text" name="site_tagline" class="form-input" value="Caring for Every Heart in Bago City">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Facebook Page URL</label>
+                <input type="url" name="facebook_page_url" class="form-input" placeholder="https://facebook.com/...">
+                <div class="form-hint">Used for the Facebook feed embed on the homepage.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Contact Email</label>
+                <input type="email" name="contact_email" class="form-input" value="heartwarriors@bago.gov.ph">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Contact Phone</label>
+                <input type="text" name="contact_phone" class="form-input" placeholder="(034) 000-0000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Office Address</label>
+                <textarea name="contact_address" class="form-input" rows="2">Bago City Hall, Bago City, Negros Occidental</textarea>
+              </div>
+              <button type="submit" class="btn-admin btn-admin-primary">Save Settings</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Admin Account -->
+        <div>
+          <div class="admin-card" style="margin-bottom:24px">
+            <div class="admin-card-header"><h3>Change Password</h3></div>
+            <div class="admin-card-body">
+              <form id="changePasswordForm" onsubmit="changePassword(event)">
+                <div class="form-group">
+                  <label class="form-label">Current Password</label>
+                  <input type="password" name="current_password" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">New Password</label>
+                  <input type="password" name="new_password" class="form-input" required minlength="8">
+                  <div class="form-hint">Minimum 8 characters.</div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Confirm New Password</label>
+                  <input type="password" name="confirm_password" class="form-input" required>
+                </div>
+                <button type="submit" class="btn-admin btn-admin-primary">Update Password</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Database Info -->
+          <div class="admin-card">
+            <div class="admin-card-header"><h3>System Info</h3></div>
+            <div class="admin-card-body">
+              <div style="display:flex;flex-direction:column;gap:12px;font-size:.85rem">
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--gray-100)">
+                  <span style="color:var(--text-muted)">Platform</span>
+                  <span style="font-weight:600">Vercel + Supabase</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--gray-100)">
+                  <span style="color:var(--text-muted)">Database</span>
+                  <span style="font-weight:600">PostgreSQL (Supabase)</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--gray-100)">
+                  <span style="color:var(--text-muted)">Storage</span>
+                  <span style="font-weight:600">Supabase Storage</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0">
+                  <span style="color:var(--text-muted)">Version</span>
+                  <span style="font-weight:600">1.0.0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast-container"></div>
+<script src="../assets/js/admin.js"></script>
+<script>
+async function saveSiteSettings(e) {
+  e.preventDefault();
+  const form = e.target;
+  const btn = form.querySelector('[type="submit"]');
+  btn.disabled = true; btn.textContent = 'Saving...';
+  try {
+    const settings = {};
+    new FormData(form).forEach((v, k) => settings[k] = v);
+    await apiFetch('/settings', { method: 'PUT', body: JSON.stringify(settings) });
+    toast('Settings saved!', 'success');
+  } catch (err) { toast(err.message, 'error'); }
+  finally { btn.disabled = false; btn.textContent = 'Save Settings'; }
+}
+
+async function changePassword(e) {
+  e.preventDefault();
+  const form = e.target;
+  if (form.new_password.value !== form.confirm_password.value) {
+    toast('Passwords do not match.', 'error'); return;
+  }
+  const btn = form.querySelector('[type="submit"]');
+  btn.disabled = true; btn.textContent = 'Updating...';
+  try {
+    await apiFetch('/auth/change-password', {
+      method: 'POST',
+      body: JSON.stringify({
+        current_password: form.current_password.value,
+        new_password: form.new_password.value
+      })
+    });
+    toast('Password updated!', 'success');
+    form.reset();
+  } catch (err) { toast(err.message, 'error'); }
+  finally { btn.disabled = false; btn.textContent = 'Update Password'; }
+}
+</script>
+</body>
+</html>

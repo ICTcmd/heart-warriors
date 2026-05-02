@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery | Heart Warriors Admin</title>
+  <link rel="stylesheet" href="../assets/css/admin.css">
+  <style>
+    .gallery-admin-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 1024px) { .gallery-admin-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (max-width: 768px) { .gallery-admin-grid { grid-template-columns: repeat(3, 1fr); } }
+  </style>
+</head>
+<body>
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">❤️</div>
+      <div class="sidebar-brand"><div class="name">Heart Warriors</div><div class="sub">Admin Panel</div></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <a href="dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+      <a href="posts.html" class="sidebar-link"><span class="icon">📝</span> Posts & News</a>
+      <a href="gallery.html" class="sidebar-link active"><span class="icon">🖼️</span> Gallery</a>
+      <div class="nav-section-label">Management</div>
+      <a href="messages.html" class="sidebar-link"><span class="icon">✉️</span> Messages</a>
+      <a href="settings.html" class="sidebar-link"><span class="icon">⚙️</span> Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar admin-avatar-initials">A</div>
+        <div class="sidebar-user-info">
+          <div class="user-name admin-name">Admin</div>
+          <div class="user-role admin-role">Administrator</div>
+        </div>
+        <button class="sidebar-logout" data-logout title="Logout">⏻</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="admin-main">
+    <header class="admin-header">
+      <div class="admin-header-left">
+        <div>
+          <div class="page-title">Gallery Management</div>
+          <div class="breadcrumb-admin">Heart Warriors › Gallery</div>
+        </div>
+      </div>
+      <div class="admin-header-right">
+        <button class="btn-admin btn-admin-primary" onclick="openModal('uploadModal')">
+          + Upload Media
+        </button>
+      </div>
+    </header>
+
+    <div class="admin-content">
+      <!-- Upload Zone (inline) -->
+      <div class="admin-card" style="margin-bottom:24px">
+        <div class="admin-card-header">
+          <h3>Upload New Media</h3>
+          <span style="font-size:.8rem;color:var(--text-muted)">Images & Videos supported</span>
+        </div>
+        <div class="admin-card-body">
+          <div class="upload-zone" id="uploadZone">
+            <div class="upload-icon">📁</div>
+            <h4>Drag & drop files here</h4>
+            <p>or click to browse — JPG, PNG, GIF, MP4, WebM (max 10MB each)</p>
+            <input type="file" id="fileInput" multiple accept="image/*,video/*" style="display:none">
+          </div>
+          <div class="upload-preview" id="uploadPreview"></div>
+          <div id="uploadMeta" style="display:none;margin-top:16px">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Title / Caption</label>
+                <input type="text" id="uploadTitle" class="form-input" placeholder="Optional title...">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Album</label>
+                <select id="uploadAlbum" class="form-input form-select">
+                  <option value="">No Album</option>
+                  <option value="outreach">Outreach Activities</option>
+                  <option value="events">Events</option>
+                  <option value="screenings">Health Screenings</option>
+                  <option value="team">Our Team</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn-admin btn-admin-primary" onclick="uploadFiles()">
+              ⬆️ Upload Files
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gallery Grid -->
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3>All Media</h3>
+          <div style="display:flex;gap:10px;align-items:center">
+            <select id="albumFilterAdmin" class="form-input form-select" style="width:160px;padding:6px 10px;font-size:.82rem"
+                    onchange="loadGalleryAdmin(1)">
+              <option value="">All Albums</option>
+              <option value="outreach">Outreach</option>
+              <option value="events">Events</option>
+              <option value="screenings">Screenings</option>
+              <option value="team">Team</option>
+            </select>
+          </div>
+        </div>
+        <div class="admin-card-body">
+          <div class="gallery-admin-grid" id="galleryAdminGrid">
+            <div style="grid-column:1/-1;text-align:center;padding:40px">
+              <div class="spinner" style="margin:0 auto"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast-container"></div>
+<script src="../assets/js/admin.js"></script>
+<script>
+// Show meta fields when files are selected
+document.getElementById('fileInput').addEventListener('change', function() {
+  if (this.files.length > 0) {
+    document.getElementById('uploadMeta').style.display = 'block';
+    handleFiles(this.files, document.getElementById('uploadPreview'));
+  }
+});
+
+document.getElementById('uploadZone').addEventListener('drop', function(e) {
+  if (e.dataTransfer.files.length > 0) {
+    document.getElementById('uploadMeta').style.display = 'block';
+  }
+});
+
+async function uploadFiles() {
+  const input = document.getElementById('fileInput');
+  const title = document.getElementById('uploadTitle').value.trim();
+  const album = document.getElementById('uploadAlbum').value;
+
+  if (!input.files.length) { toast('Please select files first.', 'warning'); return; }
+
+  const btn = document.querySelector('[onclick="uploadFiles()"]');
+  btn.disabled = true; btn.textContent = 'Uploading...';
+
+  try {
+    for (const file of input.files) {
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('title', title);
+      fd.append('album', album);
+
+      const token = getToken();
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: fd
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'Upload failed');
+    }
+    toast(`${input.files.length} file(s) uploaded!`, 'success');
+    input.value = '';
+    document.getElementById('uploadPreview').innerHTML = '';
+    document.getElementById('uploadMeta').style.display = 'none';
+    loadGalleryAdmin();
+  } catch (err) {
+    toast(err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = '⬆️ Upload Files';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadGalleryAdmin();
+  setupUploadZone('uploadZone', 'fileInput', 'uploadPreview');
+  if (new URLSearchParams(location.search).get('upload') === '1') {
+    document.getElementById('uploadZone').scrollIntoView({ behavior: 'smooth' });
+  }
+});
+</script>
+</body>
+</html>

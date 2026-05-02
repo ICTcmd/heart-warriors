@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Heart Warriors News & Updates — Latest announcements, events, and stories from Bago City's cardiovascular health program.">
+  <title>News & Updates | Heart Warriors — Bago City LGU</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="topbar">
+  <div class="container">
+    <div class="topbar-left"><span>🏛️ Local Government Unit of Bago City</span></div>
+    <div class="topbar-right">
+      <a href="mailto:heartwarriors@bago.gov.ph">✉️ heartwarriors@bago.gov.ph</a>
+      <a href="https://facebook.com" target="_blank" rel="noopener">📘 Facebook</a>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="site-header">
+  <div class="container">
+    <nav class="navbar">
+      <a href="index.html" class="navbar-brand">
+        <div class="brand-text">
+          <div class="brand-name">❤️ Heart Warriors</div>
+          <div class="brand-sub">Bago City LGU Program</div>
+        </div>
+      </a>
+      <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li><a href="news.html" class="nav-link">News & Updates</a></li>
+        <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li class="nav-cta"><a href="#" class="btn btn-disabled btn-sm">🤝 Request Help (Soon)</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- Page Hero -->
+<div class="page-hero">
+  <div class="page-hero-content">
+    <h1>News & Updates</h1>
+    <p>Announcements, events, and stories from the Heart Warriors community.</p>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Home</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>News & Updates</span>
+    </nav>
+  </div>
+</div>
+
+<!-- News Section -->
+<section class="section">
+  <div class="container">
+    <!-- Category Filter -->
+    <div class="news-filter" id="categoryFilter" role="group" aria-label="Filter by category">
+      <button class="filter-btn active" data-category="" onclick="filterNews(this, '')">All</button>
+      <button class="filter-btn" data-category="announcements" onclick="filterNews(this, 'announcements')">📢 Announcements</button>
+      <button class="filter-btn" data-category="events" onclick="filterNews(this, 'events')">📅 Events</button>
+      <button class="filter-btn" data-category="stories" onclick="filterNews(this, 'stories')">💬 Stories</button>
+      <button class="filter-btn" data-category="health-tips" onclick="filterNews(this, 'health-tips')">💚 Health Tips</button>
+    </div>
+
+    <!-- Posts Grid -->
+    <div class="news-list" id="newsPosts">
+      <!-- Sample static posts shown before JS loads -->
+      <article class="card" data-aos>
+        <img class="card-img" src="assets/images/placeholder.jpg" alt="ECG Program" style="background:#fdecea">
+        <div class="card-body">
+          <span class="card-category">Announcements</span>
+          <h3 class="card-title"><a href="news-single.html">Heart Warriors Launches Free ECG Program for Senior Citizens</a></h3>
+          <p class="card-excerpt">The Heart Warriors program is proud to announce a new initiative providing free ECG screenings to all senior citizens in Bago City starting this month.</p>
+          <div class="card-meta">
+            <span>📅 May 1, 2026</span>
+            <span>👁 245 views</span>
+          </div>
+        </div>
+      </article>
+      <article class="card" data-aos>
+        <img class="card-img" src="assets/images/placeholder.jpg" alt="Health Fair" style="background:#fee2e2">
+        <div class="card-body">
+          <span class="card-category">Events</span>
+          <h3 class="card-title"><a href="news-single.html">Community Health Fair — Barangay Poblacion, May 15</a></h3>
+          <p class="card-excerpt">Join us for a free health fair with blood pressure monitoring, cholesterol testing, and health consultations. Open to all residents.</p>
+          <div class="card-meta">
+            <span>📅 Apr 28, 2026</span>
+            <span>👁 189 views</span>
+          </div>
+        </div>
+      </article>
+      <article class="card" data-aos>
+        <img class="card-img" src="assets/images/placeholder.jpg" alt="Lola Nena" style="background:#fecaca">
+        <div class="card-body">
+          <span class="card-category">Stories</span>
+          <h3 class="card-title"><a href="news-single.html">"Heart Warriors Saved My Life" — Lola Nena's Story</a></h3>
+          <p class="card-excerpt">A touching story of how the program's early detection initiative helped a 72-year-old grandmother get the care she needed in time.</p>
+          <div class="card-meta">
+            <span>📅 Apr 20, 2026</span>
+            <span>👁 412 views</span>
+          </div>
+        </div>
+      </article>
+      <article class="card" data-aos>
+        <img class="card-img" src="assets/images/placeholder.jpg" alt="Medicine Distribution" style="background:#fdecea">
+        <div class="card-body">
+          <span class="card-category">Announcements</span>
+          <h3 class="card-title"><a href="news-single.html">April Medicine Distribution Schedule Released</a></h3>
+          <p class="card-excerpt">The schedule for April's medicine distribution to registered Heart Warriors beneficiaries has been released. Check your barangay's schedule.</p>
+          <div class="card-meta">
+            <span>📅 Apr 10, 2026</span>
+            <span>👁 320 views</span>
+          </div>
+        </div>
+      </article>
+      <article class="card" data-aos>
+        <img class="card-img" src="assets/images/placeholder.jpg" alt="Health Tips" style="background:#d1fae5">
+        <div class="card-body">
+          <span class="card-category">Health Tips</span>
+          <h3 class="card-title"><a href="news-single.html">5 Heart-Healthy Foods You Can Find in Bago City Markets</a></h3>
+          <p class="card-excerpt">Our nutritionist shares affordable, locally available foods that can help lower blood pressure and improve heart health.</p>
+          <div class="card-meta">
+            <span>📅 Apr 5, 2026</span>
+            <span>👁 567 views</span>
+          </div>
+        </div>
+      </article>
+      <article class="card" data-aos>
+        <img class="card-img" src="assets/images/placeholder.jpg" alt="Outreach" style="background:#dbeafe">
+        <div class="card-body">
+          <span class="card-category">Events</span>
+          <h3 class="card-title"><a href="news-single.html">Outreach Mission Reaches Barangay Mailum — 80 Patients Served</a></h3>
+          <p class="card-excerpt">Our mobile health team successfully completed an outreach mission in Barangay Mailum, serving 80 patients with free check-ups and medicines.</p>
+          <div class="card-meta">
+            <span>📅 Mar 28, 2026</span>
+            <span>👁 198 views</span>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination" role="navigation" aria-label="Pagination"></div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <div style="font-size:1.8rem">❤️</div>
+          <span class="footer-brand-name">Heart Warriors</span>
+        </div>
+        <p class="footer-desc">An official health program of the Local Government Unit of Bago City.</p>
+        <div class="footer-social">
+          <a href="#" class="social-btn">📘</a>
+          <a href="#" class="social-btn">✉️</a>
+          <a href="#" class="social-btn">📞</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="news.html">News & Updates</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <div class="footer-links">
+          <a href="#" onclick="filterNews(null,'announcements')">Announcements</a>
+          <a href="#" onclick="filterNews(null,'events')">Events</a>
+          <a href="#" onclick="filterNews(null,'stories')">Stories</a>
+          <a href="#" onclick="filterNews(null,'health-tips')">Health Tips</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <div class="footer-links">
+          <a href="mailto:heartwarriors@bago.gov.ph">✉️ heartwarriors@bago.gov.ph</a>
+          <a href="#">📍 Bago City Hall, Negros Occidental</a>
+          <a href="#">📞 (034) 000-0000</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Heart Warriors — LGU Bago City. All rights reserved.</span>
+      <span><a href="admin/index.html">Admin</a> · <a href="#">Privacy Policy</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script>
+  let activeCategory = '';
+  function filterNews(btn, category) {
+    activeCategory = category;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    loadNewsPosts(category, 1);
+  }
+</script>
+</body>
+</html>

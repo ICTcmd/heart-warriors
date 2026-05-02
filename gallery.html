@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Heart Warriors Photo & Video Gallery — Moments from our community outreach, events, and activities in Bago City.">
+  <title>Gallery | Heart Warriors — Bago City LGU</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="topbar">
+  <div class="container">
+    <div class="topbar-left"><span>🏛️ Local Government Unit of Bago City</span></div>
+    <div class="topbar-right">
+      <a href="mailto:heartwarriors@bago.gov.ph">✉️ heartwarriors@bago.gov.ph</a>
+      <a href="https://facebook.com" target="_blank" rel="noopener">📘 Facebook</a>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="site-header">
+  <div class="container">
+    <nav class="navbar">
+      <a href="index.html" class="navbar-brand">
+        <div class="brand-text">
+          <div class="brand-name">❤️ Heart Warriors</div>
+          <div class="brand-sub">Bago City LGU Program</div>
+        </div>
+      </a>
+      <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li><a href="news.html" class="nav-link">News & Updates</a></li>
+        <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li class="nav-cta"><a href="#" class="btn btn-disabled btn-sm">🤝 Request Help (Soon)</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- Page Hero -->
+<div class="page-hero">
+  <div class="page-hero-content">
+    <h1>Photo & Video Gallery</h1>
+    <p>Moments from our outreach activities, events, and community programs.</p>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Home</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>Gallery</span>
+    </nav>
+  </div>
+</div>
+
+<!-- Gallery Section -->
+<section class="section">
+  <div class="container">
+    <!-- Album Filter -->
+    <div class="news-filter" id="albumFilter" role="group" aria-label="Filter by album">
+      <button class="filter-btn active" onclick="filterGallery(this, '')">All</button>
+      <button class="filter-btn" onclick="filterGallery(this, 'outreach')">🏘️ Outreach</button>
+      <button class="filter-btn" onclick="filterGallery(this, 'events')">📅 Events</button>
+      <button class="filter-btn" onclick="filterGallery(this, 'screenings')">🩺 Screenings</button>
+      <button class="filter-btn" onclick="filterGallery(this, 'team')">👥 Our Team</button>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="gallery-grid" id="galleryGrid" style="grid-template-columns:repeat(4,1fr)">
+      <!-- Sample placeholders shown before JS loads -->
+      <div class="gallery-item wide tall" style="background:linear-gradient(135deg,#fdecea,#fee2e2);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:var(--red-main)">
+        <div style="font-size:4rem">❤️</div>
+        <div style="font-weight:700;font-size:.9rem">Heart Warriors</div>
+      </div>
+      <div class="gallery-item" style="background:#fee2e2;display:flex;align-items:center;justify-content:center;font-size:3rem">🩺</div>
+      <div class="gallery-item" style="background:#fecaca;display:flex;align-items:center;justify-content:center;font-size:3rem">💊</div>
+      <div class="gallery-item wide" style="background:#fde8e8;display:flex;align-items:center;justify-content:center;font-size:3rem">🏥</div>
+      <div class="gallery-item" style="background:#fdecea;display:flex;align-items:center;justify-content:center;font-size:3rem">👨‍⚕️</div>
+      <div class="gallery-item" style="background:#fee2e2;display:flex;align-items:center;justify-content:center;font-size:3rem">🏘️</div>
+      <div class="gallery-item" style="background:#fecaca;display:flex;align-items:center;justify-content:center;font-size:3rem">📋</div>
+      <div class="gallery-item" style="background:#fde8e8;display:flex;align-items:center;justify-content:center;font-size:3rem">🤝</div>
+    </div>
+
+    <div class="text-center mt-3" id="loadMoreWrap">
+      <button class="btn btn-outline" id="loadMoreBtn" onclick="loadMoreGallery()">Load More Photos</button>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">✕</button>
+    <button class="lightbox-nav lightbox-prev" onclick="lightboxNav(-1)" aria-label="Previous">‹</button>
+    <img id="lightboxImg" src="" alt="Gallery image">
+    <button class="lightbox-nav lightbox-next" onclick="lightboxNav(1)" aria-label="Next">›</button>
+    <p class="lightbox-caption" id="lightboxCaption"></p>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <div style="font-size:1.8rem">❤️</div>
+          <span class="footer-brand-name">Heart Warriors</span>
+        </div>
+        <p class="footer-desc">An official health program of the Local Government Unit of Bago City.</p>
+        <div class="footer-social">
+          <a href="#" class="social-btn">📘</a>
+          <a href="#" class="social-btn">✉️</a>
+          <a href="#" class="social-btn">📞</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="news.html">News & Updates</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Albums</h4>
+        <div class="footer-links">
+          <a href="#">Outreach Activities</a>
+          <a href="#">Community Events</a>
+          <a href="#">Health Screenings</a>
+          <a href="#">Our Team</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <div class="footer-links">
+          <a href="mailto:heartwarriors@bago.gov.ph">✉️ heartwarriors@bago.gov.ph</a>
+          <a href="#">📍 Bago City Hall, Negros Occidental</a>
+          <a href="#">📞 (034) 000-0000</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Heart Warriors — LGU Bago City. All rights reserved.</span>
+      <span><a href="admin/index.html">Admin</a> · <a href="#">Privacy Policy</a></span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container"></div>
+<script src="assets/js/main.js"></script>
+<script>
+  let galleryPage = 1;
+  let activeAlbum = '';
+
+  function filterGallery(btn, album) {
+    activeAlbum = album;
+    galleryPage = 1;
+    document.querySelectorAll('#albumFilter .filter-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    loadGallery(album);
+  }
+
+  function loadMoreGallery() {
+    galleryPage++;
+    loadGallery(activeAlbum, galleryPage);
+  }
+</script>
+</body>
+</html>

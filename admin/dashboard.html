@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Heart Warriors Admin</title>
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body>
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">❤️</div>
+      <div class="sidebar-brand">
+        <div class="name">Heart Warriors</div>
+        <div class="sub">Admin Panel</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <a href="dashboard.html" class="sidebar-link active">
+        <span class="icon">📊</span> Dashboard
+      </a>
+      <a href="posts.html" class="sidebar-link">
+        <span class="icon">📝</span> Posts & News
+      </a>
+      <a href="gallery.html" class="sidebar-link">
+        <span class="icon">🖼️</span> Gallery
+      </a>
+      <div class="nav-section-label">Management</div>
+      <a href="messages.html" class="sidebar-link">
+        <span class="icon">✉️</span> Messages
+        <span class="badge" id="unreadBadge">0</span>
+      </a>
+      <a href="settings.html" class="sidebar-link">
+        <span class="icon">⚙️</span> Settings
+      </a>
+      <div class="nav-section-label">Future</div>
+      <a href="#" class="sidebar-link" style="opacity:.4;cursor:not-allowed" title="Coming Soon">
+        <span class="icon">👥</span> Users
+      </a>
+      <a href="#" class="sidebar-link" style="opacity:.4;cursor:not-allowed" title="Coming Soon">
+        <span class="icon">🎫</span> Help Requests
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar admin-avatar-initials">A</div>
+        <div class="sidebar-user-info">
+          <div class="user-name admin-name">Admin</div>
+          <div class="user-role admin-role">Administrator</div>
+        </div>
+        <button class="sidebar-logout" data-logout title="Logout">⏻</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="admin-main">
+    <header class="admin-header">
+      <div class="admin-header-left">
+        <div>
+          <div class="page-title">Dashboard</div>
+          <div class="breadcrumb-admin">Heart Warriors › Dashboard</div>
+        </div>
+      </div>
+      <div class="admin-header-right">
+        <a href="../index.html" target="_blank" class="btn-admin btn-admin-secondary" style="font-size:.8rem">
+          🌐 View Site
+        </a>
+        <a href="posts.html?new=1" class="btn-admin btn-admin-primary" style="font-size:.8rem">
+          + New Post
+        </a>
+      </div>
+    </header>
+
+    <div class="admin-content">
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon red">📝</div>
+          <div class="stat-info">
+            <div class="stat-num" id="statPosts">—</div>
+            <div class="stat-label">Total Posts</div>
+            <div class="stat-change up" id="statPostsChange"></div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue">🖼️</div>
+          <div class="stat-info">
+            <div class="stat-num" id="statGallery">—</div>
+            <div class="stat-label">Gallery Items</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon yellow">✉️</div>
+          <div class="stat-info">
+            <div class="stat-num" id="statMessages">—</div>
+            <div class="stat-label">Messages</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">👁️</div>
+          <div class="stat-info">
+            <div class="stat-num" id="statViews">—</div>
+            <div class="stat-label">Total Views</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px">
+        <!-- Recent Posts -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3>Recent Posts</h3>
+            <a href="posts.html" class="btn-admin btn-admin-secondary" style="font-size:.78rem">View All</a>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Views</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="recentPostsBody">
+                <tr><td colspan="5" style="text-align:center;padding:30px;color:var(--text-muted)">
+                  <div class="spinner" style="margin:0 auto"></div>
+                </td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div>
+          <div class="admin-card" style="margin-bottom:24px">
+            <div class="admin-card-header"><h3>Quick Actions</h3></div>
+            <div class="admin-card-body" style="display:flex;flex-direction:column;gap:10px">
+              <a href="posts.html?new=1" class="btn-admin btn-admin-primary" style="justify-content:center">
+                📝 Create New Post
+              </a>
+              <a href="gallery.html?upload=1" class="btn-admin btn-admin-secondary" style="justify-content:center">
+                🖼️ Upload to Gallery
+              </a>
+              <a href="messages.html" class="btn-admin btn-admin-secondary" style="justify-content:center">
+                ✉️ View Messages
+              </a>
+              <a href="../index.html" target="_blank" class="btn-admin btn-admin-secondary" style="justify-content:center">
+                🌐 View Live Site
+              </a>
+            </div>
+          </div>
+
+          <!-- Coming Soon -->
+          <div class="admin-card">
+            <div class="admin-card-header"><h3>Coming Soon</h3></div>
+            <div class="admin-card-body">
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--gray-50);border-radius:var(--radius-sm)">
+                  <span style="font-size:1.2rem">👥</span>
+                  <div>
+                    <div style="font-size:.85rem;font-weight:600">User Management</div>
+                    <div style="font-size:.75rem;color:var(--text-muted)">Register & manage beneficiaries</div>
+                  </div>
+                  <span class="badge" style="background:#fef3c7;color:#92400e;margin-left:auto">Soon</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--gray-50);border-radius:var(--radius-sm)">
+                  <span style="font-size:1.2rem">🎫</span>
+                  <div>
+                    <div style="font-size:.85rem;font-weight:600">Help Requests</div>
+                    <div style="font-size:.75rem;color:var(--text-muted)">Ticketing & request tracking</div>
+                  </div>
+                  <span class="badge" style="background:#fef3c7;color:#92400e;margin-left:auto">Soon</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--gray-50);border-radius:var(--radius-sm)">
+                  <span style="font-size:1.2rem">📊</span>
+                  <div>
+                    <div style="font-size:.85rem;font-weight:600">Analytics</div>
+                    <div style="font-size:.75rem;color:var(--text-muted)">Detailed traffic & engagement</div>
+                  </div>
+                  <span class="badge" style="background:#fef3c7;color:#92400e;margin-left:auto">Soon</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast-container"></div>
+<script src="../assets/js/admin.js"></script>
+<script>
+async function loadRecentPosts() {
+  const tbody = document.getElementById('recentPostsBody');
+  try {
+    const data = await apiFetch('/posts?limit=5');
+    const posts = data.data || [];
+    if (!posts.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-muted)">No posts yet.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = posts.map(p => `
+      <tr>
+        <td><div class="table-title">${escHtml(p.title)}</div></td>
+        <td><span class="badge badge-${p.status}">${p.status}</span></td>
+        <td style="font-size:.8rem;color:var(--text-muted)">${formatDate(p.published_at || p.created_at)}</td>
+        <td style="font-size:.85rem">${(p.views||0).toLocaleString()}</td>
+        <td><a href="posts.html" class="btn-admin btn-admin-secondary btn-icon" style="font-size:.75rem">✏️</a></td>
+      </tr>
+    `).join('');
+  } catch {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-muted)">Unable to load posts.</td></tr>';
+  }
+}
+document.addEventListener('DOMContentLoaded', () => {
+  loadDashboardStats();
+  loadRecentPosts();
+});
+</script>
+</body>
+</html>
