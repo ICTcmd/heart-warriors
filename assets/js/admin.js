@@ -167,6 +167,7 @@ async function savePost(e) {
     title: form.title.value.trim(),
     excerpt: form.excerpt.value.trim(),
     content: form.content.value.trim(),
+    featured_image: form.featured_image?.value.trim() || null,
     category_id: form.category_id.value || null,
     status: form.status.value,
     is_featured: form.is_featured?.checked || false,
@@ -188,6 +189,28 @@ async function savePost(e) {
   } finally {
     btn.disabled = false;
     btn.textContent = 'Save Post';
+  }
+}
+
+async function editPost(id) {
+  try {
+    const { data } = await apiFetch(`/posts/${id}`);
+    if (!data) return;
+    const form = document.getElementById('postForm');
+    if (!form) return;
+    form.dataset.postId = id;
+    form.title.value = data.title || '';
+    form.excerpt.value = data.excerpt || '';
+    form.content.value = data.content || '';
+    form.category_id.value = data.category_id || '';
+    form.status.value = data.status || 'draft';
+    if (form.featured_image) form.featured_image.value = data.featured_image || '';
+    if (form.tags) form.tags.value = (data.tags || []).join(', ');
+    if (form.is_featured) form.is_featured.checked = data.is_featured || false;
+    document.getElementById('postModalTitle').textContent = 'Edit Post';
+    openModal('postModal');
+  } catch (err) {
+    toast('Failed to load post: ' + err.message, 'error');
   }
 }
 
@@ -300,6 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (page === 'dashboard.html') loadDashboardStats();
   if (page === 'posts.html') loadPosts();
   if (page === 'gallery.html') loadGalleryAdmin();
+  if (page === 'messages.html') {} // handled inline
 
   // Sidebar active link
   document.querySelectorAll('.sidebar-link').forEach(link => {

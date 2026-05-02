@@ -14,14 +14,29 @@ module.exports = async (req, res) => {
   cors(res);
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  // GET — list posts (public)
+  // GET — list posts (public sees only published; admin sees all)
   if (req.method === 'GET') {
     const params = req.query || {};
     const page = Math.max(1, parseInt(params.page || '1'));
     const limit = Math.min(50, parseInt(params.limit || '9'));
-    const status = params.status || '';
     const category = params.category || '';
     const from = (page - 1) * limit;
+
+    // Check if request is from admin (has valid token)
+    let isAdmin = false;
+    try {
+      const authHeader = req.headers['authorization'];
+      if (authHeader?.startsWith('Bearer ')) {
+        const jwt = require('jsonwebtoken');
+        const { JWT_SECRET } = require('../_lib/auth');
+        jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
+        isAdmin = true;
+      }
+    } catch { /* not authenticated */ }
+
+    // Public can only see published; admin can filter by status
+    const statusParam = params.status || '';
+    const status = isAdmin ? statusParam : 'published';
 
     let query = supabase
       .from('posts')

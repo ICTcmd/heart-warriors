@@ -139,7 +139,7 @@ async function loadMessages() {
       return;
     }
 
-    tbody.innerHTML = data.map(m => `
+    tbody.innerHTML = data.map((m, idx) => `
       <tr style="${!m.is_read ? 'background:#fffbf0;font-weight:600' : ''}">
         <td style="text-align:center">
           ${!m.is_read ? '<span style="color:#f59e0b;font-size:1rem" title="Unread">●</span>' : '<span style="color:var(--gray-400);font-size:1rem">○</span>'}
@@ -150,10 +150,16 @@ async function loadMessages() {
         <td style="font-size:.82rem;color:var(--text-muted)">${formatDate(m.created_at)}</td>
         <td>
           <button class="btn-admin btn-admin-secondary btn-icon" title="View"
-                  onclick="viewMessage(${JSON.stringify(m).replace(/"/g, '&quot;')})">👁️</button>
+                  data-msg-idx="${idx}">👁️</button>
         </td>
       </tr>
     `).join('');
+
+    // Store messages and attach click handlers safely (no inline JSON)
+    window._messages = data;
+    tbody.querySelectorAll('[data-msg-idx]').forEach(btn => {
+      btn.addEventListener('click', () => viewMessage(window._messages[+btn.dataset.msgIdx]));
+    });
   } catch (err) {
     tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:#991b1b">${err.message}</td></tr>`;
     countEl.textContent = 'Error loading';

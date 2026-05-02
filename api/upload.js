@@ -2,11 +2,6 @@
 const { requireAuth, cors } = require('./_lib/auth');
 const supabase = require('./_lib/supabase');
 
-// Disable body parser so we can handle raw multipart
-module.exports.config = {
-  api: { bodyParser: false }
-};
-
 const ALLOWED_TYPES = [
   'image/jpeg', 'image/png', 'image/gif', 'image/webp',
   'video/mp4', 'video/webm', 'video/ogg'
@@ -14,7 +9,8 @@ const ALLOWED_TYPES = [
 const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 const BUCKET = 'heart-warriors-media';
 
-module.exports = async (req, res) => {
+// Must be a named export for Vercel config + default export for handler
+const handler = async (req, res) => {
   cors(res);
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
@@ -52,6 +48,11 @@ module.exports = async (req, res) => {
     }
 
     const ext = filePart.filename.split('.').pop().toLowerCase().replace(/[^a-z0-9]/g, '');
+    const safeExts = ['jpg','jpeg','png','gif','webp','mp4','webm','ogg'];
+    if (!safeExts.includes(ext)) {
+      return res.status(400).json({ error: 'Invalid file extension' });
+    }
+
     const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
     const folder = filePart.contentType.startsWith('video/') ? 'videos' : 'images';
     const storagePath = `${folder}/${fileName}`;
@@ -67,8 +68,8 @@ module.exports = async (req, res) => {
 
     const { data: { publicUrl } } = supabase.storage.from(BUCKET).getPublicUrl(storagePath);
 
-    const title = titlePart?.data?.toString('utf8').trim() || null;
-    const album = albumPart?.data?.toString('utf8').trim() || null;
+    const title = titlePart?.data?.toString('utf8').trim().slice(0, 255) || null;
+    const album = albumPart?.data?.toString('utf8').trim().slice(0, 100) || null;
 
     const { data: galleryItem, error: dbError } = await supabase.from('gallery').insert({
       file_url: publicUrl,
@@ -87,6 +88,9 @@ module.exports = async (req, res) => {
   }
 };
 
+handler.config = { api: { bodyParser: false } };
+module.exports = handler;
+
 function parseMultipart(buffer, boundary) {
   const parts = [];
   const boundaryBuf = Buffer.from('--' + boundary);
@@ -97,9 +101,7 @@ function parseMultipart(buffer, boundary) {
     if (bIdx === -1) break;
 
     const afterBoundary = bIdx + boundaryBuf.length;
-    // Check for final boundary (--)
     if (buffer[afterBoundary] === 45 && buffer[afterBoundary + 1] === 45) break;
-    // Skip \r\n after boundary
     const headerStart = afterBoundary + 2;
     const headerEnd = buffer.indexOf(Buffer.from('\r\n\r\n'), headerStart);
     if (headerEnd === -1) break;
@@ -121,9 +123,7 @@ function parseMultipart(buffer, boundary) {
         data: buffer.slice(dataStart, dataEnd)
       });
     }
-
     pos = nextBoundary === -1 ? buffer.length : nextBoundary;
   }
-
   return parts;
 }

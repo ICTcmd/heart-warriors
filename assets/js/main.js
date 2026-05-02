@@ -148,12 +148,12 @@ async function loadLatestPosts() {
     }
     container.innerHTML = data.map((post, i) => `
       <article class="card ${i === 0 ? 'news-featured' : ''}" data-aos>
-        <img class="card-img" src="${post.featured_image || 'assets/images/placeholder.jpg'}"
-             alt="${post.title}" loading="lazy" onerror="this.src='assets/images/placeholder.jpg'">
+        <img class="card-img" src="${escHtml(post.featured_image || 'assets/images/placeholder.jpg')}"
+             alt="${escHtml(post.title)}" loading="lazy" onerror="this.src='assets/images/placeholder.jpg'">
         <div class="card-body">
-          <span class="card-category">${post.category_name || 'News'}</span>
-          <h3 class="card-title"><a href="news-single.html?id=${post.id}">${post.title}</a></h3>
-          <p class="card-excerpt">${post.excerpt || ''}</p>
+          <span class="card-category">${escHtml(post.category_name || 'News')}</span>
+          <h3 class="card-title"><a href="news-single.html?id=${escHtml(post.id)}">${escHtml(post.title)}</a></h3>
+          <p class="card-excerpt">${escHtml(post.excerpt || '')}</p>
           <div class="card-meta">
             <span>📅 ${formatDate(post.published_at)}</span>
             <span>👁 ${post.views || 0} views</span>
@@ -188,12 +188,12 @@ async function loadNewsPosts(category = '', page = 1) {
 
     container.innerHTML = data.map(post => `
       <article class="card" data-aos>
-        <img class="card-img" src="${post.featured_image || 'assets/images/placeholder.jpg'}"
-             alt="${post.title}" loading="lazy" onerror="this.src='assets/images/placeholder.jpg'">
+        <img class="card-img" src="${escHtml(post.featured_image || 'assets/images/placeholder.jpg')}"
+             alt="${escHtml(post.title)}" loading="lazy" onerror="this.src='assets/images/placeholder.jpg'">
         <div class="card-body">
-          <span class="card-category">${post.category_name || 'News'}</span>
-          <h3 class="card-title"><a href="news-single.html?id=${post.id}">${post.title}</a></h3>
-          <p class="card-excerpt">${post.excerpt || ''}</p>
+          <span class="card-category">${escHtml(post.category_name || 'News')}</span>
+          <h3 class="card-title"><a href="news-single.html?id=${escHtml(post.id)}">${escHtml(post.title)}</a></h3>
+          <p class="card-excerpt">${escHtml(post.excerpt || '')}</p>
           <div class="card-meta">
             <span>📅 ${formatDate(post.published_at)}</span>
             <span>👁 ${post.views || 0}</span>
@@ -307,11 +307,21 @@ function slugify(text) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 }
 
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 /* ---------- Init ---------- */
 document.addEventListener('DOMContentLoaded', () => {
-  loadLatestPosts();
-  loadNewsPosts();
-  loadGallery();
+  const page = window.location.pathname.split('/').pop() || 'index.html';
+  if (page === 'index.html' || page === '') loadLatestPosts();
+  if (page === 'news.html') loadNewsPosts();
+  if (page === 'gallery.html') loadGallery();
 });
 
 /* ============================================================

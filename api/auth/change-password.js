@@ -13,11 +13,12 @@ module.exports = async (req, res) => {
   if (!authHeader?.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
+
   let decoded;
   try {
     decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
   } catch {
-    return res.status(401).json({ error: 'Invalid token' });
+    return res.status(401).json({ error: 'Invalid or expired token' });
   }
 
   const { current_password, new_password } = req.body || {};
@@ -27,17 +28,26 @@ module.exports = async (req, res) => {
   if (new_password.length < 8) {
     return res.status(400).json({ error: 'New password must be at least 8 characters.' });
   }
+  if (new_password === current_password) {
+    return res.status(400).json({ error: 'New password must be different from current password.' });
+  }
 
-  const { data: admin } = await supabase
-    .from('admins').select('*').eq('id', decoded.id).single();
+  const { data: admin, error: fetchError } = await supabase
+    .from('admins').select('id, password_hash').eq('id', decoded.id).single();
+
+  if (fetchError || !admin) {
+    return res.status(404).json({ error: 'Admin account not found.' });
+  }
 
   const valid = await bcrypt.compare(current_password, admin.password_hash);
   if (!valid) return res.status(400).json({ error: 'Current password is incorrect.' });
 
   const hash = await bcrypt.hash(new_password, 12);
-  await supabase.from('admins')
+  const { error: updateError } = await supabase.from('admins')
     .update({ password_hash: hash, updated_at: new Date() })
     .eq('id', decoded.id);
+
+  if (updateError) return res.status(500).json({ error: 'Failed to update password.' });
 
   return res.status(200).json({ message: 'Password updated successfully.' });
 };
