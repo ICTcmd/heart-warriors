@@ -1,7 +1,7 @@
 // /api/upload — File upload with auto image compression
 const { requireAuth, cors } = require('./_lib/auth');
 const supabase = require('./_lib/supabase');
-const sharp = require('sharp');
+const Jimp = require('jimp');
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/ogg'];
@@ -61,19 +61,23 @@ const handler = async (req, res) => {
 
     if (isImage) {
       // ── Auto-compress image ──────────────────────────────────────
-      // Convert to WebP: smaller file, same quality, supported by all modern browsers
       // Resize if larger than 1920x1080 (keeps aspect ratio, never upscales)
-      const compressed = await sharp(filePart.data)
-        .resize(MAX_WIDTH, MAX_HEIGHT, {
-          fit: 'inside',        // maintain aspect ratio
-          withoutEnlargement: true  // never upscale small images
-        })
-        .webp({ quality: IMAGE_QUALITY })
-        .toBuffer();
+      // Jimp is pure JS — no native binaries, works on Vercel Hobby
+      const image = await Jimp.read(filePart.data);
+
+      // Only downscale, never upscale
+      if (image.getWidth() > MAX_WIDTH || image.getHeight() > MAX_HEIGHT) {
+        image.scaleToFit(MAX_WIDTH, MAX_HEIGHT);
+      }
+
+      // Save as JPEG (Jimp doesn't support WebP encode natively)
+      const compressed = await image
+        .quality(IMAGE_QUALITY)
+        .getBufferAsync(Jimp.MIME_JPEG);
 
       uploadBuffer = compressed;
-      uploadContentType = 'image/webp';
-      fileExt = 'webp';
+      uploadContentType = 'image/jpeg';
+      fileExt = 'jpg';
       compressedSize = compressed.length;
     } else {
       // Video — store as-is, just sanitize extension
