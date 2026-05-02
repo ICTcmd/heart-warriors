@@ -313,3 +313,75 @@ document.addEventListener('DOMContentLoaded', () => {
   loadNewsPosts();
   loadGallery();
 });
+
+/* ============================================================
+   Enhanced Animations
+   ============================================================ */
+
+// Scroll progress bar
+const progressBar = document.createElement('div');
+progressBar.className = 'scroll-progress';
+document.body.prepend(progressBar);
+window.addEventListener('scroll', () => {
+  const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  progressBar.style.width = Math.min(pct, 100) + '%';
+}, { passive: true });
+
+// Cover banner reveal on scroll
+const coverBanner = document.querySelector('.cover-banner-wrap');
+if (coverBanner) {
+  const bannerObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        bannerObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  bannerObserver.observe(coverBanner);
+}
+
+// Stagger children observer
+document.querySelectorAll('.stagger-children').forEach(el => {
+  const staggerObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        staggerObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  staggerObserver.observe(el);
+});
+
+// Lazy image fade-in
+document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+  if (img.complete) {
+    img.classList.add('loaded');
+  } else {
+    img.addEventListener('load', () => img.classList.add('loaded'));
+  }
+});
+
+// Page load class (triggers header slide-down)
+window.addEventListener('load', () => {
+  document.body.classList.add('page-loaded');
+});
+
+// Stat number pulse on count-up finish
+document.querySelectorAll('[data-counter]').forEach(el => {
+  const orig = animateCounter;
+  // Pulse the number when it finishes
+  const pulsePatch = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('pulse');
+          setTimeout(() => entry.target.classList.remove('pulse'), 200);
+        }, 1800);
+        pulsePatch.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  pulsePatch.observe(el);
+});

@@ -600,3 +600,160 @@ textarea.form-control { resize: vertical; min-height: 130px; }
   .hero-title { font-size: 1.8rem; }
   .btn-lg { padding: 13px 24px; font-size: .95rem; }
 }
+
+/* ============================================================
+   Cover Banner Animation
+   ============================================================ */
+.cover-banner-wrap {
+  width: 100%;
+  background: #1a0a0a;
+  line-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity .9s ease, transform .9s ease;
+}
+.cover-banner-wrap.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+.cover-banner-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transform: scale(1.04);
+  transition: transform 1.2s ease;
+}
+.cover-banner-wrap.revealed .cover-banner-img {
+  transform: scale(1);
+}
+
+/* ============================================================
+   Page Load — Smooth entrance for whole page
+   ============================================================ */
+.page-loaded .site-header {
+  animation: slideDown .6s ease forwards;
+}
+.page-loaded .hero {
+  animation: fadeIn .8s ease forwards;
+}
+@keyframes slideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+/* ============================================================
+   Hero text stagger animation
+   ============================================================ */
+.hero-badge    { animation: fadeInUp .6s ease .1s both; }
+.hero-title    { animation: fadeInUp .6s ease .25s both; }
+.hero-desc     { animation: fadeInUp .6s ease .4s both; }
+.hero-actions  { animation: fadeInUp .6s ease .55s both; }
+.hero-stats    { animation: fadeInUp .6s ease .7s both; }
+.hero-img-card { animation: fadeInUp .7s ease .5s both; }
+
+/* ============================================================
+   Stats bar count-up pulse
+   ============================================================ */
+.stat-item .num {
+  display: inline-block;
+  transition: transform .15s ease;
+}
+.stat-item .num.pulse {
+  transform: scale(1.15);
+}
+
+/* ============================================================
+   Card hover — lift + glow
+   ============================================================ */
+.card {
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(192,57,43,.15);
+}
+
+/* ============================================================
+   Nav link underline slide
+   ============================================================ */
+.nav-link::before {
+  content: '';
+  position: absolute;
+  bottom: 2px; left: 50%;
+  width: 0; height: 3px;
+  background: var(--red-main);
+  border-radius: 2px;
+  transition: width .3s ease, left .3s ease;
+}
+.nav-link:hover::before,
+.nav-link.active::before {
+  width: 60%; left: 20%;
+}
+/* Remove the old ::after underline since we use ::before now */
+.nav-link.active::after { display: none; }
+
+/* ============================================================
+   Button ripple effect
+   ============================================================ */
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,.2);
+  border-radius: inherit;
+  transform: scale(0);
+  opacity: 0;
+  transition: transform .4s ease, opacity .4s ease;
+}
+.btn:active::after {
+  transform: scale(1);
+  opacity: 1;
+  transition: 0s;
+}
+
+/* ============================================================
+   Section reveal — stagger children
+   ============================================================ */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .5s ease, transform .5s ease;
+}
+.stagger-children.revealed > *:nth-child(1) { opacity:1; transform:none; transition-delay:.05s; }
+.stagger-children.revealed > *:nth-child(2) { opacity:1; transform:none; transition-delay:.15s; }
+.stagger-children.revealed > *:nth-child(3) { opacity:1; transform:none; transition-delay:.25s; }
+.stagger-children.revealed > *:nth-child(4) { opacity:1; transform:none; transition-delay:.35s; }
+.stagger-children.revealed > *:nth-child(5) { opacity:1; transform:none; transition-delay:.45s; }
+.stagger-children.revealed > *:nth-child(6) { opacity:1; transform:none; transition-delay:.55s; }
+
+/* ============================================================
+   Smooth image load fade-in
+   ============================================================ */
+img {
+  transition: opacity .4s ease;
+}
+img[loading="lazy"] {
+  opacity: 0;
+}
+img[loading="lazy"].loaded {
+  opacity: 1;
+}
+
+/* ============================================================
+   Scroll progress bar
+   ============================================================ */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--red-dark), var(--red-light), #ffd700);
+  z-index: 9999;
+  transition: width .1s linear;
+  border-radius: 0 2px 2px 0;
+}
