@@ -127,17 +127,17 @@
       <div class="mv-card" data-aos>
         <div class="mv-icon">🎯</div>
         <h3>Mission</h3>
-        <p>To provide accessible, comprehensive, and compassionate cardiovascular health services to all residents of Bago City — especially the marginalized and underprivileged — through free medical assistance, health education, and community-based interventions that promote heart health and overall wellness.</p>
+        <p id="dyn-mission">To provide accessible, comprehensive, and compassionate cardiovascular health services to all residents of Bago City — especially the marginalized and underprivileged — through free medical assistance, health education, and community-based interventions that promote heart health and overall wellness.</p>
       </div>
       <div class="mv-card" data-aos>
         <div class="mv-icon">🌟</div>
         <h3>Vision</h3>
-        <p>A Bago City where every resident has access to quality heart health care, where cardiovascular diseases are prevented through education and early detection, and where no one suffers alone because of lack of resources or support from their community and government.</p>
+        <p id="dyn-vision">A Bago City where every resident has access to quality heart health care, where cardiovascular diseases are prevented through education and early detection, and where no one suffers alone because of lack of resources or support from their community and government.</p>
       </div>
       <div class="mv-card" data-aos>
         <div class="mv-icon">💎</div>
         <h3>Core Values</h3>
-        <p>
+        <p id="dyn-core-values">
           <strong>Compassion</strong> — We serve with genuine care and empathy.<br><br>
           <strong>Integrity</strong> — We act with honesty, transparency, and accountability.<br><br>
           <strong>Excellence</strong> — We strive for the best health outcomes.<br><br>
@@ -147,7 +147,7 @@
       <div class="mv-card" data-aos>
         <div class="mv-icon">🏛️</div>
         <h3>LGU Commitment</h3>
-        <p>The Local Government Unit of Bago City fully supports Heart Warriors as a flagship health program, allocating dedicated budget, personnel, and infrastructure. The program operates under the City Health Office with direct oversight from the Office of the Mayor.</p>
+        <p id="dyn-lgu-commitment">The Local Government Unit of Bago City fully supports Heart Warriors as a flagship health program, allocating dedicated budget, personnel, and infrastructure. The program operates under the City Health Office with direct oversight from the Office of the Mayor.</p>
       </div>
     </div>
   </div>
@@ -293,5 +293,39 @@
 </footer>
 
 <script src="assets/js/main.js"></script>
+<script>
+/* ── Dynamic site content loader ── */
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const isPreview = params.get('_preview') === '1';
+
+  function applyContent(s) {
+    function set(id, val) { const el = document.getElementById(id); if (el && val) el.textContent = val; }
+    function setCoreValues(id, val) {
+      const el = document.getElementById(id);
+      if (!el || !val) return;
+      el.innerHTML = val.split('\n').filter(Boolean).map(line => {
+        return line.replace(/^([^—–-]+[—–-])/, '<strong>$1</strong>');
+      }).join('<br><br>');
+    }
+
+    set('dyn-mission', s.mission_text);
+    set('dyn-vision', s.vision_text);
+    setCoreValues('dyn-core-values', s.core_values_text);
+    set('dyn-lgu-commitment', s.lgu_commitment_text);
+  }
+
+  if (isPreview) {
+    const s = {};
+    params.forEach((v, k) => { if (k !== '_preview') s[k] = v; });
+    applyContent(s);
+  } else {
+    fetch('/api/settings')
+      .then(r => r.json())
+      .then(json => { if (json.data) applyContent(json.data); })
+      .catch(() => {});
+  }
+})();
+</script>
 </body>
 </html>

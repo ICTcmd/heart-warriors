@@ -23,6 +23,7 @@
       <a href="gallery.html" class="sidebar-link"><span class="icon">🖼️</span> Gallery</a>
       <div class="nav-section-label">Management</div>
       <a href="messages.html" class="sidebar-link"><span class="icon">✉️</span> Messages</a>
+      <a href="content.html" class="sidebar-link"><span class="icon">✏️</span> Site Content</a>
       <a href="settings.html" class="sidebar-link active"><span class="icon">⚙️</span> Settings</a>
     </nav>
     <div class="sidebar-footer">
@@ -169,7 +170,7 @@ async function changePassword(e) {
   const btn = form.querySelector('[type="submit"]');
   btn.disabled = true; btn.textContent = 'Updating...';
   try {
-    await apiFetch('/auth/change-password', {
+    await apiFetch('/auth?action=change-password', {
       method: 'POST',
       body: JSON.stringify({
         current_password: form.current_password.value,
