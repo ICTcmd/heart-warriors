@@ -14,12 +14,12 @@
 <div class="topbar">
   <div class="container">
     <div class="topbar-left">
-      <span>🏛️ Local Government Unit of Bago City</span>
+      <span id="dyn-topbar-text1">🏛️ Local Government Unit of Bago City</span>
     </div>
     <div class="topbar-right">
       <div class="digital-clock" id="digitalClock"><span>🕐</span><span class="clock-time" id="clockTime">--:--:--</span><span class="clock-date" id="clockDate">--- --, ----</span></div>
-      <a href="mailto:heartwarriors@bago.gov.ph">✉️ heartwarriors@bago.gov.ph</a>
-      <a href="https://www.facebook.com/profile.php?id=61589233370202" target="_blank" rel="noopener">📘 Facebook</a>
+      <a href="mailto:heartwarriors@bago.gov.ph" id="dyn-social-email">✉️ <span id="dyn-social-email-text">heartwarriors@bago.gov.ph</span></a>
+      <a href="https://www.facebook.com/profile.php?id=61589233370202" id="dyn-social-facebook" target="_blank" rel="noopener">📘 Facebook</a>
     </div>
   </div>
 </div>
@@ -30,18 +30,19 @@
     <nav class="navbar">
       <a href="index.html" class="navbar-brand">
         <div class="brand-text">
-          <div class="brand-name">❤️ Heart Warriors</div>
-          <div class="brand-sub">Bago City LGU Program</div>
+          <div class="brand-name" id="dyn-brand-name">❤️ Heart Warriors</div>
+          <div class="brand-sub" id="dyn-brand-tagline">Bago City LGU Program</div>
         </div>
       </a>
       <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
       <ul class="nav-menu">
-        <li><a href="index.html" class="nav-link">Home</a></li>
-        <li><a href="about.html" class="nav-link">About</a></li>
-        <li><a href="news.html" class="nav-link">News & Updates</a></li>
-        <li><a href="gallery.html" class="nav-link">Gallery</a></li>
-        <li><a href="contact.html" class="nav-link">Contact</a></li>
-        <li class="nav-cta"><a href="#" class="btn btn-disabled btn-sm">🤝 Request Help (Soon)</a>        <li><button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button></li>
+        <li><a href="index.html" class="nav-link" id="dyn-nav-home">Home</a></li>
+        <li><a href="about.html" class="nav-link" id="dyn-nav-about">About</a></li>
+        <li><a href="news.html" class="nav-link" id="dyn-nav-news">News & Updates</a></li>
+        <li><a href="gallery.html" class="nav-link" id="dyn-nav-gallery">Gallery</a></li>
+        <li><a href="contact.html" class="nav-link" id="dyn-nav-contact">Contact</a></li>
+        <li class="nav-cta"><a href="#" class="btn btn-disabled btn-sm">🤝 <span id="dyn-nav-cta">Request Help</span> <span style="font-size:.7rem;opacity:.8">(Soon)</span></a></li>
+        <li><button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button></li>
       </ul>
     </nav>
   </div>
@@ -50,8 +51,8 @@
 <!-- Page Hero -->
 <div class="page-hero">
   <div class="page-hero-content">
-    <h1>About Heart Warriors</h1>
-    <p>Our story, our mission, and the people behind the program.</p>
+    <h1 id="dyn-about-title">About Heart Warriors</h1>
+    <p id="dyn-about-desc">Our story, our mission, and the people behind the program.</p>
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href="index.html">Home</a>
       <span class="breadcrumb-sep">›</span>
@@ -69,25 +70,25 @@
           ❤️
         </div>
         <div class="about-img-badge">
-          <div class="badge-num">2021</div>
+          <div class="badge-num" id="dyn-about-year">2021</div>
           <div class="badge-text">Est. Year</div>
         </div>
       </div>
       <div class="about-text" data-aos>
         <span class="section-label">Our Story</span>
         <h2>What is <span>Heart Warriors?</span></h2>
-        <p>
+        <p id="dyn-about-p1">
           Heart Warriors is an official health program of the Local Government Unit of Bago City,
           Negros Occidental. Established in 2021, the program was created in response to the
           growing prevalence of cardiovascular diseases among Bago City residents, particularly
           among the elderly and low-income communities.
         </p>
-        <p>
+        <p id="dyn-about-p2">
           The program provides free cardiovascular health services including ECG screenings,
           blood pressure monitoring, cholesterol testing, medicine assistance, and health
           education seminars — all at no cost to qualified beneficiaries.
         </p>
-        <p>
+        <p id="dyn-about-p3">
           Through partnerships with local health centers, barangay officials, and volunteer
           medical professionals, Heart Warriors has reached over 1,200 beneficiaries across
           all 48 barangays of Bago City.
@@ -95,19 +96,19 @@
         <div class="about-highlights">
           <div class="highlight-item">
             <span class="highlight-icon">✅</span>
-            <p>Free ECG and cardiovascular screenings for all qualified residents</p>
+            <p id="dyn-highlight1">Free ECG and cardiovascular screenings for all qualified residents</p>
           </div>
           <div class="highlight-item">
             <span class="highlight-icon">✅</span>
-            <p>Medicine assistance program for hypertension and heart disease patients</p>
+            <p id="dyn-highlight2">Medicine assistance program for hypertension and heart disease patients</p>
           </div>
           <div class="highlight-item">
             <span class="highlight-icon">✅</span>
-            <p>Regular community outreach in all 48 barangays of Bago City</p>
+            <p id="dyn-highlight3">Regular community outreach in all 48 barangays of Bago City</p>
           </div>
           <div class="highlight-item">
             <span class="highlight-icon">✅</span>
-            <p>Health education and lifestyle coaching for at-risk individuals</p>
+            <p id="dyn-highlight4">Health education and lifestyle coaching for at-risk individuals</p>
           </div>
         </div>
       </div>
@@ -163,34 +164,34 @@
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px" id="servicesGrid">
       <div class="card" data-aos style="text-align:center;padding:30px">
-        <div style="font-size:3rem;margin-bottom:16px">🫀</div>
-        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:10px;color:var(--red-main)">ECG Screening</h3>
-        <p style="font-size:.9rem;color:var(--text-muted)">Free electrocardiogram screenings to detect heart irregularities early, available at all partner health centers.</p>
+        <div style="font-size:3rem;margin-bottom:16px" id="dyn-service1-icon">🫀</div>
+        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:10px;color:var(--red-main)" id="dyn-service1-title">ECG Screening</h3>
+        <p style="font-size:.9rem;color:var(--text-muted)" id="dyn-service1-desc">Free electrocardiogram screenings to detect heart irregularities early, available at all partner health centers.</p>
       </div>
       <div class="card" data-aos style="text-align:center;padding:30px">
-        <div style="font-size:3rem;margin-bottom:16px">💊</div>
-        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:10px;color:var(--red-main)">Medicine Assistance</h3>
-        <p style="font-size:.9rem;color:var(--text-muted)">Monthly medicine packs for qualified hypertension and heart disease patients who cannot afford maintenance medications.</p>
+        <div style="font-size:3rem;margin-bottom:16px" id="dyn-service2-icon">💊</div>
+        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:10px;color:var(--red-main)" id="dyn-service2-title">Medicine Assistance</h3>
+        <p style="font-size:.9rem;color:var(--text-muted)" id="dyn-service2-desc">Monthly medicine packs for qualified hypertension and heart disease patients who cannot afford maintenance medications.</p>
       </div>
       <div class="card" data-aos style="text-align:center;padding:30px">
-        <div style="font-size:3rem;margin-bottom:16px">🩺</div>
-        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:10px;color:var(--red-main)">Health Consultations</h3>
-        <p style="font-size:.9rem;color:var(--text-muted)">Free consultations with licensed physicians and cardiologists during scheduled community outreach activities.</p>
+        <div style="font-size:3rem;margin-bottom:16px" id="dyn-service3-icon">🩺</div>
+        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:10px;color:var(--red-main)" id="dyn-service3-title">Health Consultations</h3>
+        <p style="font-size:.9rem;color:var(--text-muted)" id="dyn-service3-desc">Free consultations with licensed physicians and cardiologists during scheduled community outreach activities.</p>
       </div>
       <div class="card" data-aos style="text-align:center;padding:30px">
-        <div style="font-size:3rem;margin-bottom:16px">📚</div>
-        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:10px;color:var(--red-main)">Health Education</h3>
-        <p style="font-size:.9rem;color:var(--text-muted)">Regular seminars and workshops on heart-healthy lifestyles, diet, exercise, and stress management for all ages.</p>
+        <div style="font-size:3rem;margin-bottom:16px" id="dyn-service4-icon">📚</div>
+        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:10px;color:var(--red-main)" id="dyn-service4-title">Health Education</h3>
+        <p style="font-size:.9rem;color:var(--text-muted)" id="dyn-service4-desc">Regular seminars and workshops on heart-healthy lifestyles, diet, exercise, and stress management for all ages.</p>
       </div>
       <div class="card" data-aos style="text-align:center;padding:30px">
-        <div style="font-size:3rem;margin-bottom:16px">🏘️</div>
-        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:10px;color:var(--red-main)">Community Outreach</h3>
-        <p style="font-size:.9rem;color:var(--text-muted)">Mobile health teams visiting all 48 barangays to bring services directly to residents who cannot travel to health centers.</p>
+        <div style="font-size:3rem;margin-bottom:16px" id="dyn-service5-icon">🏘️</div>
+        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:10px;color:var(--red-main)" id="dyn-service5-title">Community Outreach</h3>
+        <p style="font-size:.9rem;color:var(--text-muted)" id="dyn-service5-desc">Mobile health teams visiting all 48 barangays to bring services directly to residents who cannot travel to health centers.</p>
       </div>
       <div class="card" data-aos style="text-align:center;padding:30px">
-        <div style="font-size:3rem;margin-bottom:16px">👴</div>
-        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:10px;color:var(--red-main)">Senior Care</h3>
-        <p style="font-size:.9rem;color:var(--text-muted)">Specialized care and priority services for senior citizens, including home visits for bedridden elderly patients.</p>
+        <div style="font-size:3rem;margin-bottom:16px" id="dyn-service6-icon">👴</div>
+        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:10px;color:var(--red-main)" id="dyn-service6-title">Senior Care</h3>
+        <p style="font-size:.9rem;color:var(--text-muted)" id="dyn-service6-desc">Specialized care and priority services for senior citizens, including home visits for bedridden elderly patients.</p>
       </div>
     </div>
   </div>
@@ -250,15 +251,15 @@
           <div style="font-size:1.8rem">❤️</div>
           <span class="footer-brand-name">Heart Warriors</span>
         </div>
-        <p class="footer-desc">An official health program of the Local Government Unit of Bago City, dedicated to cardiovascular health and community wellness.</p>
+        <p class="footer-desc" id="dyn-footer-desc">An official health program of the Local Government Unit of Bago City, dedicated to cardiovascular health and community wellness.</p>
         <div class="footer-social">
-          <a href="#" class="social-btn">📘</a>
-          <a href="#" class="social-btn">✉️</a>
+          <a href="#" id="dyn-social-facebook" class="social-btn">📘</a>
+          <a href="#" id="dyn-social-email" class="social-btn">✉️</a>
           <a href="#" class="social-btn">📞</a>
         </div>
       </div>
       <div class="footer-col">
-        <h4>Quick Links</h4>
+        <h4 id="dyn-footer-section1">Quick Links</h4>
         <div class="footer-links">
           <a href="index.html">Home</a>
           <a href="about.html">About</a>
@@ -268,7 +269,7 @@
         </div>
       </div>
       <div class="footer-col">
-        <h4>Programs</h4>
+        <h4 id="dyn-footer-section2">Programs</h4>
         <div class="footer-links">
           <a href="#">Free ECG Screening</a>
           <a href="#">Medicine Assistance</a>
@@ -277,7 +278,7 @@
         </div>
       </div>
       <div class="footer-col">
-        <h4>Contact</h4>
+        <h4 id="dyn-footer-section3">Contact</h4>
         <div class="footer-links">
           <a href="mailto:heartwarriors@bago.gov.ph">✉️ heartwarriors@bago.gov.ph</a>
           <a href="#">📍 Bago City Hall, Negros Occidental</a>
@@ -286,46 +287,13 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 Heart Warriors — LGU Bago City. All rights reserved.</span>
+      <span id="dyn-footer-copyright">© 2026 Heart Warriors — LGU Bago City. All rights reserved.</span>
       <span><a href="admin/index.html">Admin</a> · <a href="#">Privacy Policy</a></span>
     </div>
   </div>
 </footer>
 
 <script src="assets/js/main.js"></script>
-<script>
-/* ── Dynamic site content loader ── */
-(function() {
-  const params = new URLSearchParams(window.location.search);
-  const isPreview = params.get('_preview') === '1';
-
-  function applyContent(s) {
-    function set(id, val) { const el = document.getElementById(id); if (el && val) el.textContent = val; }
-    function setCoreValues(id, val) {
-      const el = document.getElementById(id);
-      if (!el || !val) return;
-      el.innerHTML = val.split('\n').filter(Boolean).map(line => {
-        return line.replace(/^([^—–-]+[—–-])/, '<strong>$1</strong>');
-      }).join('<br><br>');
-    }
-
-    set('dyn-mission', s.mission_text);
-    set('dyn-vision', s.vision_text);
-    setCoreValues('dyn-core-values', s.core_values_text);
-    set('dyn-lgu-commitment', s.lgu_commitment_text);
-  }
-
-  if (isPreview) {
-    const s = {};
-    params.forEach((v, k) => { if (k !== '_preview') s[k] = v; });
-    applyContent(s);
-  } else {
-    fetch('/api/settings')
-      .then(r => r.json())
-      .then(json => { if (json.data) applyContent(json.data); })
-      .catch(() => {});
-  }
-})();
-</script>
+<script src="assets/js/content-loader.js"></script>
 </body>
 </html>

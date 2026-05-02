@@ -64,7 +64,7 @@ if (loginForm) {
     if (errEl) errEl.style.display = 'none';
 
     try {
-      const data = await apiFetch('/auth/login', {
+      const data = await apiFetch('/auth?action=login', {
         method: 'POST',
         body: JSON.stringify({
           email: loginForm.email.value.trim(),
@@ -147,7 +147,7 @@ async function loadPosts(page = 1, status = '') {
 async function deletePost(id, title) {
   if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
   try {
-    await apiFetch(`/posts/${id}`, { method: 'DELETE' });
+    await apiFetch(`/posts?id=${id}`, { method: 'DELETE' });
     toast('Post deleted.', 'success');
     loadPosts(postsPage, postsFilter);
   } catch (err) {
@@ -176,7 +176,7 @@ async function savePost(e) {
 
   try {
     if (id) {
-      await apiFetch(`/posts/${id}`, { method: 'PUT', body: JSON.stringify(body) });
+      await apiFetch(`/posts?id=${id}`, { method: 'PUT', body: JSON.stringify(body) });
       toast('Post updated!', 'success');
     } else {
       await apiFetch('/posts', { method: 'POST', body: JSON.stringify(body) });
@@ -194,7 +194,7 @@ async function savePost(e) {
 
 async function editPost(id) {
   try {
-    const { data } = await apiFetch(`/posts/${id}`);
+    const { data } = await apiFetch(`/posts?id=${id}`);
     if (!data) return;
     const form = document.getElementById('postForm');
     if (!form) return;
@@ -249,7 +249,7 @@ async function loadGalleryAdmin(page = 1) {
 async function deleteGalleryItem(id) {
   if (!confirm('Delete this media item?')) return;
   try {
-    await apiFetch(`/gallery/${id}`, { method: 'DELETE' });
+    await apiFetch(`/gallery?id=${id}`, { method: 'DELETE' });
     toast('Deleted.', 'success');
     loadGalleryAdmin();
   } catch (err) {

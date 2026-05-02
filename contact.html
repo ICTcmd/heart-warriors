@@ -13,11 +13,11 @@
 <!-- Top Bar -->
 <div class="topbar">
   <div class="container">
-    <div class="topbar-left"><span>🏛️ Local Government Unit of Bago City</span></div>
+    <div class="topbar-left"><span id="dyn-topbar-text1">🏛️ Local Government Unit of Bago City</span></div>
     <div class="topbar-right">
       <div class="digital-clock" id="digitalClock"><span>🕐</span><span class="clock-time" id="clockTime">--:--:--</span><span class="clock-date" id="clockDate">--- --, ----</span></div>
-      <a href="mailto:heartwarriors@bago.gov.ph">✉️ heartwarriors@bago.gov.ph</a>
-      <a href="https://www.facebook.com/profile.php?id=61589233370202" target="_blank" rel="noopener">📘 Facebook</a>
+      <a href="mailto:heartwarriors@bago.gov.ph" id="dyn-social-email">✉️ <span id="dyn-social-email-text">heartwarriors@bago.gov.ph</span></a>
+      <a href="https://www.facebook.com/profile.php?id=61589233370202" id="dyn-social-facebook" target="_blank" rel="noopener">📘 Facebook</a>
     </div>
   </div>
 </div>
@@ -28,18 +28,19 @@
     <nav class="navbar">
       <a href="index.html" class="navbar-brand">
         <div class="brand-text">
-          <div class="brand-name">❤️ Heart Warriors</div>
-          <div class="brand-sub">Bago City LGU Program</div>
+          <div class="brand-name" id="dyn-brand-name">❤️ Heart Warriors</div>
+          <div class="brand-sub" id="dyn-brand-tagline">Bago City LGU Program</div>
         </div>
       </a>
       <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
       <ul class="nav-menu">
-        <li><a href="index.html" class="nav-link">Home</a></li>
-        <li><a href="about.html" class="nav-link">About</a></li>
-        <li><a href="news.html" class="nav-link">News & Updates</a></li>
-        <li><a href="gallery.html" class="nav-link">Gallery</a></li>
-        <li><a href="contact.html" class="nav-link">Contact</a></li>
-        <li class="nav-cta"><a href="#" class="btn btn-disabled btn-sm">🤝 Request Help (Soon)</a>        <li><button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button></li>
+        <li><a href="index.html" class="nav-link" id="dyn-nav-home">Home</a></li>
+        <li><a href="about.html" class="nav-link" id="dyn-nav-about">About</a></li>
+        <li><a href="news.html" class="nav-link" id="dyn-nav-news">News & Updates</a></li>
+        <li><a href="gallery.html" class="nav-link" id="dyn-nav-gallery">Gallery</a></li>
+        <li><a href="contact.html" class="nav-link" id="dyn-nav-contact">Contact</a></li>
+        <li class="nav-cta"><a href="#" class="btn btn-disabled btn-sm">🤝 <span id="dyn-nav-cta">Request Help</span> <span style="font-size:.7rem;opacity:.8">(Soon)</span></a></li>
+        <li><button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button></li>
       </ul>
     </nav>
   </div>
@@ -48,8 +49,8 @@
 <!-- Page Hero -->
 <div class="page-hero">
   <div class="page-hero-content">
-    <h1>Contact Us</h1>
-    <p>We'd love to hear from you. Reach out for inquiries, assistance, or feedback.</p>
+    <h1 id="dyn-contact-title">Contact Us</h1>
+    <p id="dyn-contact-desc">We'd love to hear from you. Reach out for inquiries, assistance, or feedback.</p>
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href="index.html">Home</a>
       <span class="breadcrumb-sep">›</span>
@@ -91,7 +92,7 @@
             <div class="contact-icon">🕐</div>
             <div>
               <h4>Office Hours</h4>
-              <p>Monday – Friday<br>8:00 AM – 5:00 PM<br><small style="color:var(--text-muted)">Closed on weekends and holidays</small></p>
+              <p id="dyn-contact-hours">Monday – Friday<br>8:00 AM – 5:00 PM<br><small style="color:var(--text-muted)">Closed on weekends and holidays</small></p>
             </div>
           </div>
           <div class="contact-info-item">
@@ -123,16 +124,16 @@
           <div class="form-row">
             <div class="form-group">
               <label for="name" class="form-group label">Full Name <span style="color:var(--red-main)">*</span></label>
-              <input type="text" id="name" name="name" class="form-control" placeholder="Juan dela Cruz" required>
+              <input type="text" id="name" name="name" class="form-control" id="dyn-form-name" placeholder="Juan dela Cruz" required>
             </div>
             <div class="form-group">
               <label for="email">Email Address <span style="color:var(--red-main)">*</span></label>
-              <input type="email" id="email" name="email" class="form-control" placeholder="juan@email.com" required>
+              <input type="email" id="email" name="email" class="form-control" id="dyn-form-email" placeholder="juan@email.com" required>
             </div>
           </div>
           <div class="form-group">
             <label for="subject">Subject <span style="color:var(--red-main)">*</span></label>
-            <select id="subject" name="subject" class="form-control" required>
+            <select id="subject" name="subject" class="form-control" id="dyn-form-subject" required>
               <option value="">Select a subject...</option>
               <option value="General Inquiry">General Inquiry</option>
               <option value="Program Information">Program Information</option>
@@ -145,7 +146,7 @@
           </div>
           <div class="form-group">
             <label for="message">Message <span style="color:var(--red-main)">*</span></label>
-            <textarea id="message" name="message" class="form-control" rows="6"
+            <textarea id="message" name="message" class="form-control" rows="6" id="dyn-form-message"
                       placeholder="Write your message here..." required></textarea>
           </div>
           <div class="form-group" style="display:flex;align-items:flex-start;gap:10px">
@@ -156,7 +157,7 @@
             </label>
           </div>
           <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">
-            ✉️ Send Message
+            ✉️ <span id="dyn-form-submit">Send Message</span>
           </button>
         </form>
       </div>
@@ -230,15 +231,15 @@
           <div style="font-size:1.8rem">❤️</div>
           <span class="footer-brand-name">Heart Warriors</span>
         </div>
-        <p class="footer-desc">An official health program of the Local Government Unit of Bago City.</p>
+        <p class="footer-desc" id="dyn-footer-desc">An official health program of the Local Government Unit of Bago City.</p>
         <div class="footer-social">
-          <a href="#" class="social-btn">📘</a>
-          <a href="#" class="social-btn">✉️</a>
+          <a href="#" id="dyn-social-facebook" class="social-btn">📘</a>
+          <a href="#" id="dyn-social-email" class="social-btn">✉️</a>
           <a href="#" class="social-btn">📞</a>
         </div>
       </div>
       <div class="footer-col">
-        <h4>Quick Links</h4>
+        <h4 id="dyn-footer-section1">Quick Links</h4>
         <div class="footer-links">
           <a href="index.html">Home</a>
           <a href="about.html">About</a>
@@ -248,7 +249,7 @@
         </div>
       </div>
       <div class="footer-col">
-        <h4>Programs</h4>
+        <h4 id="dyn-footer-section2">Programs</h4>
         <div class="footer-links">
           <a href="#">Free ECG Screening</a>
           <a href="#">Medicine Assistance</a>
@@ -257,7 +258,7 @@
         </div>
       </div>
       <div class="footer-col">
-        <h4>Contact</h4>
+        <h4 id="dyn-footer-section3">Contact</h4>
         <div class="footer-links">
           <a href="mailto:heartwarriors@bago.gov.ph">✉️ heartwarriors@bago.gov.ph</a>
           <a href="#">📍 Bago City Hall, Negros Occidental</a>
@@ -266,7 +267,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 Heart Warriors — LGU Bago City. All rights reserved.</span>
+      <span id="dyn-footer-copyright">© 2026 Heart Warriors — LGU Bago City. All rights reserved.</span>
       <span><a href="admin/index.html">Admin</a> · <a href="#">Privacy Policy</a></span>
     </div>
   </div>
@@ -274,5 +275,6 @@
 
 <div class="toast-container"></div>
 <script src="assets/js/main.js"></script>
+<script src="assets/js/content-loader.js"></script>
 </body>
 </html>

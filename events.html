@@ -55,11 +55,11 @@
 <!-- Top Bar -->
 <div class="topbar">
   <div class="container">
-    <div class="topbar-left"><span>🏛️ Local Government Unit of Bago City</span></div>
+    <div class="topbar-left"><span id="dyn-topbar-text1">🏛️ Local Government Unit of Bago City</span></div>
     <div class="topbar-right">
       <div class="digital-clock" id="digitalClock"><span>🕐</span><span class="clock-time" id="clockTime">--:--:--</span><span class="clock-date" id="clockDate">--- --, ----</span></div>
-      <a href="mailto:heartwarriors@bago.gov.ph">✉️ heartwarriors@bago.gov.ph</a>
-      <a href="https://www.facebook.com/profile.php?id=61589233370202" target="_blank" rel="noopener">📘 Facebook</a>
+      <a href="mailto:heartwarriors@bago.gov.ph" id="dyn-social-email">✉️ <span id="dyn-social-email-text">heartwarriors@bago.gov.ph</span></a>
+      <a href="https://www.facebook.com/profile.php?id=61589233370202" id="dyn-social-facebook" target="_blank" rel="noopener">📘 Facebook</a>
     </div>
   </div>
 </div>
@@ -71,19 +71,20 @@
       <a href="index.html" class="navbar-brand">
         <img src="assets/images/logo.png" alt="Heart Warriors Logo" class="brand-logo">
         <div class="brand-text">
-          <div class="brand-name">❤️ Heart Warriors</div>
-          <div class="brand-sub">Bago City LGU Program</div>
+          <div class="brand-name" id="dyn-brand-name">❤️ Heart Warriors</div>
+          <div class="brand-sub" id="dyn-brand-tagline">Bago City LGU Program</div>
         </div>
       </a>
       <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
       <ul class="nav-menu">
-        <li><a href="index.html" class="nav-link">Home</a></li>
-        <li><a href="about.html" class="nav-link">About</a></li>
-        <li><a href="news.html" class="nav-link">News & Updates</a></li>
-        <li><a href="events.html" class="nav-link active">Events</a></li>
-        <li><a href="gallery.html" class="nav-link">Gallery</a></li>
-        <li><a href="contact.html" class="nav-link">Contact</a></li>
-        <li class="nav-cta"><a href="#" class="btn btn-disabled btn-sm">🤝 Request Help (Soon)</a>        <li><button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button></li>
+        <li><a href="index.html" class="nav-link" id="dyn-nav-home">Home</a></li>
+        <li><a href="about.html" class="nav-link" id="dyn-nav-about">About</a></li>
+        <li><a href="news.html" class="nav-link" id="dyn-nav-news">News & Updates</a></li>
+        <li><a href="events.html" class="nav-link active" id="dyn-nav-events">Events</a></li>
+        <li><a href="gallery.html" class="nav-link" id="dyn-nav-gallery">Gallery</a></li>
+        <li><a href="contact.html" class="nav-link" id="dyn-nav-contact">Contact</a></li>
+        <li class="nav-cta"><a href="#" class="btn btn-disabled btn-sm">🤝 <span id="dyn-nav-cta">Request Help</span> <span style="font-size:.7rem;opacity:.8">(Soon)</span></a></li>
+        <li><button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button></li>
       </ul>
     </nav>
   </div>
@@ -186,35 +187,36 @@
     <div class="footer-grid">
       <div>
         <div class="footer-brand"><div style="font-size:1.8rem">❤️</div><span class="footer-brand-name">Heart Warriors</span></div>
-        <p class="footer-desc">An official health program of the Local Government Unit of Bago City.</p>
+        <p class="footer-desc" id="dyn-footer-desc">An official health program of the Local Government Unit of Bago City.</p>
         <div class="footer-social">
-          <a href="https://www.facebook.com/profile.php?id=61589233370202" target="_blank" rel="noopener" class="social-btn">📘</a>
-          <a href="mailto:heartwarriors@bago.gov.ph" class="social-btn">✉️</a>
+          <a href="https://www.facebook.com/profile.php?id=61589233370202" id="dyn-social-facebook" target="_blank" rel="noopener" class="social-btn">📘</a>
+          <a href="mailto:heartwarriors@bago.gov.ph" id="dyn-social-email" class="social-btn">✉️</a>
         </div>
       </div>
-      <div class="footer-col"><h4>Quick Links</h4><div class="footer-links">
+      <div class="footer-col"><h4 id="dyn-footer-section1">Quick Links</h4><div class="footer-links">
         <a href="index.html">Home</a><a href="about.html">About</a>
         <a href="news.html">News</a><a href="events.html">Events</a>
         <a href="gallery.html">Gallery</a><a href="contact.html">Contact</a>
       </div></div>
-      <div class="footer-col"><h4>Programs</h4><div class="footer-links">
+      <div class="footer-col"><h4 id="dyn-footer-section2">Programs</h4><div class="footer-links">
         <a href="#">Free ECG Screening</a><a href="#">Medicine Assistance</a>
         <a href="#">Health Education</a><a href="#">Community Outreach</a>
       </div></div>
-      <div class="footer-col"><h4>Contact</h4><div class="footer-links">
+      <div class="footer-col"><h4 id="dyn-footer-section3">Contact</h4><div class="footer-links">
         <a href="mailto:heartwarriors@bago.gov.ph">✉️ heartwarriors@bago.gov.ph</a>
         <a href="#">📍 Bago City Hall, Negros Occidental</a>
         <a href="#">📞 (034) 000-0000</a>
       </div></div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 Heart Warriors — LGU Bago City. All rights reserved.</span>
+      <span id="dyn-footer-copyright">© 2026 Heart Warriors — LGU Bago City. All rights reserved.</span>
       <span><a href="admin/index.html">Admin</a> · <a href="#">Privacy Policy</a></span>
     </div>
   </div>
 </footer>
 
 <script src="assets/js/main.js"></script>
+<script src="assets/js/content-loader.js"></script>
 <script>
 function filterEvents(btn, status) {
   document.querySelectorAll('.events-filter .filter-btn').forEach(b => b.classList.remove('active'));

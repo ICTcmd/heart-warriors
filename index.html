@@ -20,9 +20,9 @@
 <div class="topbar">
   <div class="container">
     <div class="topbar-left">
-      <span>🏛️ Local Government Unit of Bago City</span>
+      <span id="dyn-topbar-text1">🏛️ Local Government Unit of Bago City</span>
       <span>|</span>
-      <span>📅 Official Program Website</span>
+      <span id="dyn-topbar-text2">📅 Official Program Website</span>
     </div>
     <div class="topbar-right">
       <div class="digital-clock" id="digitalClock">
@@ -43,23 +43,23 @@
       <a href="index.html" class="navbar-brand">
         <img src="assets/images/logo.png" alt="Heart Warriors Logo" class="brand-logo">
         <div class="brand-text">
-          <div class="brand-name">❤️ Heart Warriors</div>
-          <div class="brand-sub">Bago City LGU Program</div>
+          <div class="brand-name" id="dyn-brand-name">❤️ Heart Warriors</div>
+          <div class="brand-sub" id="dyn-brand-tagline">Bago City LGU Program</div>
         </div>
       </a>
       <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-menu">
-        <li><a href="index.html" class="nav-link">Home</a></li>
-        <li><a href="about.html" class="nav-link">About</a></li>
-        <li><a href="news.html" class="nav-link">News & Updates</a></li>
-        <li><a href="events.html" class="nav-link">Events</a></li>
-        <li><a href="gallery.html" class="nav-link">Gallery</a></li>
-        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li><a href="index.html" class="nav-link" id="dyn-nav-home">Home</a></li>
+        <li><a href="about.html" class="nav-link" id="dyn-nav-about">About</a></li>
+        <li><a href="news.html" class="nav-link" id="dyn-nav-news">News & Updates</a></li>
+        <li><a href="events.html" class="nav-link" id="dyn-nav-events">Events</a></li>
+        <li><a href="gallery.html" class="nav-link" id="dyn-nav-gallery">Gallery</a></li>
+        <li><a href="contact.html" class="nav-link" id="dyn-nav-contact">Contact</a></li>
         <li class="nav-cta">
           <a href="#" class="btn btn-disabled btn-sm" title="Coming Soon">
-            🤝 Request Help <span style="font-size:.7rem;opacity:.8">(Soon)</span>
+            🤝 <span id="dyn-nav-cta">Request Help</span> <span style="font-size:.7rem;opacity:.8">(Soon)</span>
           </a>
         </li>
         <li>
@@ -319,18 +319,18 @@
           <div style="font-size:1.8rem">❤️</div>
           <span class="footer-brand-name">Heart Warriors</span>
         </div>
-        <p class="footer-desc">
+        <p class="footer-desc" id="dyn-footer-desc">
           An official health program of the Local Government Unit of Bago City,
           dedicated to cardiovascular health and community wellness.
         </p>
         <div class="footer-social">
-          <a href="https://www.facebook.com/profile.php?id=61589233370202" target="_blank" rel="noopener" class="social-btn" title="Facebook">📘</a>
-          <a href="#" class="social-btn" title="Email">✉️</a>
+          <a href="https://www.facebook.com/profile.php?id=61589233370202" id="dyn-social-facebook" target="_blank" rel="noopener" class="social-btn" title="Facebook">📘</a>
+          <a href="#" id="dyn-social-email" class="social-btn" title="Email">✉️</a>
           <a href="#" class="social-btn" title="Phone">📞</a>
         </div>
       </div>
       <div class="footer-col">
-        <h4>Quick Links</h4>
+        <h4 id="dyn-footer-section1">Quick Links</h4>
         <div class="footer-links">
           <a href="index.html">Home</a>
           <a href="about.html">About the Program</a>
@@ -340,7 +340,7 @@
         </div>
       </div>
       <div class="footer-col">
-        <h4>Programs</h4>
+        <h4 id="dyn-footer-section2">Programs</h4>
         <div class="footer-links">
           <a href="#">Free ECG Screening</a>
           <a href="#">Medicine Assistance</a>
@@ -350,17 +350,17 @@
         </div>
       </div>
       <div class="footer-col">
-        <h4>Contact</h4>
+        <h4 id="dyn-footer-section3">Contact</h4>
         <div class="footer-links">
-          <a href="mailto:heartwarriors@bago.gov.ph">✉️ heartwarriors@bago.gov.ph</a>
+          <a href="mailto:heartwarriors@bago.gov.ph" id="dyn-social-email">✉️ <span id="dyn-social-email-text">heartwarriors@bago.gov.ph</span></a>
           <a href="#">📍 Bago City Hall, Negros Occidental</a>
-          <a href="#">📞 (034) 000-0000</a>
+          <a href="#" id="dyn-social-phone">📞 (034) 000-0000</a>
           <a href="#">🕐 Mon–Fri, 8AM–5PM</a>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 Heart Warriors — LGU Bago City. All rights reserved.</span>
+      <span id="dyn-footer-copyright">© 2026 Heart Warriors — LGU Bago City. All rights reserved.</span>
       <span>
         <a href="admin/index.html">Admin</a> ·
         <a href="#">Privacy Policy</a> ·
@@ -383,73 +383,6 @@
 
 <div class="toast-container"></div>
 <script src="assets/js/main.js"></script>
-<script>
-/* ── Dynamic site content loader ── */
-(function() {
-  // Check for preview mode — admin passes form values as URL params
-  const params = new URLSearchParams(window.location.search);
-  const isPreview = params.get('_preview') === '1';
-
-  function applyContent(s) {
-    function set(id, val) { const el = document.getElementById(id); if (el && val) el.textContent = val; }
-    function setCounter(id, val, suffix) {
-      const el = document.getElementById(id);
-      if (!el || !val) return;
-      el.dataset.target = val;
-      el.dataset.suffix = suffix || '';
-    }
-    function setCoreValues(id, val) {
-      const el = document.getElementById(id);
-      if (!el || !val) return;
-      // Convert plain line breaks to <br> and bold "Word —" patterns
-      el.innerHTML = val.split('\n').filter(Boolean).map(line => {
-        return line.replace(/^([^—–-]+[—–-])/, '<strong>$1</strong>');
-      }).join('<br>');
-    }
-
-    set('dyn-hero-badge', s.hero_badge);
-    set('dyn-hero-title-line1', s.hero_title_line1);
-    set('dyn-hero-title-highlight', s.hero_title_highlight);
-    set('dyn-hero-title-line2', s.hero_title_line2);
-    set('dyn-hero-description', s.hero_description);
-    if (s.hero_btn1_text) { const el = document.getElementById('dyn-hero-btn1'); if(el) el.textContent = s.hero_btn1_text; }
-    if (s.hero_btn2_text) { const el = document.getElementById('dyn-hero-btn2'); if(el) el.textContent = s.hero_btn2_text; }
-    set('dyn-card-title', s.hero_card_title);
-    set('dyn-card-subtitle', s.hero_card_subtitle);
-    set('dyn-tag1', s.hero_tag1);
-    set('dyn-tag2', s.hero_tag2);
-    set('dyn-tag3', s.hero_tag3);
-
-    // Stats bar
-    setCounter('dyn-stat1-num', s.stat1_value, s.stat1_suffix); set('dyn-stat1-label', s.stat1_label);
-    setCounter('dyn-stat2-num', s.stat2_value, s.stat2_suffix); set('dyn-stat2-label', s.stat2_label);
-    setCounter('dyn-stat3-num', s.stat3_value, s.stat3_suffix); set('dyn-stat3-label', s.stat3_label);
-    setCounter('dyn-stat4-num', s.stat4_value, s.stat4_suffix); set('dyn-stat4-label', s.stat4_label);
-
-    // Hero mini stats (3-stat version)
-    setCounter('dyn-hero-stat1-num', s.stat1_value, s.stat1_suffix); set('dyn-hero-stat1-label', s.stat1_label);
-    setCounter('dyn-hero-stat2-num', s.stat2_value, s.stat2_suffix); set('dyn-hero-stat2-label', s.stat2_label);
-    setCounter('dyn-hero-stat4-num', s.stat4_value, s.stat4_suffix); set('dyn-hero-stat4-label', s.stat4_label);
-
-    // Mission & Vision
-    set('dyn-mission', s.mission_text);
-    set('dyn-vision', s.vision_text);
-    setCoreValues('dyn-core-values', s.core_values_text);
-    set('dyn-lgu-commitment', s.lgu_commitment_text);
-  }
-
-  if (isPreview) {
-    // Preview mode: use URL params directly (no API call needed)
-    const s = {};
-    params.forEach((v, k) => { if (k !== '_preview') s[k] = v; });
-    applyContent(s);
-  } else {
-    // Normal mode: fetch from API
-    fetch('/api/settings')
-      .then(r => r.json())
-      .then(json => { if (json.data) applyContent(json.data); })
-      .catch(() => { /* silently use hardcoded defaults */ });
-  }
-})();
-</script>
+<script src="assets/js/content-loader.js"></script>
+</body>
 </html>
