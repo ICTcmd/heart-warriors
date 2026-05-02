@@ -8,7 +8,11 @@ module.exports = async (req, res) => {
   cors(res);
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const path = req.url.replace('/api/auth', '').split('?')[0];
+  // Vercel rewrites strip the sub-path, use x-matched-path or parse from original url
+  const originalUrl = req.headers['x-vercel-deployment-url']
+    ? req.url
+    : (req.headers['x-matched-path'] || req.url);
+  const path = (req.url || '').split('?')[0].replace(/^\/api\/auth/, '') || '/';
 
   // POST /api/auth/login
   if (req.method === 'POST' && path === '/login') {
