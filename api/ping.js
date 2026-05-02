@@ -24,9 +24,9 @@ module.exports = async (req, res) => {
       timestamp: new Date().toISOString()
     });
   } catch (err) {
+    console.error('Ping error:', err);
     return res.status(500).json({
       status: 'error',
-      error: err.message,
       timestamp: new Date().toISOString()
     });
   }

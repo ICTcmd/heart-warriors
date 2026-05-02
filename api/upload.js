@@ -10,6 +10,26 @@ const MAX_IMAGE_SIZE = 20 * 1024 * 1024; // 20MB input (will be compressed down)
 const MAX_VIDEO_SIZE = 100 * 1024 * 1024; // 100MB for videos
 const BUCKET = 'heart-warriors-media';
 
+// ── Magic number (file signature) validation ───────────────────────────────
+// Checks the actual bytes of the file, not just the MIME type header.
+// This prevents attackers from uploading executables disguised as images.
+const MAGIC_NUMBERS = [
+  { mime: 'image/jpeg', offset: 0, bytes: [0xFF, 0xD8, 0xFF] },
+  { mime: 'image/png',  offset: 0, bytes: [0x89, 0x50, 0x4E, 0x47] },
+  { mime: 'image/gif',  offset: 0, bytes: [0x47, 0x49, 0x46, 0x38] },
+  { mime: 'image/webp', offset: 8, bytes: [0x57, 0x45, 0x42, 0x50] }, // "WEBP" at offset 8
+  { mime: 'video/mp4',  offset: 4, bytes: [0x66, 0x74, 0x79, 0x70] }, // "ftyp" box
+  { mime: 'video/webm', offset: 0, bytes: [0x1A, 0x45, 0xDF, 0xA3] },
+  { mime: 'video/ogg',  offset: 0, bytes: [0x4F, 0x67, 0x67, 0x53] }, // "OggS"
+];
+
+function validateMagicNumber(buffer, declaredMime) {
+  const entry = MAGIC_NUMBERS.find(m => m.mime === declaredMime);
+  if (!entry) return false; // Unknown type — reject
+  if (buffer.length < entry.offset + entry.bytes.length) return false;
+  return entry.bytes.every((b, i) => buffer[entry.offset + i] === b);
+}
+
 // Image compression settings — high quality, much smaller file
 const IMAGE_QUALITY = 85; // 85% quality — visually identical, ~60-80% smaller
 const MAX_WIDTH = 1920;   // Max 1920px wide (Full HD) — enough for any screen
@@ -44,6 +64,12 @@ const handler = async (req, res) => {
 
     if (!isImage && !isVideo) {
       return res.status(400).json({ error: `File type not allowed: ${filePart.contentType}` });
+    }
+
+    // Validate actual file bytes match the declared MIME type
+    // Prevents uploading executables/scripts disguised as images
+    if (!validateMagicNumber(filePart.data, filePart.contentType)) {
+      return res.status(400).json({ error: 'File content does not match its declared type.' });
     }
 
     const maxSize = isVideo ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;

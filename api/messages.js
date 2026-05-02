@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
       .order('created_at', { ascending: false })
       .range(from, from + limit - 1);
 
-    if (error) return res.status(500).json({ error: error.message });
+    if (error) return res.status(500).json({ error: 'Failed to fetch messages.' });
     return res.status(200).json({ data: data || [], total: count || 0 });
   }
 
