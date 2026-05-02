@@ -9,7 +9,7 @@ function getToken() { return localStorage.getItem('hw_admin_token'); }
 function getAdmin() { try { return JSON.parse(localStorage.getItem('hw_admin_user')); } catch { return null; } }
 
 function requireAuth() {
-  if (!getToken()) { window.location.href = 'index.html'; return false; }
+  if (!getToken()) { window.location.href = '/admin/index.html'; return false; }
   const admin = getAdmin();
   if (admin) {
     document.querySelectorAll('.admin-name').forEach(el => el.textContent = admin.name);
@@ -24,7 +24,7 @@ function requireAuth() {
 function logout() {
   localStorage.removeItem('hw_admin_token');
   localStorage.removeItem('hw_admin_user');
-  window.location.href = 'index.html';
+  window.location.href = '/admin/index.html';
 }
 
 /* ---------- API Helper ---------- */
@@ -73,7 +73,7 @@ if (loginForm) {
       });
       localStorage.setItem('hw_admin_token', data.token);
       localStorage.setItem('hw_admin_user', JSON.stringify(data.admin));
-      window.location.href = 'dashboard.html';
+      window.location.href = '/admin/dashboard.html';
     } catch (err) {
       if (errEl) { errEl.textContent = err.message; errEl.style.display = 'block'; }
       btn.disabled = false;
