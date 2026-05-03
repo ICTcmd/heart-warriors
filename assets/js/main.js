@@ -4,28 +4,56 @@
 
 const API_BASE = '/api';
 
-/* ---------- Navbar ---------- */
+/* ---------- Mobile Menu Enhancement ---------- */
 const header = document.querySelector('.site-header');
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
+
+// Create overlay for mobile menu
+const navOverlay = document.createElement('div');
+navOverlay.className = 'nav-overlay';
+document.body.appendChild(navOverlay);
 
 window.addEventListener('scroll', () => {
   if (header) header.classList.toggle('scrolled', window.scrollY > 50);
 });
 
 if (hamburger) {
-  hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('open');
+  hamburger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = hamburger.classList.toggle('active');
     navMenu.classList.toggle('open');
+    navOverlay.classList.toggle('active');
+    document.body.style.overflow = isOpen ? 'hidden' : '';
   });
 }
+
+// Close menu when clicking overlay
+navOverlay.addEventListener('click', () => {
+  hamburger?.classList.remove('active');
+  navMenu?.classList.remove('open');
+  navOverlay.classList.remove('active');
+  document.body.style.overflow = '';
+});
 
 // Close nav on link click (mobile)
 document.querySelectorAll('.nav-link').forEach(link => {
   link.addEventListener('click', () => {
-    hamburger?.classList.remove('open');
+    hamburger?.classList.remove('active');
     navMenu?.classList.remove('open');
+    navOverlay.classList.remove('active');
+    document.body.style.overflow = '';
   });
+});
+
+// Close menu on escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && navMenu?.classList.contains('open')) {
+    hamburger?.classList.remove('active');
+    navMenu?.classList.remove('open');
+    navOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
 });
 
 // Set active nav link
@@ -590,3 +618,179 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+
+/* ============================================================
+   Mobile Enhancements
+   ============================================================ */
+
+// Prevent iOS double-tap zoom on buttons
+document.addEventListener('touchend', (e) => {
+  if (e.target.matches('button, .btn, .filter-btn, .nav-link')) {
+    e.preventDefault();
+    e.target.click();
+  }
+}, { passive: false });
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    const href = this.getAttribute('href');
+    if (href === '#') return;
+    e.preventDefault();
+    const target = document.querySelector(href);
+    if (target) {
+      const offset = 80; // Account for sticky header
+      const targetPosition = target.offsetTop - offset;
+      window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+    }
+  });
+});
+
+// Add touch feedback class
+document.addEventListener('touchstart', (e) => {
+  if (e.target.matches('.btn, .card, .filter-btn')) {
+    e.target.classList.add('touching');
+  }
+}, { passive: true });
+
+document.addEventListener('touchend', (e) => {
+  if (e.target.matches('.btn, .card, .filter-btn')) {
+    setTimeout(() => e.target.classList.remove('touching'), 150);
+  }
+}, { passive: true });
+
+// Optimize images for mobile
+if ('IntersectionObserver' in window) {
+  const imageObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        if (img.dataset.src) {
+          img.src = img.dataset.src;
+          img.removeAttribute('data-src');
+        }
+        imageObserver.unobserve(img);
+      }
+    });
+  }, { rootMargin: '50px' });
+
+  document.querySelectorAll('img[data-src]').forEach(img => imageObserver.observe(img));
+}
+
+// Handle orientation change
+window.addEventListener('orientationchange', () => {
+  // Close mobile menu on orientation change
+  hamburger?.classList.remove('active');
+  navMenu?.classList.remove('open');
+  navOverlay.classList.remove('active');
+  document.body.style.overflow = '';
+});
+
+// Improve form input experience on mobile
+document.querySelectorAll('input, textarea').forEach(input => {
+  // Prevent zoom on focus for iOS
+  input.addEventListener('focus', () => {
+    if (window.innerWidth < 768) {
+      const viewport = document.querySelector('meta[name=viewport]');
+      if (viewport) {
+        viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1');
+      }
+    }
+  });
+  
+  input.addEventListener('blur', () => {
+    if (window.innerWidth < 768) {
+      const viewport = document.querySelector('meta[name=viewport]');
+      if (viewport) {
+        viewport.setAttribute('content', 'width=device-width, initial-scale=1');
+      }
+    }
+  });
+});
+
+// Add pull-to-refresh indicator (visual feedback only)
+let touchStartY = 0;
+let touchEndY = 0;
+
+document.addEventListener('touchstart', (e) => {
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+document.addEventListener('touchmove', (e) => {
+  touchEndY = e.touches[0].clientY;
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  
+  // If at top of page and pulling down
+  if (scrollTop === 0 && touchEndY > touchStartY + 50) {
+    // Visual feedback could be added here
+  }
+}, { passive: true });
+
+// Optimize scroll performance
+let ticking = false;
+let lastScrollY = window.scrollY;
+
+window.addEventListener('scroll', () => {
+  lastScrollY = window.scrollY;
+  if (!ticking) {
+    window.requestAnimationFrame(() => {
+      // Scroll-based animations or effects
+      ticking = false;
+    });
+    ticking = true;
+  }
+}, { passive: true });
+
+// Add swipe gesture support for gallery/lightbox
+let touchstartX = 0;
+let touchendX = 0;
+
+function handleSwipe(element, leftCallback, rightCallback) {
+  element.addEventListener('touchstart', (e) => {
+    touchstartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  element.addEventListener('touchend', (e) => {
+    touchendX = e.changedTouches[0].screenX;
+    const diff = touchstartX - touchendX;
+    
+    if (Math.abs(diff) > 50) { // Minimum swipe distance
+      if (diff > 0 && rightCallback) {
+        rightCallback(); // Swiped left
+      } else if (diff < 0 && leftCallback) {
+        leftCallback(); // Swiped right
+      }
+    }
+  }, { passive: true });
+}
+
+// Apply swipe to lightbox if it exists
+const lightbox = document.getElementById('lightbox');
+if (lightbox) {
+  handleSwipe(
+    lightbox,
+    () => window.lightboxNav && lightboxNav(-1), // Swipe right = previous
+    () => window.lightboxNav && lightboxNav(1)   // Swipe left = next
+  );
+}
+
+// Detect if user is on mobile device
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+if (isMobile) {
+  document.body.classList.add('is-mobile');
+}
+
+// Detect if user is on iOS
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+if (isIOS) {
+  document.body.classList.add('is-ios');
+}
+
+// Add safe area insets for notched devices
+if (isIOS && window.CSS && CSS.supports('padding-top: env(safe-area-inset-top)')) {
+  document.documentElement.style.setProperty('--safe-area-top', 'env(safe-area-inset-top)');
+  document.documentElement.style.setProperty('--safe-area-bottom', 'env(safe-area-inset-bottom)');
+}
+
+console.log('✅ Mobile enhancements loaded');
