@@ -347,7 +347,7 @@ function escHtml(str) {
 /* ---------- Init ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   const page = window.location.pathname.split('/').pop() || 'index.html';
-  if (page === 'index.html' || page === '') loadLatestPosts();
+  if (page === 'index.html' || page === '') { loadLatestPosts(); loadGallery(); }
   if (page === 'news.html') loadNewsPosts();
   if (page === 'gallery.html') loadGallery();
 });
