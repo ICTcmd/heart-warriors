@@ -291,7 +291,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('fileInput');
   const preview = document.getElementById('uploadPreview');
 
-  zone.addEventListener('click', () => input.click());
+  zone.addEventListener('click', (e) => {
+    if (e.target === input) return; // prevent double trigger
+    input.click();
+  });
   zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
   zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
   zone.addEventListener('drop', e => {
