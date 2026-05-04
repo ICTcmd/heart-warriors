@@ -1,5 +1,5 @@
 // Heart Warriors Service Worker — PWA offline support
-const CACHE = 'hw-v1';
+const CACHE = 'hw-v3';
 const OFFLINE_URLS = [
   '/',
   '/index.html',
