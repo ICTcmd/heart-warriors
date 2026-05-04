@@ -255,7 +255,7 @@ async function loadHomeGallery() {
 
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000); // 5s timeout
+    const timeout = setTimeout(() => controller.abort(), 5000);
     const res = await fetch(`${API_BASE}/gallery?limit=5`, { signal: controller.signal });
     clearTimeout(timeout);
     const { data } = await res.json();
@@ -270,9 +270,28 @@ async function loadHomeGallery() {
       </div>
     `).join('');
     window._galleryItems = data;
+
+    // Also start hero slideshow with these photos
+    startHeroSlideshow(data.map(d => d.file_url));
   } catch {
     section.style.display = 'none';
   }
+}
+
+function startHeroSlideshow(urls) {
+  const img = document.getElementById('heroSlideImg');
+  if (!img || !urls.length) return;
+  let i = 0;
+  img.src = urls[0];
+  if (urls.length < 2) return;
+  setInterval(() => {
+    img.style.opacity = '0';
+    setTimeout(() => {
+      i = (i + 1) % urls.length;
+      img.src = urls[i];
+      img.style.opacity = '1';
+    }, 600);
+  }, 3500);
 }
 
 async function loadGallery(album = '') {

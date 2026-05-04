@@ -114,11 +114,11 @@
       </div>
       <div class="hero-image-wrap">
         <div class="hero-img-card">
-          <picture>
-            <source srcset="assets/images/logo.webp" type="image/webp">
-            <img src="assets/images/logo.png" alt="Heart Warriors Logo"
-                 style="width:140px;height:140px;border-radius:50%;object-fit:cover;margin:0 auto 16px;border:4px solid rgba(255,255,255,.3);box-shadow:0 8px 30px rgba(0,0,0,.2);">
-          </picture>
+          <!-- Slideshow of gallery photos, falls back to logo -->
+          <div id="heroSlideshow" style="width:220px;height:220px;border-radius:16px;overflow:hidden;margin:0 auto 16px;border:4px solid rgba(255,255,255,.3);box-shadow:0 8px 30px rgba(0,0,0,.2);position:relative;background:rgba(255,255,255,.1)">
+            <img id="heroSlideImg" src="assets/images/logo.png" alt="Heart Warriors"
+                 style="width:100%;height:100%;object-fit:cover;transition:opacity .6s ease;">
+          </div>
           <div class="card-title" id="dyn-card-title">Heart Warriors</div>
           <div class="card-sub" id="dyn-card-subtitle">Bago City, Negros Occidental</div>
           <div style="margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
