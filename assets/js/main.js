@@ -279,32 +279,28 @@ async function loadHomeGallery() {
 }
 
 function startHeroSlideshow(urls) {
-  const img = document.getElementById('heroSlideImg');
-  if (!img || !urls.length) return;
-  let i = 0;
-  img.src = urls[0];
-  if (urls.length < 2) return;
-  setInterval(() => {
-    img.style.opacity = '0';
-    setTimeout(() => {
-      i = (i + 1) % urls.length;
-      img.src = urls[i];
-      img.style.opacity = '1';
-    }, 600);
-  }, 3500);
+  // no-op — replaced by card slideshow
 }
 
 async function startHeroSlideshowFromAPI() {
-  try {
-    const controller = new AbortController();
-    setTimeout(() => controller.abort(), 6000);
-    const res = await fetch(`${API_BASE}/gallery?limit=10`, { signal: controller.signal });
-    const { data } = await res.json();
-    if (!data || data.length === 0) return;
-    const urls = data.filter(d => d.file_type === 'image').map(d => d.file_url);
-    if (urls.length > 0) startHeroSlideshow(urls);
-  } catch { /* keep logo if API fails */ }
+  // no-op — replaced by card slideshow
 }
+
+/* ---------- Hero Card Slideshow ---------- */
+let _heroSlide = 0;
+const _heroTotal = 4;
+
+function goToSlide(n) {
+  document.getElementById('slide-' + _heroSlide)?.classList.remove('active');
+  document.querySelectorAll('.hero-dot')[_heroSlide]?.classList.remove('active');
+  _heroSlide = n;
+  document.getElementById('slide-' + _heroSlide)?.classList.add('active');
+  document.querySelectorAll('.hero-dot')[_heroSlide]?.classList.add('active');
+}
+
+setInterval(() => {
+  goToSlide((_heroSlide + 1) % _heroTotal);
+}, 3000);
 async function loadGallery(album = '') {
   const container = document.getElementById('galleryGrid');
   if (!container) return;
@@ -404,7 +400,7 @@ function escHtml(str) {
 /* ---------- Init ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   const page = window.location.pathname.split('/').pop() || 'index.html';
-  if (page === 'index.html' || page === '') { loadLatestPosts(); loadHomeGallery(); startHeroSlideshowFromAPI(); }
+  if (page === 'index.html' || page === '') { loadLatestPosts(); loadHomeGallery(); }
   if (page === 'news.html') loadNewsPosts();
   if (page === 'gallery.html') loadGallery();
 });
