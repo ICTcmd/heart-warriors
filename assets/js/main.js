@@ -294,6 +294,17 @@ function startHeroSlideshow(urls) {
   }, 3500);
 }
 
+async function startHeroSlideshowFromAPI() {
+  try {
+    const controller = new AbortController();
+    setTimeout(() => controller.abort(), 6000);
+    const res = await fetch(`${API_BASE}/gallery?limit=10`, { signal: controller.signal });
+    const { data } = await res.json();
+    if (!data || data.length === 0) return;
+    const urls = data.filter(d => d.file_type === 'image').map(d => d.file_url);
+    if (urls.length > 0) startHeroSlideshow(urls);
+  } catch { /* keep logo if API fails */ }
+}
 async function loadGallery(album = '') {
   const container = document.getElementById('galleryGrid');
   if (!container) return;
@@ -393,7 +404,7 @@ function escHtml(str) {
 /* ---------- Init ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   const page = window.location.pathname.split('/').pop() || 'index.html';
-  if (page === 'index.html' || page === '') { loadLatestPosts(); loadHomeGallery(); }
+  if (page === 'index.html' || page === '') { loadLatestPosts(); loadHomeGallery(); startHeroSlideshowFromAPI(); }
   if (page === 'news.html') loadNewsPosts();
   if (page === 'gallery.html') loadGallery();
 });
