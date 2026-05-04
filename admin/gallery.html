@@ -159,19 +159,7 @@
 <div class="toast-container"></div>
 <script src="../assets/js/admin.js"></script>
 <script>
-// Show meta fields when files are selected
-document.getElementById('fileInput').addEventListener('change', function() {
-  if (this.files.length > 0) {
-    document.getElementById('uploadMeta').style.display = 'block';
-    handleFiles(this.files, document.getElementById('uploadPreview'));
-  }
-});
-
-document.getElementById('uploadZone').addEventListener('drop', function(e) {
-  if (e.dataTransfer.files.length > 0) {
-    document.getElementById('uploadMeta').style.display = 'block';
-  }
-});
+// File input change is handled in DOMContentLoaded below
 
 async function uploadFiles() {
   const input = document.getElementById('fileInput');
@@ -298,9 +286,30 @@ function renderGalleryPreview(items, albumText) {
 
 document.addEventListener('DOMContentLoaded', () => {
   loadGalleryAdmin();
-  setupUploadZone('uploadZone', 'fileInput', 'uploadPreview');
+  // Setup click-to-browse on upload zone
+  const zone = document.getElementById('uploadZone');
+  const input = document.getElementById('fileInput');
+  const preview = document.getElementById('uploadPreview');
+
+  zone.addEventListener('click', () => input.click());
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('dragover');
+    if (e.dataTransfer.files.length > 0) {
+      document.getElementById('uploadMeta').style.display = 'block';
+      handleFiles(e.dataTransfer.files, preview);
+    }
+  });
+  input.addEventListener('change', function() {
+    if (this.files.length > 0) {
+      document.getElementById('uploadMeta').style.display = 'block';
+      handleFiles(this.files, preview);
+    }
+  });
   if (new URLSearchParams(location.search).get('upload') === '1') {
-    document.getElementById('uploadZone').scrollIntoView({ behavior: 'smooth' });
+    zone.scrollIntoView({ behavior: 'smooth' });
   }
 });
 </script>
