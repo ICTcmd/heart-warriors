@@ -1077,6 +1077,8 @@ body .card { transition: transform .3s ease, box-shadow .3s ease, background-col
   margin: 0;
 }
 
+.floating-btns { display: none !important; }
+
 /* Topbar social links */
 .topbar-right a .social-icon {
   display: none;
