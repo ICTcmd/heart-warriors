@@ -268,7 +268,7 @@ async function loadGallery(album = '') {
     container.innerHTML = data.map((item, i) => `
       <div class="gallery-item ${i === 0 ? 'wide tall' : i === 3 ? 'wide' : ''}"
            onclick="openLightbox(${i})" data-index="${i}">
-        <img src="${item.file_url}" alt="${item.title || ''}" loading="lazy">
+        <img src="${item.file_url}" alt="${item.title || ''}" loading="eager">
         <div class="gallery-overlay">
           <span>${item.file_type === 'video' ? '▶ Video' : '🔍 ' + (item.title || 'View')}</span>
         </div>

@@ -316,7 +316,7 @@ input, textarea, select { font-family: var(--font-main); }
 .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 .gallery-item {
   position: relative; border-radius: var(--radius-sm); overflow: hidden;
-  aspect-ratio: 1; cursor: pointer;
+  aspect-ratio: 1; cursor: pointer; background: #e5e7eb;
 }
 .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
 .gallery-item:hover img { transform: scale(1.08); }
