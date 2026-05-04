@@ -613,7 +613,32 @@ document.addEventListener('DOMContentLoaded', () => {
    Mobile Enhancements
    ============================================================ */
 
-// Prevent iOS double-tap zoom on buttons
+// Prevent accidental card clicks while scrolling on mobile
+let _touchStartY = 0;
+let _touchStartX = 0;
+let _didScroll = false;
+
+document.addEventListener('touchstart', (e) => {
+  _touchStartY = e.touches[0].clientY;
+  _touchStartX = e.touches[0].clientX;
+  _didScroll = false;
+}, { passive: true });
+
+document.addEventListener('touchmove', (e) => {
+  const dy = Math.abs(e.touches[0].clientY - _touchStartY);
+  const dx = Math.abs(e.touches[0].clientX - _touchStartX);
+  if (dy > 8 || dx > 8) _didScroll = true;
+}, { passive: true });
+
+document.addEventListener('click', (e) => {
+  if (_didScroll) {
+    const link = e.target.closest('a');
+    if (link && link.href && !link.href.startsWith('#') && !link.href.includes('mailto')) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }
+}, true);
 document.addEventListener('touchend', (e) => {
   if (e.target.matches('button, .btn, .filter-btn, .nav-link')) {
     e.preventDefault();
