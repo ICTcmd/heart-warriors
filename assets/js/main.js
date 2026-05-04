@@ -439,8 +439,6 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 /* Floating Action Buttons removed */
-/* .floating-btns display:none fallback */
-.floating-btns { display: none !important; }
 
 /* ============================================================
    Cookie / Privacy Banner
