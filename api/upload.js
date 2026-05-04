@@ -1,39 +1,29 @@
-// /api/upload — File upload with auto image compression
+// /api/upload — File upload (direct, no Jimp compression to avoid Vercel timeout)
 const { requireAuth, cors } = require('./_lib/auth');
 const supabase = require('./_lib/supabase');
-const Jimp = require('jimp');
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/ogg'];
-const ALLOWED_TYPES = [...ALLOWED_IMAGE_TYPES, ...ALLOWED_VIDEO_TYPES];
-const MAX_IMAGE_SIZE = 20 * 1024 * 1024; // 20MB input (will be compressed down)
-const MAX_VIDEO_SIZE = 100 * 1024 * 1024; // 100MB for videos
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
+const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50MB
 const BUCKET = 'heart-warriors-media';
 
-// ── Magic number (file signature) validation ───────────────────────────────
-// Checks the actual bytes of the file, not just the MIME type header.
-// This prevents attackers from uploading executables disguised as images.
 const MAGIC_NUMBERS = [
   { mime: 'image/jpeg', offset: 0, bytes: [0xFF, 0xD8, 0xFF] },
   { mime: 'image/png',  offset: 0, bytes: [0x89, 0x50, 0x4E, 0x47] },
   { mime: 'image/gif',  offset: 0, bytes: [0x47, 0x49, 0x46, 0x38] },
-  { mime: 'image/webp', offset: 8, bytes: [0x57, 0x45, 0x42, 0x50] }, // "WEBP" at offset 8
-  { mime: 'video/mp4',  offset: 4, bytes: [0x66, 0x74, 0x79, 0x70] }, // "ftyp" box
+  { mime: 'image/webp', offset: 8, bytes: [0x57, 0x45, 0x42, 0x50] },
+  { mime: 'video/mp4',  offset: 4, bytes: [0x66, 0x74, 0x79, 0x70] },
   { mime: 'video/webm', offset: 0, bytes: [0x1A, 0x45, 0xDF, 0xA3] },
-  { mime: 'video/ogg',  offset: 0, bytes: [0x4F, 0x67, 0x67, 0x53] }, // "OggS"
+  { mime: 'video/ogg',  offset: 0, bytes: [0x4F, 0x67, 0x67, 0x53] },
 ];
 
 function validateMagicNumber(buffer, declaredMime) {
   const entry = MAGIC_NUMBERS.find(m => m.mime === declaredMime);
-  if (!entry) return false; // Unknown type — reject
+  if (!entry) return false;
   if (buffer.length < entry.offset + entry.bytes.length) return false;
   return entry.bytes.every((b, i) => buffer[entry.offset + i] === b);
 }
-
-// Image compression settings — high quality, much smaller file
-const IMAGE_QUALITY = 85; // 85% quality — visually identical, ~60-80% smaller
-const MAX_WIDTH = 1920;   // Max 1920px wide (Full HD) — enough for any screen
-const MAX_HEIGHT = 1080;  // Max 1080px tall
 
 const handler = async (req, res) => {
   cors(res);
@@ -66,59 +56,29 @@ const handler = async (req, res) => {
       return res.status(400).json({ error: `File type not allowed: ${filePart.contentType}` });
     }
 
-    // Validate actual file bytes match the declared MIME type
-    // Prevents uploading executables/scripts disguised as images
     if (!validateMagicNumber(filePart.data, filePart.contentType)) {
       return res.status(400).json({ error: 'File content does not match its declared type.' });
     }
 
     const maxSize = isVideo ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
     if (filePart.data.length > maxSize) {
-      const limitMB = Math.round(maxSize / 1024 / 1024);
-      return res.status(400).json({ error: `File too large. Max ${limitMB}MB for ${isVideo ? 'videos' : 'images'}.` });
+      return res.status(400).json({ error: `File too large. Max ${Math.round(maxSize / 1024 / 1024)}MB.` });
     }
     if (filePart.data.length === 0) return res.status(400).json({ error: 'File is empty' });
 
-    let uploadBuffer = filePart.data;
-    let uploadContentType = filePart.contentType;
-    let fileExt = 'bin';
-    let originalSize = filePart.data.length;
-    let compressedSize = filePart.data.length;
-
-    if (isImage) {
-      // ── Auto-compress image ──────────────────────────────────────
-      // Resize if larger than 1920x1080 (keeps aspect ratio, never upscales)
-      // Jimp is pure JS — no native binaries, works on Vercel Hobby
-      const image = await Jimp.read(filePart.data);
-
-      // Only downscale, never upscale
-      if (image.getWidth() > MAX_WIDTH || image.getHeight() > MAX_HEIGHT) {
-        image.scaleToFit(MAX_WIDTH, MAX_HEIGHT);
-      }
-
-      // Save as JPEG (Jimp doesn't support WebP encode natively)
-      const compressed = await image
-        .quality(IMAGE_QUALITY)
-        .getBufferAsync(Jimp.MIME_JPEG);
-
-      uploadBuffer = compressed;
-      uploadContentType = 'image/jpeg';
-      fileExt = 'jpg';
-      compressedSize = compressed.length;
-    } else {
-      // Video — store as-is, just sanitize extension
-      const safeVideoExts = { 'video/mp4': 'mp4', 'video/webm': 'webm', 'video/ogg': 'ogv' };
-      fileExt = safeVideoExts[filePart.contentType] || 'mp4';
-    }
-
-    const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
+    const safeExts = {
+      'image/jpeg': 'jpg', 'image/png': 'png', 'image/gif': 'gif', 'image/webp': 'webp',
+      'video/mp4': 'mp4', 'video/webm': 'webm', 'video/ogg': 'ogv'
+    };
+    const fileExt = safeExts[filePart.contentType] || 'bin';
     const folder = isVideo ? 'videos' : 'images';
+    const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
     const storagePath = `${folder}/${fileName}`;
 
     const { error: uploadError } = await supabase.storage
       .from(BUCKET)
-      .upload(storagePath, uploadBuffer, {
-        contentType: uploadContentType,
+      .upload(storagePath, filePart.data, {
+        contentType: filePart.contentType,
         upsert: false
       });
 
@@ -139,19 +99,7 @@ const handler = async (req, res) => {
 
     if (dbError) return res.status(500).json({ error: 'DB error: ' + dbError.message });
 
-    const savings = isImage
-      ? `${Math.round((1 - compressedSize / originalSize) * 100)}% smaller`
-      : 'stored as-is';
-
-    return res.status(201).json({
-      data: galleryItem,
-      url: publicUrl,
-      compression: {
-        original_kb: Math.round(originalSize / 1024),
-        compressed_kb: Math.round(compressedSize / 1024),
-        savings
-      }
-    });
+    return res.status(201).json({ data: galleryItem, url: publicUrl });
 
   } catch (err) {
     console.error('Upload error:', err);
