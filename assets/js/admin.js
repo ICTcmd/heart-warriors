@@ -221,7 +221,10 @@ async function loadGalleryAdmin(page = 1) {
   grid.innerHTML = '<div class="spinner" style="margin:40px auto;grid-column:1/-1"></div>';
 
   try {
-    const { data } = await apiFetch(`/gallery?page=${page}&limit=20`);
+    // Use plain fetch for GET (no auth needed for gallery list)
+    const res = await fetch(`/api/gallery?page=${page}&limit=20`);
+    const json = await res.json();
+    const data = json.data;
     if (!data?.length) {
       grid.innerHTML = '<p style="text-align:center;padding:40px;color:#6b7280;grid-column:1/-1">No media uploaded yet.</p>';
       return;
@@ -229,7 +232,8 @@ async function loadGalleryAdmin(page = 1) {
     grid.innerHTML = data.map(item => `
       <div class="gallery-admin-item" style="position:relative;border-radius:8px;overflow:hidden;aspect-ratio:1;background:#f3f4f6">
         <img src="${item.file_url}" alt="${escHtml(item.title || '')}"
-             style="width:100%;height:100%;object-fit:cover" loading="lazy">
+             style="width:100%;height:100%;object-fit:cover" loading="eager"
+             onerror="this.style.opacity='.3'">
         <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7),transparent);opacity:0;transition:.2s;display:flex;align-items:flex-end;padding:10px"
              onmouseenter="this.style.opacity=1" onmouseleave="this.style.opacity=0">
           <div style="flex:1">
@@ -242,7 +246,7 @@ async function loadGalleryAdmin(page = 1) {
       </div>
     `).join('');
   } catch (err) {
-    grid.innerHTML = `<p style="text-align:center;padding:40px;color:#991b1b;grid-column:1/-1">${err.message}</p>`;
+    grid.innerHTML = `<p style="text-align:center;padding:40px;color:#991b1b;grid-column:1/-1">Error: ${err.message}</p>`;
   }
 }
 
