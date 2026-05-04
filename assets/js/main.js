@@ -279,28 +279,14 @@ async function loadHomeGallery() {
 }
 
 function startHeroSlideshow(urls) {
-  // no-op — replaced by card slideshow
+  // no-op
 }
 
 async function startHeroSlideshowFromAPI() {
-  // no-op — replaced by card slideshow
+  // no-op
 }
 
-/* ---------- Hero Card Slideshow ---------- */
-let _heroSlide = 0;
-const _heroTotal = 4;
-
-function goToSlide(n) {
-  document.getElementById('slide-' + _heroSlide)?.classList.remove('active');
-  document.querySelectorAll('.hero-dot')[_heroSlide]?.classList.remove('active');
-  _heroSlide = n;
-  document.getElementById('slide-' + _heroSlide)?.classList.add('active');
-  document.querySelectorAll('.hero-dot')[_heroSlide]?.classList.add('active');
-}
-
-setInterval(() => {
-  goToSlide((_heroSlide + 1) % _heroTotal);
-}, 3000);async function loadGallery(album = '') {
+async function loadGallery(album = '') {
   const container = document.getElementById('galleryGrid');
   if (!container) return;
 
@@ -415,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.hero-dot')[_heroSlide]?.classList.add('active');
     }
     window.goToSlide = goToSlide; // expose for onclick
-    setInterval(() => goToSlide((_heroSlide + 1) % _heroTotal), 3000);
+    setInterval(() => goToSlide((_heroSlide + 1) % _heroTotal), 4000);
   }
 });
 
