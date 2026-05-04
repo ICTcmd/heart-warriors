@@ -337,6 +337,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Logout buttons
   document.querySelectorAll('[data-logout]').forEach(btn => btn.addEventListener('click', logout));
 
-  // Upload zones
-  setupUploadZone('uploadZone', 'fileInput', 'uploadPreview');
+  // Upload zone setup is handled per-page in inline scripts
+  // setupUploadZone('uploadZone', 'fileInput', 'uploadPreview');
 });
