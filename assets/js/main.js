@@ -250,16 +250,16 @@ function renderPagination(current, total, callback) {
 /* ---------- Gallery ---------- */
 async function loadHomeGallery() {
   const container = document.getElementById('galleryGrid');
-  if (!container) return;
+  const section = document.getElementById('homeGallerySection');
+  if (!container || !section) return;
+
   try {
-    const res = await fetch(`${API_BASE}/gallery?limit=5`);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000); // 5s timeout
+    const res = await fetch(`${API_BASE}/gallery?limit=5`, { signal: controller.signal });
+    clearTimeout(timeout);
     const { data } = await res.json();
-    if (!data || data.length === 0) {
-      // No photos yet — hide the whole gallery section on homepage
-      const section = container.closest('section');
-      if (section) section.style.display = 'none';
-      return;
-    }
+    if (!data || data.length === 0) { section.style.display = 'none'; return; }
     container.innerHTML = data.map((item, i) => `
       <div class="gallery-item ${i === 0 ? 'wide tall' : i === 3 ? 'wide' : ''}"
            onclick="openLightbox(${i})" data-index="${i}">
@@ -271,8 +271,7 @@ async function loadHomeGallery() {
     `).join('');
     window._galleryItems = data;
   } catch {
-    const section = container.closest('section');
-    if (section) section.style.display = 'none';
+    section.style.display = 'none';
   }
 }
 
