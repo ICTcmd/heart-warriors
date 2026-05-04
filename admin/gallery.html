@@ -291,9 +291,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('fileInput');
   const preview = document.getElementById('uploadPreview');
 
+  let _zoneClickBusy = false;
   zone.addEventListener('click', (e) => {
-    if (e.target === input) return; // prevent double trigger
+    if (_zoneClickBusy) return;
+    _zoneClickBusy = true;
     input.click();
+    setTimeout(() => { _zoneClickBusy = false; }, 500);
   });
   zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
   zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
@@ -307,6 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   input.addEventListener('change', function() {
     if (this.files.length > 0) {
+      preview.innerHTML = ''; // clear old previews first
       document.getElementById('uploadMeta').style.display = 'block';
       handleFiles(this.files, preview);
     }
