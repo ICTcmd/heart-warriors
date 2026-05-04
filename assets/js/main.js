@@ -261,8 +261,7 @@ async function loadHomeGallery() {
     const { data } = await res.json();
     if (!data || data.length === 0) { section.style.display = 'none'; return; }
     container.innerHTML = data.map((item, i) => `
-      <div class="gallery-item ${i === 0 ? 'wide tall' : i === 3 ? 'wide' : ''}"
-           onclick="openLightbox(${i})" data-index="${i}">
+      <div class="gallery-item" onclick="openLightbox(${i})" data-index="${i}">
         <img src="${item.file_url}" alt="${item.title || ''}" loading="eager">
         <div class="gallery-overlay">
           <span>🔍 ${item.title || 'View'}</span>
@@ -272,8 +271,7 @@ async function loadHomeGallery() {
     window._galleryItems = data;
 
     // Also start hero slideshow with these photos
-    startHeroSlideshow(data.map(d => d.file_url));
-  } catch {
+    startHeroSlideshow(data.map(d => d.file_url));  } catch {
     section.style.display = 'none';
   }
 }
