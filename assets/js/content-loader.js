@@ -116,7 +116,9 @@
     set('dyn-footer-section3', s.footer_section3_title);
     set('dyn-footer-copyright', s.footer_copyright);
     setAttr('dyn-social-facebook', 'href', s.social_facebook);
-    setAttr('dyn-social-email', 'href', 'mailto:' + s.social_email);
+    // Only update href, never innerHTML of topbar email link
+    const emailEl = document.getElementById('dyn-social-email');
+    if (emailEl && s.social_email) emailEl.setAttribute('href', 'mailto:' + s.social_email);
     set('dyn-social-email-text', s.social_email);
     set('dyn-social-phone', s.social_phone);
   }

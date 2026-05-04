@@ -577,8 +577,10 @@ function updateClock() {
   dateEl.textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${String(now.getDate()).padStart(2,'0')}, ${now.getFullYear()}`;
 }
 
-updateClock();
-setInterval(updateClock, 1000);
+document.addEventListener('DOMContentLoaded', () => {
+  updateClock();
+  setInterval(updateClock, 1000);
+});
 
 /* ============================================================
    Dark Mode Toggle
