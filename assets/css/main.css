@@ -256,7 +256,8 @@ input, textarea, select { font-family: var(--font-main); }
   align-items: center;
   text-align: center;
   padding-bottom: 28px;
-  animation: fadeInUp .5s ease;
+  width: 100%;
+  animation: fadeInUp .4s ease;
 }
 .hero-slide.active { display: flex; }
 .hero-dot {

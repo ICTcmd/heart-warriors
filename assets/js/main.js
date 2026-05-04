@@ -300,8 +300,7 @@ function goToSlide(n) {
 
 setInterval(() => {
   goToSlide((_heroSlide + 1) % _heroTotal);
-}, 3000);
-async function loadGallery(album = '') {
+}, 3000);async function loadGallery(album = '') {
   const container = document.getElementById('galleryGrid');
   if (!container) return;
 
@@ -403,6 +402,21 @@ document.addEventListener('DOMContentLoaded', () => {
   if (page === 'index.html' || page === '') { loadLatestPosts(); loadHomeGallery(); }
   if (page === 'news.html') loadNewsPosts();
   if (page === 'gallery.html') loadGallery();
+
+  // Hero card slideshow
+  if (document.getElementById('slide-0')) {
+    let _heroSlide = 0;
+    const _heroTotal = 4;
+    function goToSlide(n) {
+      document.getElementById('slide-' + _heroSlide)?.classList.remove('active');
+      document.querySelectorAll('.hero-dot')[_heroSlide]?.classList.remove('active');
+      _heroSlide = n;
+      document.getElementById('slide-' + _heroSlide)?.classList.add('active');
+      document.querySelectorAll('.hero-dot')[_heroSlide]?.classList.add('active');
+    }
+    window.goToSlide = goToSlide; // expose for onclick
+    setInterval(() => goToSlide((_heroSlide + 1) % _heroTotal), 3000);
+  }
 });
 
 /* ============================================================
