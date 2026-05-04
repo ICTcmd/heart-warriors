@@ -133,6 +133,10 @@ input, textarea, select { font-family: var(--font-main); }
 .topbar a { color: rgba(255,255,255,.85); }
 .topbar a:hover { color: var(--white); }
 .topbar-left, .topbar-right { display: flex; align-items: center; gap: 16px; }
+/* Hide topbar-left text and email link, keep only the clock */
+.topbar-left { display: none !important; }
+.topbar-right a { display: none !important; }
+.topbar .social-icon { display: none !important; }
 
 /* ---------- Header / Navbar ---------- */
 .site-header {
