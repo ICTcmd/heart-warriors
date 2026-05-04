@@ -248,6 +248,34 @@ function renderPagination(current, total, callback) {
 }
 
 /* ---------- Gallery ---------- */
+async function loadHomeGallery() {
+  const container = document.getElementById('galleryGrid');
+  if (!container) return;
+  try {
+    const res = await fetch(`${API_BASE}/gallery?limit=5`);
+    const { data } = await res.json();
+    if (!data || data.length === 0) {
+      // No photos yet — hide the whole gallery section on homepage
+      const section = container.closest('section');
+      if (section) section.style.display = 'none';
+      return;
+    }
+    container.innerHTML = data.map((item, i) => `
+      <div class="gallery-item ${i === 0 ? 'wide tall' : i === 3 ? 'wide' : ''}"
+           onclick="openLightbox(${i})" data-index="${i}">
+        <img src="${item.file_url}" alt="${item.title || ''}" loading="eager">
+        <div class="gallery-overlay">
+          <span>🔍 ${item.title || 'View'}</span>
+        </div>
+      </div>
+    `).join('');
+    window._galleryItems = data;
+  } catch {
+    const section = container.closest('section');
+    if (section) section.style.display = 'none';
+  }
+}
+
 async function loadGallery(album = '') {
   const container = document.getElementById('galleryGrid');
   if (!container) return;
@@ -347,7 +375,7 @@ function escHtml(str) {
 /* ---------- Init ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   const page = window.location.pathname.split('/').pop() || 'index.html';
-  if (page === 'index.html' || page === '') { loadLatestPosts(); loadGallery(); }
+  if (page === 'index.html' || page === '') { loadLatestPosts(); loadHomeGallery(); }
   if (page === 'news.html') loadNewsPosts();
   if (page === 'gallery.html') loadGallery();
 });
