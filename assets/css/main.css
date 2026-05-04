@@ -1079,9 +1079,7 @@ body .card { transition: transform .3s ease, box-shadow .3s ease, background-col
 
 /* Topbar social links */
 .topbar-right a .social-icon {
-  width: 16px;
-  height: 16px;
-  margin-right: 4px;
+  display: none;
 }
 
 /* Contact info icons */
