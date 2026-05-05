@@ -1120,3 +1120,68 @@ body .card { transition: transform .3s ease, box-shadow .3s ease, background-col
   height: 80px;
   margin: 0 auto;
 }
+
+/* ============================================================
+   Sister Programs Bar
+   ============================================================ */
+.sister-programs-bar {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  padding: 18px 0;
+  border-top: 3px solid var(--red-main);
+}
+.sister-programs-bar .container {
+  display: flex; align-items: center; gap: 20px;
+  flex-wrap: wrap;
+}
+.sister-label {
+  font-size: .78rem; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: rgba(255,255,255,.5);
+  white-space: nowrap;
+}
+.sister-link {
+  display: flex; align-items: center; gap: 14px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--radius-md);
+  padding: 10px 20px 10px 12px;
+  text-decoration: none; color: #fff;
+  transition: var(--transition);
+  flex: 1; max-width: 380px;
+}
+.sister-link:hover {
+  background: rgba(255,255,255,.12);
+  border-color: var(--red-main);
+  color: #fff;
+  transform: translateY(-2px);
+}
+.sister-logo {
+  width: 44px; height: 44px;
+  border-radius: 50%; object-fit: cover;
+  border: 2px solid rgba(255,255,255,.2);
+  flex-shrink: 0;
+}
+.sister-info {
+  display: flex; flex-direction: column; gap: 2px; flex: 1;
+}
+.sister-info strong {
+  font-size: .95rem; font-weight: 700; color: #fff;
+}
+.sister-info span {
+  font-size: .78rem; color: rgba(255,255,255,.6);
+}
+.sister-arrow {
+  font-size: .82rem; font-weight: 600;
+  color: var(--gold); white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .sister-programs-bar .container { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .sister-link { max-width: 100%; width: 100%; }
+}
+
+.sister-logo-emoji {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(255,255,255,.1);
+  border: 2px solid rgba(255,255,255,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; flex-shrink: 0;
+}
