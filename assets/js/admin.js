@@ -35,7 +35,8 @@ async function apiFetch(path, options = {}) {
   if (options.body instanceof FormData) delete headers['Content-Type'];
 
   const res = await fetch(`${API}${path}`, { ...options, headers });
-  const json = await res.json().catch(() => ({}));
+  if (res.status === 413) throw new Error('File too large. Please use a smaller file (max ~4MB for videos on this plan).');
+  const json = await res.json().catch(() => ({ error: `Server error (HTTP ${res.status})` }));
   if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
   return json;
 }
