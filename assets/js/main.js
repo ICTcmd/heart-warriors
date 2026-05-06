@@ -263,7 +263,7 @@ async function loadHomeGallery() {
     container.innerHTML = data.map((item, i) => `
       <div class="gallery-item" onclick="openLightbox(${i})" data-index="${i}">
         ${item.file_type === 'video'
-          ? `<video src="${item.file_url}" muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover"></video>`
+          ? `<video src="${item.file_url}" muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>`
           : `<img src="${item.file_url}" alt="${item.title || ''}" loading="eager">`
         }
         <div class="gallery-overlay">
@@ -308,7 +308,7 @@ async function loadGallery(album = '') {
       <div class="gallery-item ${i === 0 ? 'wide tall' : i === 3 ? 'wide' : ''}"
            onclick="openLightbox(${i})" data-index="${i}">
         ${item.file_type === 'video'
-          ? `<video src="${item.file_url}" muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover"></video>`
+          ? `<video src="${item.file_url}" muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>`
           : `<img src="${item.file_url}" alt="${item.title || ''}" loading="eager">`
         }
         <div class="gallery-overlay">

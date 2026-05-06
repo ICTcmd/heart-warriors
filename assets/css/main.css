@@ -1222,3 +1222,8 @@ body .card { transition: transform .3s ease, box-shadow .3s ease, background-col
   .sister-nav-link { padding: 4px; border-radius: 50%; }
   .sister-nav-logo { width: 34px; height: 34px; }
 }
+
+/* ── Video hover-to-play: hide play icon on hover ── */
+.gallery-item:hover .vid-play-icon,
+.gallery-admin-item:hover .vid-play-icon { opacity: 0; }
+.vid-play-icon { transition: opacity .2s ease; }

@@ -233,8 +233,8 @@ async function loadGalleryAdmin(page = 1) {
     grid.innerHTML = data.map(item => `
       <div class="gallery-admin-item" style="position:relative;border-radius:8px;overflow:hidden;aspect-ratio:1;background:#f3f4f6">
         ${item.file_type === 'video'
-          ? `<video src="${item.file_url}" style="width:100%;height:100%;object-fit:cover" muted playsinline preload="metadata"></video>
-             <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2rem;pointer-events:none">▶️</div>`
+          ? `<video src="${item.file_url}" style="width:100%;height:100%;object-fit:cover" muted playsinline preload="metadata" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>
+             <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2rem;pointer-events:none;transition:.2s" class="vid-play-icon">▶️</div>`
           : `<img src="${item.file_url}" alt="${escHtml(item.title || '')}"
                style="width:100%;height:100%;object-fit:cover" loading="eager"
                onerror="this.style.opacity='.3'">`
