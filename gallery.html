@@ -28,20 +28,35 @@
   <div class="container">
     <nav class="navbar">
       <a href="index.html" class="navbar-brand">
+        <img src="assets/images/logo.png" alt="Heart Warriors Logo" class="brand-logo">
         <div class="brand-text">
           <div class="brand-name" id="dyn-brand-name">❤️ Heart Warriors</div>
           <div class="brand-sub" id="dyn-brand-tagline">Bago City LGU Program</div>
         </div>
       </a>
-      <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+      <button class="hamburger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
       <ul class="nav-menu">
         <li><a href="index.html" class="nav-link" id="dyn-nav-home">Home</a></li>
         <li><a href="about.html" class="nav-link" id="dyn-nav-about">About</a></li>
         <li><a href="news.html" class="nav-link" id="dyn-nav-news">News & Updates</a></li>
-        <li><a href="gallery.html" class="nav-link" id="dyn-nav-gallery">Gallery</a></li>
+        <li><a href="events.html" class="nav-link" id="dyn-nav-events">Events</a></li>
+        <li><a href="gallery.html" class="nav-link active" id="dyn-nav-gallery">Gallery</a></li>
         <li><a href="contact.html" class="nav-link" id="dyn-nav-contact">Contact</a></li>
-        <li class="nav-cta"><a href="#" class="btn btn-disabled btn-sm">🤝 <span id="dyn-nav-cta">Request Help</span> <span style="font-size:.7rem;opacity:.8">(Soon)</span></a></li>
+        <li class="nav-cta">
+          <a href="#" class="btn btn-disabled btn-sm" title="Coming Soon">
+            🤝 <span id="dyn-nav-cta">Request Help</span> <span style="font-size:.7rem;opacity:.8">(Soon)</span>
+          </a>
+        </li>
         <li><button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button></li>
+        <li class="nav-sister-site">
+          <a href="https://wheels-of-love.vercel.app" target="_blank" rel="noopener" class="sister-nav-link" title="Visit Wheels of Love — Free Wheelchair Program for PWDs">
+            <picture>
+              <source srcset="assets/images/wol-logo.webp" type="image/webp">
+              <img src="assets/images/wol-logo.png" alt="Wheels of Love" class="sister-nav-logo">
+            </picture>
+            <span class="sister-nav-label">Wheels of Love</span>
+          </a>
+        </li>
       </ul>
     </nav>
   </div>
