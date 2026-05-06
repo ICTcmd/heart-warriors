@@ -12,4 +12,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   auth: { persistSession: false }
 });
 
+const PROGRAM = process.env.PROGRAM || 'heart-warriors';
+
 module.exports = supabase;
+module.exports.PROGRAM = PROGRAM;

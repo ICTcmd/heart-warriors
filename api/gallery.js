@@ -1,5 +1,6 @@
 // /api/gallery — GET list, POST add, DELETE /api/gallery?id=xxx
 const supabase = require('./_lib/supabase');
+const { PROGRAM } = require('./_lib/supabase');
 const { requireAuth, cors } = require('./_lib/auth');
 const cache = require('./_lib/cache');
 
@@ -27,6 +28,7 @@ module.exports = async (req, res) => {
     if (cached) { cache.setCacheHeaders(res, 120); return res.status(200).json(cached); }
 
     let query = supabase.from('gallery').select('*', { count: 'exact' })
+      .eq('program', PROGRAM)
       .order('created_at', { ascending: false }).range(from, from + limit - 1);
     if (album) query = query.eq('album', album);
 
@@ -65,7 +67,8 @@ module.exports = async (req, res) => {
       file_type:   safeFileType,
       album:       album?.trim().slice(0, MAX_ALBUM_LENGTH) || null,
       is_featured: is_featured === true,
-      uploaded_by: admin.id
+      uploaded_by: admin.id,
+      program:     PROGRAM
     }).select().single();
 
     if (error) return res.status(500).json({ error: 'Failed to add gallery item.' });
