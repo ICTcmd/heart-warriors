@@ -640,3 +640,82 @@
     contain: layout style paint;
   }
 }
+
+/* ────────────────────────────────────────────────────────────────────────────
+   MISSING MOBILE FIXES — Touch targets, fonts, lightbox, overflow
+   ──────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+
+  .btn-sm {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 10px 18px;
+    font-size: .9rem;
+  }
+
+  .page-btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 10px 16px;
+  }
+
+  .hero-dot {
+    width: 14px;
+    height: 14px;
+    margin: 4px;
+  }
+
+  .dark-mode-toggle {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .footer-links a {
+    padding: 10px 0;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .sister-nav-logo,
+  .sister-nav-link {
+    width: 44px;
+    height: 44px;
+  }
+
+  .section-label { font-size: .875rem; }
+  .card-category { font-size: .875rem; }
+  .card-meta { font-size: .875rem; }
+  .brand-sub { font-size: .8rem; }
+  .hero-badge { font-size: .875rem; }
+  .stat-item .label { font-size: .875rem; }
+  .filter-btn { font-size: .875rem; }
+
+  .lightbox-inner { position: relative; padding: 0 50px; }
+  .lightbox-prev { left: 4px !important; position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; }
+  .lightbox-next { right: 4px !important; position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; }
+
+  .news-search-wrap { max-width: 100%; width: 100%; }
+  .hero-scroll { display: none; }
+
+  .sister-programs-bar .container { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .sister-link { max-width: 100%; width: 100%; }
+
+  .gallery-item video { pointer-events: none; }
+
+  .about-intro { grid-template-columns: 1fr; gap: 32px; }
+  .events-grid { grid-template-columns: 1fr; }
+
+  .cover-banner-img { max-height: 220px; object-fit: cover; object-position: center top; }
+}
+
+@media (max-width: 480px) {
+  .hero-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .hero-stat .stat-num { font-size: 1.4rem; }
+  .hero-stat .stat-label { font-size: .7rem; }
+  .clock-date { display: none; }
+  .brand-sub { display: none; }
+  .lightbox-inner { padding: 0 44px; }
+  .lightbox-inner img, .lightbox-inner video { max-width: 100%; max-height: 70vh; }
+}
