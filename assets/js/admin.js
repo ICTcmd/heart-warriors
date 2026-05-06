@@ -231,9 +231,13 @@ async function loadGalleryAdmin(page = 1) {
     }
     grid.innerHTML = data.map(item => `
       <div class="gallery-admin-item" style="position:relative;border-radius:8px;overflow:hidden;aspect-ratio:1;background:#f3f4f6">
-        <img src="${item.file_url}" alt="${escHtml(item.title || '')}"
-             style="width:100%;height:100%;object-fit:cover" loading="eager"
-             onerror="this.style.opacity='.3'">
+        ${item.file_type === 'video'
+          ? `<video src="${item.file_url}" style="width:100%;height:100%;object-fit:cover" muted playsinline preload="metadata"></video>
+             <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2rem;pointer-events:none">▶️</div>`
+          : `<img src="${item.file_url}" alt="${escHtml(item.title || '')}"
+               style="width:100%;height:100%;object-fit:cover" loading="eager"
+               onerror="this.style.opacity='.3'">`
+        }
         <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7),transparent);opacity:0;transition:.2s;display:flex;align-items:flex-end;padding:10px"
              onmouseenter="this.style.opacity=1" onmouseleave="this.style.opacity=0">
           <div style="flex:1">
