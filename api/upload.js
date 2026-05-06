@@ -94,7 +94,8 @@ const handler = async (req, res) => {
       title: title || null,
       file_type: isVideo ? 'video' : 'image',
       album: album || null,
-      uploaded_by: admin.id
+      uploaded_by: admin.id,
+      program: process.env.PROGRAM || 'heart-warriors'
     }).select().single();
 
     if (dbError) return res.status(500).json({ error: 'DB error: ' + dbError.message });
