@@ -1,11 +1,11 @@
-// /api/upload — File upload (direct, no Jimp compression to avoid Vercel timeout)
+// /api/upload — File upload with signed URL support for large files
 const { requireAuth, cors } = require('./_lib/auth');
 const supabase = require('./_lib/supabase');
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/ogg'];
-const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
-const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50MB
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024;
+const MAX_VIDEO_SIZE = 500 * 1024 * 1024;
 const BUCKET = 'heart-warriors-media';
 
 const MAGIC_NUMBERS = [
@@ -33,6 +33,37 @@ const handler = async (req, res) => {
   const admin = requireAuth(req, res);
   if (!admin) return;
 
+  // ── Signed URL action (for large/video direct uploads) ────
+  if (req.query?.action === 'sign') {
+    let body = {};
+    try {
+      const chunks = [];
+      for await (const chunk of req) chunks.push(chunk);
+      body = JSON.parse(Buffer.concat(chunks).toString('utf8'));
+    } catch { return res.status(400).json({ error: 'Invalid JSON body' }); }
+
+    const { filename, contentType } = body;
+    if (!filename || !contentType) return res.status(400).json({ error: 'filename and contentType required' });
+
+    const isImage = ALLOWED_IMAGE_TYPES.includes(contentType);
+    const isVideo = ALLOWED_VIDEO_TYPES.includes(contentType);
+    if (!isImage && !isVideo) return res.status(400).json({ error: 'File type not allowed: ' + contentType });
+
+    const safeExts = {
+      'image/jpeg': 'jpg', 'image/png': 'png', 'image/gif': 'gif', 'image/webp': 'webp',
+      'video/mp4': 'mp4', 'video/webm': 'webm', 'video/ogg': 'ogv'
+    };
+    const fileExt = safeExts[contentType] || 'bin';
+    const folder = isVideo ? 'videos' : 'images';
+    const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
+
+    const { data, error } = await supabase.storage.from(BUCKET).createSignedUploadUrl(path);
+    if (error) return res.status(500).json({ error: 'Failed to create signed URL: ' + error.message });
+
+    return res.status(200).json({ signedUrl: data.signedUrl, path, token: data.token });
+  }
+
+  // ── Regular multipart upload (images under 4MB) ───────────
   try {
     const chunks = [];
     for await (const chunk of req) chunks.push(chunk);
@@ -108,7 +139,7 @@ const handler = async (req, res) => {
   }
 };
 
-handler.config = { api: { bodyParser: false } };
+handler.config = { api: { bodyParser: false, responseLimit: '50mb' } };
 module.exports = handler;
 
 function parseMultipart(buffer, boundary) {

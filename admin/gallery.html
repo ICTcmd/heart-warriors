@@ -159,7 +159,47 @@
 <div class="toast-container"></div>
 <script src="../assets/js/admin.js"></script>
 <script>
-// File input change is handled in DOMContentLoaded below
+const SUPABASE_URL = 'https://bjnzdhmlndxxvyzaigii.supabase.co';
+const STORAGE_BUCKET = 'heart-warriors-media';
+const VERCEL_SIZE_LIMIT = 4 * 1024 * 1024; // 4MB
+
+async function uploadDirect(file, title, album) {
+  const token = getToken();
+  const sigRes = await fetch('/api/upload?action=sign', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ filename: file.name, contentType: file.type })
+  });
+  if (!sigRes.ok) {
+    const j = await sigRes.json().catch(() => ({}));
+    throw new Error(j.error || 'Failed to get upload URL');
+  }
+  const { signedUrl, path } = await sigRes.json();
+
+  const uploadRes = await fetch(signedUrl, {
+    method: 'PUT',
+    headers: { 'Content-Type': file.type, 'x-upsert': 'false' },
+    body: file
+  });
+  if (!uploadRes.ok) throw new Error('Storage upload failed: ' + uploadRes.status);
+
+  const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${STORAGE_BUCKET}/${path}`;
+  const dbRes = await fetch('/api/gallery', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      file_url: publicUrl,
+      title: title || null,
+      file_type: file.type.startsWith('video/') ? 'video' : 'image',
+      album: album || null
+    })
+  });
+  if (!dbRes.ok) {
+    const j = await dbRes.json().catch(() => ({}));
+    throw new Error(j.error || 'Failed to save to gallery');
+  }
+  return await dbRes.json();
+}
 
 async function uploadFiles() {
   const input = document.getElementById('fileInput');
@@ -168,51 +208,51 @@ async function uploadFiles() {
 
   if (!input.files.length) { toast('Please select files first.', 'warning'); return; }
 
-  const btn = document.querySelector('[onclick="uploadFiles()"]');
-  btn.disabled = true;
+  const btns = document.querySelectorAll('[onclick="uploadFiles()"]');
+  btns.forEach(b => { b.disabled = true; });
 
   let successCount = 0;
-  let totalSaved = 0;
 
   for (let i = 0; i < input.files.length; i++) {
     const file = input.files[i];
-    btn.textContent = `Uploading ${i + 1} of ${input.files.length}...`;
+    btns.forEach(b => b.textContent = `Uploading ${i + 1} of ${input.files.length}...`);
 
     try {
-      const fd = new FormData();
-      fd.append('file', file);
-      fd.append('title', title);
-      fd.append('album', album);
+      const isLarge = file.size > VERCEL_SIZE_LIMIT;
+      const isVideo = file.type.startsWith('video/');
 
-      const token = getToken();
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` },
-        body: fd
-      });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || 'Upload failed');
-
-      successCount++;
-      if (json.compression) {
-        totalSaved += (json.compression.original_kb - json.compression.compressed_kb);
+      if (isLarge || isVideo) {
+        await uploadDirect(file, title, album);
+      } else {
+        const fd = new FormData();
+        fd.append('file', file);
+        fd.append('title', title);
+        fd.append('album', album);
+        const token = getToken();
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` },
+          body: fd
+        });
+        if (res.status === 413) throw new Error('File too large. Try a smaller file.');
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || 'Upload failed');
       }
+      successCount++;
     } catch (err) {
       toast(`Failed: ${file.name} — ${err.message}`, 'error');
     }
   }
 
   if (successCount > 0) {
-    const savedMsg = totalSaved > 0 ? ` (saved ~${Math.round(totalSaved)}KB)` : '';
-    toast(`${successCount} file(s) uploaded successfully!${savedMsg}`, 'success');
+    toast(`${successCount} file(s) uploaded successfully!`, 'success');
     input.value = '';
     document.getElementById('uploadPreview').innerHTML = '';
     document.getElementById('uploadMeta').style.display = 'none';
     loadGalleryAdmin();
   }
 
-  btn.disabled = false;
-  btn.textContent = '⬆️ Upload Files';
+  btns.forEach(b => { b.disabled = false; b.textContent = '⬆️ Upload Files'; });
 }
 
 // ── Gallery Preview ──
