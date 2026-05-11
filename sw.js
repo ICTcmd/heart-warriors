@@ -1,5 +1,5 @@
 // Heart Warriors Service Worker — PWA offline support
-const CACHE = 'hw-v3';
+const CACHE = 'hw-v4';
 const OFFLINE_URLS = [
   '/',
   '/index.html',
@@ -35,11 +35,18 @@ self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   if (e.request.url.includes('/api/')) return; // never cache API calls
 
+  // Skip cross-origin requests (Supabase images, external CDNs)
+  const url = new URL(e.request.url);
+  if (url.origin !== self.location.origin) return;
+
   e.respondWith(
     fetch(e.request)
       .then(res => {
-        const clone = res.clone();
-        caches.open(CACHE).then(cache => cache.put(e.request, clone));
+        // Only cache same-origin successful responses
+        if (res && res.status === 200 && res.type === 'basic') {
+          const clone = res.clone();
+          caches.open(CACHE).then(cache => cache.put(e.request, clone));
+        }
         return res;
       })
       .catch(() => caches.match(e.request))
