@@ -209,13 +209,30 @@ async function uploadFiles() {
   if (!input.files.length) { toast('Please select files first.', 'warning'); return; }
 
   const btns = document.querySelectorAll('[onclick="uploadFiles()"]');
-  btns.forEach(b => { b.disabled = true; });
+  btns.forEach(b => { b.disabled = true; b.textContent = '⏳ Uploading...'; });
+
+  // Show progress overlay
+  let progressEl = document.getElementById('uploadProgressBar');
+  if (!progressEl) {
+    const wrap = document.createElement('div');
+    wrap.id = 'uploadProgressWrap';
+    wrap.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#c0392b;height:4px;transition:width .3s';
+    progressEl = document.createElement('div');
+    progressEl.id = 'uploadProgressBar';
+    progressEl.style.cssText = 'height:4px;background:#ffd700;width:0%;transition:width .4s ease';
+    wrap.appendChild(progressEl);
+    document.body.appendChild(wrap);
+  }
+  progressEl.style.width = '0%';
 
   let successCount = 0;
+  const total = input.files.length;
 
-  for (let i = 0; i < input.files.length; i++) {
+  for (let i = 0; i < total; i++) {
     const file = input.files[i];
-    btns.forEach(b => b.textContent = `Uploading ${i + 1} of ${input.files.length}...`);
+    const pct = Math.round(((i) / total) * 90);
+    progressEl.style.width = pct + '%';
+    btns.forEach(b => b.textContent = `⏳ Uploading ${i + 1} of ${total}...`);
 
     try {
       const isLarge = file.size > VERCEL_SIZE_LIMIT;
@@ -239,13 +256,21 @@ async function uploadFiles() {
         if (!res.ok) throw new Error(json.error || 'Upload failed');
       }
       successCount++;
+      // Refresh gallery after each successful upload so user sees it immediately
+      loadGalleryAdmin();
     } catch (err) {
       toast(`Failed: ${file.name} — ${err.message}`, 'error');
     }
   }
 
+  progressEl.style.width = '100%';
+  setTimeout(() => {
+    const wrap = document.getElementById('uploadProgressWrap');
+    if (wrap) wrap.remove();
+  }, 800);
+
   if (successCount > 0) {
-    toast(`${successCount} file(s) uploaded successfully!`, 'success');
+    toast(`✅ ${successCount} file(s) uploaded successfully!`, 'success');
     input.value = '';
     document.getElementById('uploadPreview').innerHTML = '';
     document.getElementById('uploadMeta').style.display = 'none';
