@@ -257,12 +257,36 @@ async function loadGalleryAdmin(page = 1) {
 
 async function deleteGalleryItem(id) {
   if (!confirm('Delete this media item?')) return;
+
+  // Find the card and show deleting state immediately
+  const btn = event.target;
+  const card = btn.closest('.gallery-admin-item');
+  if (card) {
+    card.style.opacity = '0.4';
+    card.style.pointerEvents = 'none';
+    btn.textContent = '⏳ Deleting...';
+  }
+
   try {
     await apiFetch(`/gallery?id=${id}`, { method: 'DELETE' });
-    toast('Deleted.', 'success');
-    loadGalleryAdmin();
+    toast('✅ Deleted successfully.', 'success');
+    // Remove card instantly from DOM
+    if (card) {
+      card.style.transition = 'all .3s ease';
+      card.style.transform = 'scale(0)';
+      card.style.opacity = '0';
+      setTimeout(() => { card.remove(); }, 300);
+    } else {
+      loadGalleryAdmin();
+    }
   } catch (err) {
-    toast(err.message, 'error');
+    toast('❌ ' + err.message, 'error');
+    // Restore card if delete failed
+    if (card) {
+      card.style.opacity = '1';
+      card.style.pointerEvents = '';
+      btn.textContent = 'Delete';
+    }
   }
 }
 
