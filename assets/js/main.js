@@ -634,6 +634,72 @@ if ('serviceWorker' in navigator) {
 }
 
 /* ============================================================
+   PWA Install Prompt (Add to Home Screen)
+   ============================================================ */
+let _pwaInstallPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  _pwaInstallPrompt = e;
+
+  // Only show if not already installed and not dismissed recently
+  const dismissed = localStorage.getItem('pwa_dismissed');
+  if (dismissed && Date.now() - parseInt(dismissed) < 7 * 24 * 60 * 60 * 1000) return;
+
+  // Show banner after 3 seconds
+  setTimeout(() => {
+    if (!_pwaInstallPrompt) return;
+    const banner = document.createElement('div');
+    banner.id = 'pwa-banner';
+    banner.style.cssText = `
+      position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+      background:#fff;border-radius:16px;padding:16px 20px;
+      box-shadow:0 8px 32px rgba(0,0,0,.18);z-index:9999;
+      display:flex;align-items:center;gap:14px;max-width:340px;width:90%;
+      border:2px solid var(--red-pale,#fdecea);
+      animation:slideUp .4s ease;
+    `;
+    banner.innerHTML = `
+      <style>@keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}</style>
+      <img src="/assets/images/logo.png" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0" alt="App icon">
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:.9rem;color:#1a1a1a">Install App</div>
+        <div style="font-size:.78rem;color:#666;margin-top:2px">Add to your home screen for quick access</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
+        <button id="pwa-install-btn" style="background:var(--red-main,#c0392b);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:.8rem;font-weight:700;cursor:pointer">Install</button>
+        <button id="pwa-dismiss-btn" style="background:none;border:none;color:#999;font-size:.75rem;cursor:pointer;padding:2px">Not now</button>
+      </div>
+    `;
+    document.body.appendChild(banner);
+
+    document.getElementById('pwa-install-btn').addEventListener('click', async () => {
+      banner.remove();
+      if (_pwaInstallPrompt) {
+        _pwaInstallPrompt.prompt();
+        const { outcome } = await _pwaInstallPrompt.userChoice;
+        _pwaInstallPrompt = null;
+        if (outcome === 'accepted') localStorage.setItem('pwa_dismissed', Date.now());
+      }
+    });
+
+    document.getElementById('pwa-dismiss-btn').addEventListener('click', () => {
+      banner.remove();
+      localStorage.setItem('pwa_dismissed', Date.now());
+    });
+
+    // Auto-hide after 10 seconds
+    setTimeout(() => banner?.remove(), 10000);
+  }, 3000);
+});
+
+// Hide banner if app is already installed
+window.addEventListener('appinstalled', () => {
+  document.getElementById('pwa-banner')?.remove();
+  _pwaInstallPrompt = null;
+});
+
+/* ============================================================
    Digital Clock
    ============================================================ */
 function updateClock() {
