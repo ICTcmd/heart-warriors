@@ -264,7 +264,7 @@ async function loadHomeGallery() {
       <div class="gallery-item" onclick="openLightbox(${i})" data-index="${i}">
         ${item.file_type === 'video'
           ? `<video src="${item.file_url}" muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>`
-          : `<img src="${item.file_url}" alt="${item.title || ''}" loading="eager">`
+          : `<img src="${item.file_url}" alt="${item.title || ''}" loading="eager" decoding="async" crossorigin="anonymous" onerror="this.style.opacity='0.3'">`
         }
         <div class="gallery-overlay">
           <span>${item.file_type === 'video' ? '▶ Video' : '🔍 ' + (item.title || 'View')}</span>
@@ -309,7 +309,7 @@ async function loadGallery(album = '') {
            onclick="openLightbox(${i})" data-index="${i}">
         ${item.file_type === 'video'
           ? `<video src="${item.file_url}" muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>`
-          : `<img src="${item.file_url}" alt="${item.title || ''}" loading="eager">`
+          : `<img src="${item.file_url}" alt="${item.title || ''}" loading="eager" decoding="async" crossorigin="anonymous" onerror="this.style.opacity='0.3'">`
         }
         <div class="gallery-overlay">
           <span>${item.file_type === 'video' ? '▶ Video' : '🔍 ' + (item.title || 'View')}</span>
