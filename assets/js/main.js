@@ -264,32 +264,39 @@ async function loadHomeGallery() {
       <div class="gallery-item" onclick="openLightbox(${i})" data-index="${i}">
         ${item.file_type === 'video'
           ? `<video src="${item.file_url}" muted playsinline preload="auto" loop
-               style="width:100%;height:100%;object-fit:cover"
+               style="width:100%;height:100%;object-fit:cover;display:block"
                data-video></video>
-             <div class="gallery-overlay vid-overlay">
-               <span>&#9654; Video</span>
-             </div>`
+             <div class="vid-play-badge" style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,.6);color:#fff;font-size:.7rem;padding:3px 8px;border-radius:4px;pointer-events:none">&#9654; Video</div>`
           : `<img src="${item.file_url}" alt="${item.title || ''}" loading="eager" decoding="async" crossorigin="anonymous" onerror="this.style.opacity='0.3'">`
         }
         <div class="gallery-overlay">
-          <span>${item.file_type === 'video' ? '&#9654; Video' : '&#128269; ' + (item.title || 'View')}</span>
+          <span>${item.file_type === 'video' ? '&#9654; Play' : '&#128269; ' + (item.title || 'View')}</span>
         </div>
       </div>
     `).join('');
     window._galleryItems = data;
 
-    // Hover-to-play for videos
-    container.querySelectorAll('[data-video]').forEach(vid => {
-      const item = vid.closest('.gallery-item');
-      const overlay = item.querySelector('.vid-overlay');
-      item.addEventListener('mouseenter', () => {
-        vid.play().catch(() => {});
-        if (overlay) overlay.style.opacity = '0';
-      });
-      item.addEventListener('mouseleave', () => {
-        vid.pause();
-        vid.currentTime = 0;
-        if (overlay) overlay.style.opacity = '1';
+    // Hover-to-play — attach after DOM is ready
+    requestAnimationFrame(() => {
+      container.querySelectorAll('[data-video]').forEach(vid => {
+        const item = vid.closest('.gallery-item');
+        const badge = item.querySelector('.vid-play-badge');
+        // Load the video
+        vid.load();
+        item.addEventListener('mouseenter', () => {
+          const playPromise = vid.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(() => {
+              // Autoplay blocked — show play icon instead
+            });
+          }
+          if (badge) badge.style.display = 'none';
+        });
+        item.addEventListener('mouseleave', () => {
+          vid.pause();
+          vid.currentTime = 0;
+          if (badge) badge.style.display = 'block';
+        });
       });
     });
 
@@ -329,33 +336,35 @@ async function loadGallery(album = '') {
            onclick="openLightbox(${i})" data-index="${i}">
         ${item.file_type === 'video'
           ? `<video src="${item.file_url}" muted playsinline preload="auto" loop
-               style="width:100%;height:100%;object-fit:cover"
+               style="width:100%;height:100%;object-fit:cover;display:block"
                data-video></video>
-             <div class="gallery-overlay vid-overlay">
-               <span>&#9654; Video</span>
-             </div>`
+             <div class="vid-play-badge" style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,.6);color:#fff;font-size:.7rem;padding:3px 8px;border-radius:4px;pointer-events:none">&#9654; Video</div>`
           : `<img src="${item.file_url}" alt="${item.title || ''}" loading="eager" decoding="async" crossorigin="anonymous" onerror="this.style.opacity='0.3'">`
         }
         <div class="gallery-overlay">
-          <span>${item.file_type === 'video' ? '&#9654; Video' : '&#128269; ' + (item.title || 'View')}</span>
+          <span>${item.file_type === 'video' ? '&#9654; Play' : '&#128269; ' + (item.title || 'View')}</span>
         </div>
       </div>
     `).join('');
 
     window._galleryItems = data;
 
-    // Hover-to-play for videos
-    container.querySelectorAll('[data-video]').forEach(vid => {
-      const item = vid.closest('.gallery-item');
-      const overlay = item.querySelector('.vid-overlay');
-      item.addEventListener('mouseenter', () => {
-        vid.play().catch(() => {});
-        if (overlay) overlay.style.opacity = '0';
-      });
-      item.addEventListener('mouseleave', () => {
-        vid.pause();
-        vid.currentTime = 0;
-        if (overlay) overlay.style.opacity = '1';
+    // Hover-to-play — attach after DOM is ready
+    requestAnimationFrame(() => {
+      container.querySelectorAll('[data-video]').forEach(vid => {
+        const item = vid.closest('.gallery-item');
+        const badge = item.querySelector('.vid-play-badge');
+        vid.load();
+        item.addEventListener('mouseenter', () => {
+          const playPromise = vid.play();
+          if (playPromise !== undefined) playPromise.catch(() => {});
+          if (badge) badge.style.display = 'none';
+        });
+        item.addEventListener('mouseleave', () => {
+          vid.pause();
+          vid.currentTime = 0;
+          if (badge) badge.style.display = 'block';
+        });
       });
     });
   } catch {
