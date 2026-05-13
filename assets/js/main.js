@@ -263,15 +263,35 @@ async function loadHomeGallery() {
     container.innerHTML = data.map((item, i) => `
       <div class="gallery-item" onclick="openLightbox(${i})" data-index="${i}">
         ${item.file_type === 'video'
-          ? `<video src="${item.file_url}" muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>`
+          ? `<video src="${item.file_url}" muted playsinline preload="auto" loop
+               style="width:100%;height:100%;object-fit:cover"
+               data-video></video>
+             <div class="gallery-overlay vid-overlay">
+               <span>&#9654; Video</span>
+             </div>`
           : `<img src="${item.file_url}" alt="${item.title || ''}" loading="eager" decoding="async" crossorigin="anonymous" onerror="this.style.opacity='0.3'">`
         }
         <div class="gallery-overlay">
-          <span>${item.file_type === 'video' ? '▶ Video' : '🔍 ' + (item.title || 'View')}</span>
+          <span>${item.file_type === 'video' ? '&#9654; Video' : '&#128269; ' + (item.title || 'View')}</span>
         </div>
       </div>
     `).join('');
     window._galleryItems = data;
+
+    // Hover-to-play for videos
+    container.querySelectorAll('[data-video]').forEach(vid => {
+      const item = vid.closest('.gallery-item');
+      const overlay = item.querySelector('.vid-overlay');
+      item.addEventListener('mouseenter', () => {
+        vid.play().catch(() => {});
+        if (overlay) overlay.style.opacity = '0';
+      });
+      item.addEventListener('mouseleave', () => {
+        vid.pause();
+        vid.currentTime = 0;
+        if (overlay) overlay.style.opacity = '1';
+      });
+    });
 
     // Also start hero slideshow with these photos
     startHeroSlideshow(data.map(d => d.file_url));  } catch {
@@ -308,16 +328,36 @@ async function loadGallery(album = '') {
       <div class="gallery-item ${i === 0 ? 'wide tall' : i === 3 ? 'wide' : ''}"
            onclick="openLightbox(${i})" data-index="${i}">
         ${item.file_type === 'video'
-          ? `<video src="${item.file_url}" muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>`
+          ? `<video src="${item.file_url}" muted playsinline preload="auto" loop
+               style="width:100%;height:100%;object-fit:cover"
+               data-video></video>
+             <div class="gallery-overlay vid-overlay">
+               <span>&#9654; Video</span>
+             </div>`
           : `<img src="${item.file_url}" alt="${item.title || ''}" loading="eager" decoding="async" crossorigin="anonymous" onerror="this.style.opacity='0.3'">`
         }
         <div class="gallery-overlay">
-          <span>${item.file_type === 'video' ? '▶ Video' : '🔍 ' + (item.title || 'View')}</span>
+          <span>${item.file_type === 'video' ? '&#9654; Video' : '&#128269; ' + (item.title || 'View')}</span>
         </div>
       </div>
     `).join('');
 
     window._galleryItems = data;
+
+    // Hover-to-play for videos
+    container.querySelectorAll('[data-video]').forEach(vid => {
+      const item = vid.closest('.gallery-item');
+      const overlay = item.querySelector('.vid-overlay');
+      item.addEventListener('mouseenter', () => {
+        vid.play().catch(() => {});
+        if (overlay) overlay.style.opacity = '0';
+      });
+      item.addEventListener('mouseleave', () => {
+        vid.pause();
+        vid.currentTime = 0;
+        if (overlay) overlay.style.opacity = '1';
+      });
+    });
   } catch {
     container.innerHTML = '<p class="text-muted text-center" style="padding:60px;grid-column:1/-1">Unable to load gallery.</p>';
   }
