@@ -18,7 +18,7 @@ const MAX_IMAGE_URL = 2048;
 const ALLOWED_STATUS = new Set(['draft', 'published', 'archived']);
 
 module.exports = async (req, res) => {
-  cors(res);
+  cors(res, req);
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const id = req.query?.id || null;

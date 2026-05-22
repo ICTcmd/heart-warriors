@@ -68,7 +68,7 @@ const ALLOWED_KEYS = [
 ];
 
 module.exports = async (req, res) => {
-  cors(res);
+  cors(res, req);
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   if (req.method === 'GET') {

@@ -11,7 +11,7 @@ const MAX_DESC_LENGTH = 1000;
 const MAX_ALBUM_LENGTH = 100;
 
 module.exports = async (req, res) => {
-  cors(res);
+  cors(res, req);
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const id = req.query?.id || null;

@@ -23,6 +23,43 @@
   <meta name="theme-color" content="#c0392b">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Heart Warriors">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "GovernmentService",
+    "name": "Heart Warriors",
+    "description": "Official cardiovascular health program of the Local Government Unit of Bago City, providing free heart check-ups, medicines, and health education to all residents.",
+    "url": "https://heart-warriors.vercel.app",
+    "logo": "https://heart-warriors.vercel.app/assets/images/logo.png",
+    "image": "https://heart-warriors.vercel.app/assets/images/cover.png",
+    "serviceType": "Cardiovascular Health Program",
+    "areaServed": {
+      "@type": "City",
+      "name": "Bago City",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Negros Occidental, Philippines"
+      }
+    },
+    "provider": {
+      "@type": "GovernmentOrganization",
+      "name": "Local Government Unit of Bago City",
+      "url": "https://lgu-bago-portal.vercel.app",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Bago City",
+        "addressRegion": "Negros Occidental",
+        "addressCountry": "PH"
+      }
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "PHP",
+      "description": "Free cardiovascular health services for all Bago City residents"
+    }
+  }
+  </script>
 </head>
 <body>
 
@@ -53,7 +90,7 @@
       <a href="index.html" class="navbar-brand">
         <img src="assets/images/logo.png" alt="Heart Warriors Logo" class="brand-logo">
         <div class="brand-text">
-          <div class="brand-name" id="dyn-brand-name">❤️ Heart Warriors</div>
+          <div class="brand-name" id="dyn-brand-name"><span aria-hidden="true">❤️ </span>Heart Warriors</div>
           <div class="brand-sub" id="dyn-brand-tagline">Bago City LGU Program</div>
         </div>
       </a>
@@ -100,7 +137,7 @@
   <div class="container">
     <div class="hero-content">
       <div class="hero-text">
-        <div class="hero-badge" id="dyn-hero-badge">❤️ LGU Bago City Official Program</div>
+        <div class="hero-badge" id="dyn-hero-badge"><span aria-hidden="true">❤️</span> LGU Bago City Official Program</div>
         <h1 class="hero-title">
           <span id="dyn-hero-title-line1">Caring for Every</span><br>
           <span class="highlight" id="dyn-hero-title-highlight">Heart</span> <span id="dyn-hero-title-line2">in Our City</span>
@@ -135,7 +172,7 @@
 
           <!-- Slide 1: Free Medicines -->
           <div class="hero-slide active" id="slide-0">
-            <div style="font-size:4rem;margin-bottom:12px">💊</div>
+            <div style="font-size:4rem;margin-bottom:12px" aria-hidden="true">💊</div>
             <div class="card-title">Free Medicines</div>
             <div class="card-sub">Providing essential medications to heart patients in need</div>
           </div>
@@ -149,7 +186,7 @@
 
           <!-- Slide 3: Health Education -->
           <div class="hero-slide" id="slide-2">
-            <div style="font-size:4rem;margin-bottom:12px">📚</div>
+            <div style="font-size:4rem;margin-bottom:12px" aria-hidden="true">📚</div>
             <div class="card-title">Health Education</div>
             <div class="card-sub">Empowering communities with heart health knowledge</div>
           </div>
@@ -227,7 +264,7 @@
     </div>
     <div class="mv-grid stagger-children">
       <div class="mv-card" data-aos>
-        <div class="mv-icon">🎯</div>
+        <div class="mv-icon" aria-hidden="true">🎯</div>
         <h3>Our Mission</h3>
         <p id="dyn-mission">
           To provide accessible, comprehensive, and compassionate cardiovascular health services
@@ -236,7 +273,7 @@
         </p>
       </div>
       <div class="mv-card" data-aos>
-        <div class="mv-icon">🌟</div>
+        <div class="mv-icon" aria-hidden="true">🌟</div>
         <h3>Our Vision</h3>
         <p id="dyn-vision">
           A Bago City where every resident has access to quality heart health care, where
@@ -245,7 +282,7 @@
         </p>
       </div>
       <div class="mv-card" data-aos>
-        <div class="mv-icon">💪</div>
+        <div class="mv-icon" aria-hidden="true">💪</div>
         <h3>Core Values</h3>
         <p id="dyn-core-values">
           <strong>Compassion</strong> — We serve with genuine care.<br>
@@ -255,7 +292,7 @@
         </p>
       </div>
       <div class="mv-card" data-aos>
-        <div class="mv-icon">🏛️</div>
+        <div class="mv-icon" aria-hidden="true">🏛️</div>
         <h3>LGU Commitment</h3>
         <p id="dyn-lgu-commitment">
           The Local Government Unit of Bago City fully supports Heart Warriors as a flagship
@@ -279,7 +316,7 @@
     <div class="news-grid stagger-children" id="latestPosts">
       <!-- Loaded dynamically -->
       <article class="card news-featured">
-        <img class="card-img" src="assets/images/placeholder.jpg" alt="Loading..." style="background:#fdecea">
+        <img class="card-img" loading="lazy" src="assets/images/placeholder.jpg" alt="Loading..." style="background:#fdecea">
         <div class="card-body">
           <span class="card-category">Announcements</span>
           <h3 class="card-title"><a href="#">Heart Warriors Launches Free ECG Program for Senior Citizens</a></h3>
@@ -291,7 +328,7 @@
         </div>
       </article>
       <article class="card">
-        <img class="card-img" src="assets/images/placeholder.jpg" alt="Loading..." style="background:#fdecea">
+        <img class="card-img" loading="lazy" src="assets/images/placeholder.jpg" alt="Loading..." style="background:#fdecea">
         <div class="card-body">
           <span class="card-category">Events</span>
           <h3 class="card-title"><a href="#">Community Health Fair — Barangay Poblacion</a></h3>
@@ -300,7 +337,7 @@
         </div>
       </article>
       <article class="card">
-        <img class="card-img" src="assets/images/placeholder.jpg" alt="Loading..." style="background:#fdecea">
+        <img class="card-img" loading="lazy" src="assets/images/placeholder.jpg" alt="Loading..." style="background:#fdecea">
         <div class="card-body">
           <span class="card-category">Stories</span>
           <h3 class="card-title"><a href="#">"Heart Warriors Saved My Life" — Lola Nena's Story</a></h3>
@@ -353,9 +390,9 @@
 <!-- Sister Programs Banner -->
 <section class="sister-programs-bar">
   <div class="container">
-    <span class="sister-label">🏛️ Also under LGU Bago City</span>
+    <span class="sister-label"><span aria-hidden="true">🏛️</span> Also under LGU Bago City</span>
     <a href="https://wheels-of-love.vercel.app" target="_blank" rel="noopener" class="sister-link">
-      <div class="sister-logo-emoji">♿</div>
+      <div class="sister-logo-emoji"><span aria-hidden="true">♿</span></div>
       <div class="sister-info">
         <strong>Wheels of Love</strong>
         <span>PWD Mobility Program</span>
@@ -363,7 +400,7 @@
       <span class="sister-arrow">Visit →</span>
     </a>
     <a href="https://smile-bright-bago.vercel.app" target="_blank" rel="noopener" class="sister-link">
-      <div class="sister-logo-emoji">🦷</div>
+      <div class="sister-logo-emoji"><span aria-hidden="true">🦷</span></div>
       <div class="sister-info">
         <strong>Smile Bright Bago</strong>
         <span>Dental Health Program</span>
@@ -371,7 +408,7 @@
       <span class="sister-arrow">Visit →</span>
     </a>
     <a href="https://lgu-bago-portal.vercel.app" target="_blank" rel="noopener" class="sister-link">
-      <div class="sister-logo-emoji">🏛️</div>
+      <div class="sister-logo-emoji"><span aria-hidden="true">🏛️</span></div>
       <div class="sister-info">
         <strong>LGU Bago Portal</strong>
         <span>All Programs</span>
@@ -387,7 +424,7 @@
     <div class="footer-grid">
       <div>
         <div class="footer-brand">
-          <div style="font-size:1.8rem">❤️</div>
+          <div style="font-size:1.8rem" aria-hidden="true">❤️</div>
           <span class="footer-brand-name">Heart Warriors</span>
         </div>
         <p class="footer-desc" id="dyn-footer-desc">

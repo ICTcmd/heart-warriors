@@ -8,8 +8,29 @@ const API = '/api';
 function getToken() { return localStorage.getItem('hw_admin_token'); }
 function getAdmin() { try { return JSON.parse(localStorage.getItem('hw_admin_user')); } catch { return null; } }
 
+// Decode JWT payload without verifying signature (verification happens server-side)
+function getTokenExpiry(token) {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.exp ? payload.exp * 1000 : null; // convert to ms
+  } catch { return null; }
+}
+
+function isTokenExpired(token) {
+  const expiry = getTokenExpiry(token);
+  if (!expiry) return true; // treat unreadable token as expired
+  return Date.now() >= expiry;
+}
+
 function requireAuth() {
-  if (!getToken()) { window.location.href = '/admin/index.html'; return false; }
+  const token = getToken();
+  if (!token || isTokenExpired(token)) {
+    // Clear stale data and redirect to login
+    localStorage.removeItem('hw_admin_token');
+    localStorage.removeItem('hw_admin_user');
+    window.location.href = '/admin/index.html';
+    return false;
+  }
   const admin = getAdmin();
   if (admin) {
     document.querySelectorAll('.admin-name').forEach(el => el.textContent = admin.name);

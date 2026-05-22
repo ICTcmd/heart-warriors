@@ -4,7 +4,7 @@ const supabase = require('./_lib/supabase');
 const { cors } = require('./_lib/auth');
 
 module.exports = async (req, res) => {
-  cors(res);
+  cors(res, req);
   res.setHeader('Cache-Control', 'no-store');
 
   const start = Date.now();

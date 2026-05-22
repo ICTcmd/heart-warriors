@@ -62,14 +62,26 @@ function requireAuth(req, res) {
 }
 
 // ── CORS ───────────────────────────────────────────────────────────────────
-// Restrict to your own domain in production. Falls back to * only if
-// ALLOWED_ORIGIN is not set (local dev convenience).
-function cors(res) {
-  const origin = process.env.ALLOWED_ORIGIN || '*';
-  res.setHeader('Access-Control-Allow-Origin', origin);
+// Restrict to known origins only. Never falls back to wildcard in production.
+const ALLOWED_ORIGINS = new Set([
+  process.env.ALLOWED_ORIGIN,
+  'https://heart-warriors.vercel.app',
+  'https://wheels-of-love.vercel.app',
+  'https://smile-bright-bago.vercel.app',
+  'https://lgu-bago-portal.vercel.app',
+  'https://asenso-bago.vercel.app',
+].filter(Boolean));
+
+function cors(res, req) {
+  const origin = req?.headers?.origin || '';
+  // Allow known origins; block everything else
+  if (ALLOWED_ORIGINS.has(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
+  }
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  // Prevent MIME-type sniffing on API responses
+  res.setHeader('Access-Control-Max-Age', '86400');
   res.setHeader('X-Content-Type-Options', 'nosniff');
 }
 
