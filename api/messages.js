@@ -1,6 +1,6 @@
 // /api/messages — GET contact messages (admin only)
 const supabase = require('./_lib/supabase');
-const { requireAuth, cors } = require('./_lib/auth');
+const { requireAuth, cors, getClientIp, checkWriteRateLimit } = require('./_lib/auth');
 
 module.exports = async (req, res) => {
   cors(res, req);
@@ -27,6 +27,12 @@ module.exports = async (req, res) => {
 
   // Mark as read
   if (req.method === 'PUT') {
+    const writeIp = getClientIp(req);
+    const writeCheck = checkWriteRateLimit(writeIp);
+    if (!writeCheck.allowed) {
+      res.setHeader('Retry-After', String(writeCheck.retryAfter));
+      return res.status(429).json({ error: 'Too many requests.' });
+    }
     const { id } = req.query;
     if (!id) return res.status(400).json({ error: 'Missing ID' });
     await supabase.from('contact_messages').update({ is_read: true }).eq('id', id);

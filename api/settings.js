@@ -1,6 +1,6 @@
 // /api/settings — GET and PUT site settings
 const supabase = require('./_lib/supabase');
-const { requireAuth, cors } = require('./_lib/auth');
+const { requireAuth, cors, getClientIp, checkWriteRateLimit, enforceBodySizeLimit, stripHtml } = require('./_lib/auth');
 
 // Whitelist of allowed setting keys to prevent arbitrary DB writes
 const ALLOWED_KEYS = [
@@ -83,13 +83,24 @@ module.exports = async (req, res) => {
   if (!admin) return;
 
   if (req.method === 'PUT') {
+    // Rate limit + body size check
+    const writeIp = getClientIp(req);
+    const writeCheck = checkWriteRateLimit(writeIp);
+    if (!writeCheck.allowed) {
+      res.setHeader('Retry-After', String(writeCheck.retryAfter));
+      return res.status(429).json({ error: 'Too many requests. Please slow down.' });
+    }
+    if (!enforceBodySizeLimit(req, res, 256 * 1024)) return; // 256KB max for settings
+
     const body = req.body || {};
     const filtered = Object.entries(body).filter(([k]) => ALLOWED_KEYS.includes(k));
     if (!filtered.length) return res.status(400).json({ error: 'No valid settings provided.' });
 
     for (const [key, value] of filtered) {
+      // Strip HTML tags to prevent stored XSS via settings rendered on public site
+      const safeValue = stripHtml(String(value)).slice(0, 2000);
       await supabase.from('site_settings').upsert(
-        { key, value: String(value).slice(0, 2000), updated_at: new Date() },
+        { key, value: safeValue, updated_at: new Date() },
         { onConflict: 'key' }
       );
     }

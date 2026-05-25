@@ -48,6 +48,63 @@ function logout() {
   window.location.href = '/admin/index.html';
 }
 
+/* ---------- Session Timeout Warning ---------- */
+// Warns admin 5 minutes before token expires, auto-logs out at expiry
+function startSessionWatcher() {
+  const token = getToken();
+  if (!token) return;
+  const expiry = getTokenExpiry(token);
+  if (!expiry) return;
+
+  const warnAt  = expiry - 5 * 60 * 1000; // 5 min before expiry
+  const now     = Date.now();
+
+  // Already past warning time — warn immediately
+  if (now >= warnAt && now < expiry) {
+    showSessionWarning(Math.ceil((expiry - now) / 60000));
+  } else if (now < warnAt) {
+    setTimeout(() => {
+      showSessionWarning(5);
+    }, warnAt - now);
+  }
+
+  // Auto-logout at expiry
+  if (now < expiry) {
+    setTimeout(() => {
+      toast('Your session has expired. Please log in again.', 'warning');
+      setTimeout(logout, 2000);
+    }, expiry - now);
+  }
+}
+
+function showSessionWarning(minutesLeft) {
+  // Don't show duplicate warnings
+  if (document.getElementById('session-warning')) return;
+  const bar = document.createElement('div');
+  bar.id = 'session-warning';
+  bar.style.cssText = `
+    position:fixed;top:0;left:0;right:0;z-index:9999;
+    background:#92400e;color:#fff;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 20px;font-size:13px;font-weight:600;
+    box-shadow:0 2px 8px rgba(0,0,0,0.2);
+  `;
+  bar.innerHTML = `
+    <span>⚠️ Your session will expire in ${minutesLeft} minute${minutesLeft !== 1 ? 's' : ''}. Save your work.</span>
+    <div style="display:flex;gap:8px">
+      <button onclick="document.getElementById('session-warning').remove()"
+        style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:4px 12px;border-radius:6px;cursor:pointer;font-size:12px;">
+        Dismiss
+      </button>
+      <button onclick="logout()"
+        style="background:#fff;border:none;color:#92400e;padding:4px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;">
+        Log Out Now
+      </button>
+    </div>
+  `;
+  document.body.prepend(bar);
+}
+
 /* ---------- API Helper ---------- */
 async function apiFetch(path, options = {}) {
   const token = getToken();
@@ -372,7 +429,10 @@ function escHtml(str) {
 /* ---------- Init ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   const page = window.location.pathname.split('/').pop();
-  if (page !== 'index.html' && page !== '') requireAuth();
+  if (page !== 'index.html' && page !== '') {
+    requireAuth();
+    startSessionWatcher(); // start expiry countdown after auth check
+  }
 
   if (page === 'dashboard.html') loadDashboardStats();
   if (page === 'posts.html') loadPosts();

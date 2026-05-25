@@ -93,4 +93,54 @@ function getClientIp(req) {
   return req.socket?.remoteAddress || 'unknown';
 }
 
-module.exports = { verifyToken, requireAuth, cors, JWT_SECRET, checkLoginRateLimit, resetLoginRateLimit, getClientIp };
+// ── Write rate limiter ─────────────────────────────────────────────────────
+// Prevents authenticated users from spamming write endpoints
+// Max 60 write operations per IP per minute
+const writeAttempts = new Map();
+const WRITE_LIMIT  = 60;
+const WRITE_WINDOW = 60 * 1000; // 1 minute
+
+function checkWriteRateLimit(ip) {
+  const now = Date.now();
+  const entry = writeAttempts.get(ip);
+  if (!entry || now > entry.resetAt) {
+    writeAttempts.set(ip, { count: 1, resetAt: now + WRITE_WINDOW });
+    return { allowed: true };
+  }
+  if (entry.count >= WRITE_LIMIT) {
+    const retryAfter = Math.ceil((entry.resetAt - now) / 1000);
+    return { allowed: false, retryAfter };
+  }
+  entry.count++;
+  return { allowed: true };
+}
+
+// ── Body size limit ────────────────────────────────────────────────────────
+// Rejects requests with Content-Length over the specified limit
+// Protects against memory exhaustion from huge payloads
+// Default: 1MB for JSON endpoints
+const DEFAULT_MAX_BODY = 1 * 1024 * 1024; // 1MB
+
+function enforceBodySizeLimit(req, res, maxBytes = DEFAULT_MAX_BODY) {
+  const contentLength = parseInt(req.headers['content-length'] || '0', 10);
+  if (contentLength > maxBytes) {
+    res.status(413).json({ error: `Request too large. Maximum size is ${Math.round(maxBytes / 1024)}KB.` });
+    return false;
+  }
+  return true;
+}
+
+// ── HTML sanitizer ─────────────────────────────────────────────────────────
+// Strips all HTML tags from a string to prevent stored XSS via settings
+function stripHtml(str) {
+  if (typeof str !== 'string') return str;
+  return str
+    .replace(/<script[\s\S]*?<\/script>/gi, '')  // remove script blocks
+    .replace(/<style[\s\S]*?<\/style>/gi, '')     // remove style blocks
+    .replace(/<[^>]+>/g, '')                       // remove all HTML tags
+    .replace(/javascript:/gi, '')                  // remove js: protocol
+    .replace(/on\w+\s*=/gi, '')                    // remove event handlers
+    .trim();
+}
+
+module.exports = { verifyToken, requireAuth, cors, JWT_SECRET, checkLoginRateLimit, resetLoginRateLimit, getClientIp, checkWriteRateLimit, enforceBodySizeLimit, stripHtml };

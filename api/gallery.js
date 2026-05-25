@@ -1,7 +1,7 @@
 // /api/gallery — GET list, POST add, DELETE /api/gallery?id=xxx
 const supabase = require('./_lib/supabase');
 const { PROGRAM } = require('./_lib/supabase');
-const { requireAuth, cors } = require('./_lib/auth');
+const { requireAuth, cors, getClientIp, checkWriteRateLimit, enforceBodySizeLimit } = require('./_lib/auth');
 const cache = require('./_lib/cache');
 
 const ALLOWED_FILE_TYPES = new Set(['image', 'video']);
@@ -44,6 +44,17 @@ module.exports = async (req, res) => {
   // Auth required for all write ops
   const admin = requireAuth(req, res);
   if (!admin) return;
+
+  // Rate limit write operations
+  const writeIp = getClientIp(req);
+  const writeCheck = checkWriteRateLimit(writeIp);
+  if (!writeCheck.allowed) {
+    res.setHeader('Retry-After', String(writeCheck.retryAfter));
+    return res.status(429).json({ error: 'Too many requests. Please slow down.' });
+  }
+
+  // Body size limit (1MB for JSON)
+  if (!enforceBodySizeLimit(req, res)) return;
 
   // ── POST add item ──────────────────────────────────────────
   if (req.method === 'POST') {
