@@ -132,33 +132,41 @@ function toast(msg, type = 'info') {
 }
 
 /* ---------- Login ---------- */
+/* ---------- Login ---------- */
+// Exposed as named function so the login page's bot-protection wrapper can call it
+async function handleAdminLogin(e) {
+  if (e) e.preventDefault();
+  const form = document.getElementById('loginForm');
+  if (!form) return;
+  const btn = form.querySelector('[type="submit"]');
+  const errEl = document.getElementById('loginError');
+  if (btn) { btn.disabled = true; btn.textContent = 'Signing in...'; }
+  if (errEl) errEl.style.display = 'none';
+
+  try {
+    const data = await apiFetch('/auth?action=login', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: form.email.value.trim(),
+        password: form.password.value
+      })
+    });
+    localStorage.setItem('hw_admin_token', data.token);
+    localStorage.setItem('hw_admin_user', JSON.stringify(data.admin));
+    window.location.href = '/admin/dashboard.html';
+  } catch (err) {
+    if (errEl) { errEl.textContent = err.message; errEl.style.display = 'block'; }
+    if (btn) { btn.disabled = false; btn.textContent = 'Sign In →'; }
+  }
+}
+
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = loginForm.querySelector('[type="submit"]');
-    const errEl = document.getElementById('loginError');
-    btn.disabled = true;
-    btn.textContent = 'Signing in...';
-    if (errEl) errEl.style.display = 'none';
-
-    try {
-      const data = await apiFetch('/auth?action=login', {
-        method: 'POST',
-        body: JSON.stringify({
-          email: loginForm.email.value.trim(),
-          password: loginForm.password.value
-        })
-      });
-      localStorage.setItem('hw_admin_token', data.token);
-      localStorage.setItem('hw_admin_user', JSON.stringify(data.admin));
-      window.location.href = '/admin/dashboard.html';
-    } catch (err) {
-      if (errEl) { errEl.textContent = err.message; errEl.style.display = 'block'; }
-      btn.disabled = false;
-      btn.textContent = 'Sign In';
-    }
-  });
+  // Only attach direct submit listener if the page hasn't added its own bot-protection wrapper
+  // (admin/index.html adds its own wrapper that calls handleAdminLogin)
+  if (!loginForm.dataset.botProtected) {
+    loginForm.addEventListener('submit', handleAdminLogin);
+  }
 }
 
 /* ---------- Dashboard Stats ---------- */

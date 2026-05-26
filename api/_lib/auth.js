@@ -130,6 +130,19 @@ function enforceBodySizeLimit(req, res, maxBytes = DEFAULT_MAX_BODY) {
   return true;
 }
 
+// ── Audit Logger ──────────────────────────────────────────────────────────
+// Records admin actions to the audit_log table in Supabase
+// Non-blocking — failures are silently ignored so they never break the main operation
+async function auditLog(supabase, adminId, action, details = {}) {
+  try {
+    await supabase.from('audit_log').insert({
+      admin_id:   adminId,
+      action:     String(action).slice(0, 100),
+      details:    JSON.stringify(details).slice(0, 1000),
+      created_at: new Date()
+    });
+  } catch { /* never block main operation */ }
+}
 // ── HTML sanitizer ─────────────────────────────────────────────────────────
 // Strips all HTML tags from a string to prevent stored XSS via settings
 function stripHtml(str) {
@@ -143,4 +156,4 @@ function stripHtml(str) {
     .trim();
 }
 
-module.exports = { verifyToken, requireAuth, cors, JWT_SECRET, checkLoginRateLimit, resetLoginRateLimit, getClientIp, checkWriteRateLimit, enforceBodySizeLimit, stripHtml };
+module.exports = { verifyToken, requireAuth, cors, JWT_SECRET, checkLoginRateLimit, resetLoginRateLimit, getClientIp, checkWriteRateLimit, enforceBodySizeLimit, stripHtml, auditLog };

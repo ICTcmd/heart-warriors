@@ -55,8 +55,16 @@ module.exports = async (req, res) => {
     const token = jwt.sign(
       { id: admin.id, email: admin.email, role: admin.role },
       JWT_SECRET,
-      { expiresIn: '8h' }  // Reduced from 7d — shorter window limits damage if token is stolen
+      { expiresIn: '8h' }
     );
+
+    // Log successful login non-blocking — use supabase directly to avoid circular require
+    supabase.from('audit_log').insert({
+      admin_id: admin.id,
+      action: 'admin.login',
+      details: JSON.stringify({ ip, email: admin.email }).slice(0, 1000),
+      created_at: new Date()
+    }).catch(() => {});
     return res.status(200).json({
       token,
       admin: { id: admin.id, name: admin.name, email: admin.email, role: admin.role, avatar_url: admin.avatar_url }

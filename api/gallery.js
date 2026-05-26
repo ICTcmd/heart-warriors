@@ -1,7 +1,7 @@
 // /api/gallery — GET list, POST add, DELETE /api/gallery?id=xxx
 const supabase = require('./_lib/supabase');
 const { PROGRAM } = require('./_lib/supabase');
-const { requireAuth, cors, getClientIp, checkWriteRateLimit, enforceBodySizeLimit } = require('./_lib/auth');
+const { requireAuth, cors, getClientIp, checkWriteRateLimit, enforceBodySizeLimit, auditLog } = require('./_lib/auth');
 const cache = require('./_lib/cache');
 
 const ALLOWED_FILE_TYPES = new Set(['image', 'video']);
@@ -84,6 +84,7 @@ module.exports = async (req, res) => {
 
     if (error) return res.status(500).json({ error: 'Failed to add gallery item.' });
     cache.del('gallery:');
+    auditLog(supabase, admin.id, 'gallery.upload', { id: data.id, file_type: safeFileType });
     return res.status(201).json({ data });
   }
 
@@ -106,6 +107,7 @@ module.exports = async (req, res) => {
     const { error } = await supabase.from('gallery').delete().eq('id', id);
     if (error) return res.status(500).json({ error: 'Failed to delete item.' });
     cache.del('gallery:');
+    auditLog(supabase, admin.id, 'gallery.delete', { id });
     return res.status(200).json({ message: 'Deleted.' });
   }
 

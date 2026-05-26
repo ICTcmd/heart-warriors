@@ -1,6 +1,6 @@
 // /api/posts — GET list, POST create, PUT /api/posts?id=xxx, DELETE /api/posts?id=xxx
 const supabase = require('./_lib/supabase');
-const { requireAuth, cors, getClientIp, checkWriteRateLimit, enforceBodySizeLimit } = require('./_lib/auth');
+const { requireAuth, cors, getClientIp, checkWriteRateLimit, enforceBodySizeLimit, auditLog } = require('./_lib/auth');
 const cache = require('./_lib/cache');
 
 // ── Slug helper ────────────────────────────────────────────────────────────
@@ -146,6 +146,7 @@ module.exports = async (req, res) => {
 
     if (error) return res.status(500).json({ error: 'Failed to create post.' });
     cache.del('posts:');
+    auditLog(supabase, admin.id, 'post.create', { title: data.title, id: data.id });
     return res.status(201).json({ data });
   }
 
@@ -188,6 +189,7 @@ module.exports = async (req, res) => {
     const { data, error } = await supabase.from('posts').update(updates).eq('id', id).select().single();
     if (error) return res.status(500).json({ error: 'Failed to update post.' });
     cache.del('posts:');
+    auditLog(supabase, admin.id, 'post.update', { id });
     return res.status(200).json({ data });
   }
 
@@ -196,6 +198,7 @@ module.exports = async (req, res) => {
     const { error } = await supabase.from('posts').delete().eq('id', id);
     if (error) return res.status(500).json({ error: 'Failed to delete post.' });
     cache.del('posts:');
+    auditLog(supabase, admin.id, 'post.delete', { id });
     return res.status(200).json({ message: 'Post deleted.' });
   }
 

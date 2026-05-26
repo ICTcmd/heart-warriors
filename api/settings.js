@@ -1,6 +1,6 @@
 // /api/settings — GET and PUT site settings
 const supabase = require('./_lib/supabase');
-const { requireAuth, cors, getClientIp, checkWriteRateLimit, enforceBodySizeLimit, stripHtml } = require('./_lib/auth');
+const { requireAuth, cors, getClientIp, checkWriteRateLimit, enforceBodySizeLimit, stripHtml, auditLog } = require('./_lib/auth');
 
 // Whitelist of allowed setting keys to prevent arbitrary DB writes
 const ALLOWED_KEYS = [
@@ -104,6 +104,7 @@ module.exports = async (req, res) => {
         { onConflict: 'key' }
       );
     }
+    auditLog(supabase, admin.id, 'settings.update', { keys: filtered.map(([k]) => k) });
     return res.status(200).json({ message: 'Settings saved.' });
   }
 

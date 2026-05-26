@@ -194,3 +194,29 @@ CREATE POLICY "Public read gallery" ON gallery
 -- Anyone can submit contact messages
 CREATE POLICY "Anyone can submit contact" ON contact_messages
   FOR INSERT WITH CHECK (true);
+
+-- ============================================================
+-- AUDIT LOG TABLE
+-- Records all admin actions for security and accountability
+-- ============================================================
+CREATE TABLE IF NOT EXISTS audit_log (
+  id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  admin_id    UUID REFERENCES admins(id) ON DELETE SET NULL,
+  action      VARCHAR(100) NOT NULL,
+  details     TEXT,
+  created_at  TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Index for fast lookups by admin and time
+CREATE INDEX IF NOT EXISTS idx_audit_log_admin_id   ON audit_log(admin_id);
+CREATE INDEX IF NOT EXISTS idx_audit_log_created_at ON audit_log(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_audit_log_action     ON audit_log(action);
+
+-- Row Level Security — only service role can write, admins can read their own
+ALTER TABLE audit_log ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Service role full access" ON audit_log
+  FOR ALL USING (auth.role() = 'service_role');
+
+CREATE POLICY "Admins read own logs" ON audit_log
+  FOR SELECT USING (admin_id::text = auth.uid()::text);

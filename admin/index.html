@@ -6,17 +6,28 @@
   <title>Admin Login | Heart Warriors</title>
   <link rel="stylesheet" href="../assets/css/admin.css">
   <link rel="icon" href="../assets/images/bago-city-logo.png" type="image/png">
+  <style>
+    /* Honeypot field — hidden from real users, visible to bots */
+    .hp-field { opacity: 0; position: absolute; top: 0; left: 0; height: 0; width: 0; z-index: -1; }
+  </style>
 </head>
 <body>
 <div class="login-page">
   <div class="login-card">
     <div class="login-logo">
-      <div class="logo-icon">❤️</div>
+      <div class="logo-icon" aria-hidden="true">❤️</div>
       <h1>Heart Warriors</h1>
       <p>Admin Panel — Bago City LGU</p>
     </div>
-    <div class="login-error" id="loginError" role="alert"></div>
-    <form id="loginForm" novalidate>
+    <div class="login-error" id="loginError" role="alert" aria-live="assertive"></div>
+    <form id="loginForm" novalidate autocomplete="on" data-bot-protected="true">
+
+      <!-- Honeypot — bots fill this, humans don't see it -->
+      <div class="hp-field" aria-hidden="true">
+        <label for="website">Website</label>
+        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+      </div>
+
       <div class="form-group">
         <label class="form-label" for="email">Email Address</label>
         <input type="email" id="email" name="email" class="form-input"
@@ -33,7 +44,7 @@
                   aria-label="Toggle password visibility">👁</button>
         </div>
       </div>
-      <button type="submit" class="btn-admin btn-admin-primary"
+      <button type="submit" id="submitBtn" class="btn-admin btn-admin-primary"
               style="width:100%;justify-content:center;padding:11px;font-size:.95rem;margin-top:8px">
         Sign In →
       </button>
@@ -45,15 +56,54 @@
 </div>
 <script src="../assets/js/admin.js"></script>
 <script>
-  // Redirect if already logged in
-  if (localStorage.getItem('hw_admin_token')) window.location.href = '/admin/dashboard.html';
+  // Redirect if already logged in and token not expired
+  const existingToken = localStorage.getItem('hw_admin_token');
+  if (existingToken && !isTokenExpired(existingToken)) {
+    window.location.href = '/admin/dashboard.html';
+  }
 
   // Toggle password visibility
   document.getElementById('togglePw').addEventListener('click', function() {
     const pw = document.getElementById('password');
     pw.type = pw.type === 'password' ? 'text' : 'password';
+    this.setAttribute('aria-label', pw.type === 'password' ? 'Show password' : 'Hide password');
     this.textContent = pw.type === 'password' ? '👁' : '🙈';
   });
+
+  // Record page load time for timing check
+  const _pageLoadTime = Date.now();
+
+  // Override the login form submit to add bot protection
+  const loginForm = document.getElementById('loginForm');
+  if (loginForm) {
+    loginForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const errEl = document.getElementById('loginError');
+      errEl.textContent = '';
+
+      // 1. Honeypot check — if filled, it's a bot
+      const honeypot = document.getElementById('website').value;
+      if (honeypot) {
+        // Silently fail — don't tell the bot it was caught
+        setTimeout(() => {
+          errEl.textContent = 'Invalid email or password.';
+        }, 1500);
+        return;
+      }
+
+      // 2. Timing check — real humans take at least 3 seconds to fill a form
+      const elapsed = Date.now() - _pageLoadTime;
+      if (elapsed < 3000) {
+        errEl.textContent = 'Invalid email or password.';
+        return;
+      }
+
+      // 3. Proceed with normal login (handled by admin.js loginForm listener)
+      // Re-trigger the original submit handler in admin.js
+      handleAdminLogin(e);
+    }, { once: false });
+  }
 </script>
 </body>
 </html>
